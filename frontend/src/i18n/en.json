@@ -1,0 +1,640 @@
+{
+  "common": {
+    "brand": "FreeFromPsoriasis",
+    "brandBm": "BebasPsoriasis"
+  },
+  "topbar": {
+    "nav": {
+      "tips": "Tips & Tricks",
+      "checklist": "Checklist",
+      "products": "Products",
+      "faq": "FAQ",
+      "story": "My Story"
+    },
+    "cta": "Free Guide",
+    "toggleMenu": "Toggle menu",
+    "language": "Language"
+  },
+  "footer": {
+    "tagline": "Wellness education for people navigating psoriasis and skin flare-ups — with clarity, not confusion.",
+    "education": {
+      "title": "Education",
+      "blog": "Blog",
+      "checklist": "Free Checklist",
+      "faq": "FAQ"
+    },
+    "products": {
+      "title": "Products",
+      "tips": "Tips & Tricks",
+      "productSupport": "Product Support"
+    },
+    "legal": {
+      "title": "Legal",
+      "notMedical": "Not medical advice",
+      "affiliate": "Affiliate disclosure"
+    },
+    "copyright": "© {year} FreeFromPsoriasis / BebasPsoriasis. Wellness education only.",
+    "disclaimer": "Made with care — not a substitute for medical advice."
+  },
+  "landing": {
+    "hero": {
+      "badge": "Free From Psoriasis Since 2021",
+      "heading": "Step by step what I did to heal from painful psoriasis — no steroids, no fancy cream.",
+      "subheading": "This isn't a medical book. This is my personal account — 90 days of everything I did, felt, and pushed through when my psoriasis was at its absolute worst.",
+      "ctaPrimary": "Get My E-Book",
+      "ctaSecondary": "Learn More",
+      "tags": [
+        "Instant digital download",
+        "Education-first",
+        "Not medical advice"
+      ],
+      "cover": {
+        "brand": "BebasPsoriasis",
+        "title": "Panduan Sokongan Psoriasis",
+        "subtitle": "Trigger checklist. Routine review. Product education."
+      }
+    },
+    "learn": {
+      "badge": "What's inside",
+      "heading": "Three phases to recovery",
+      "items": [
+        {
+          "title": "🔥 Starting",
+          "desc": "The part nobody warns you about. When things get worse before they get better. Your skin flares, your body fights back, and most people give up right here. I'll walk you through exactly what I experienced and how I stayed the course when it felt impossible."
+        },
+        {
+          "title": "🌱 Progressing",
+          "desc": "Day by day, the changes start showing. I share the exact diet, daily routine, and lifestyle shifts that moved the needle — and what I cut out completely."
+        },
+        {
+          "title": "🧘 Thriving",
+          "desc": "No more depending on steroid cream to function. This phase is about locking in the results, protecting your skin long term, and building a life where psoriasis no longer controls you."
+        }
+      ]
+    },
+    "quote": {
+      "text": "Healing doesn't happen overnight. It's slow, messy, and some days you'll feel like giving up. But when you get the right support — the right diet, the right mindset, the right habits — your body will surprise you. Change is possible. I've lived it.",
+      "author": "Anonymous"
+    },
+    "beforeAfter": {
+      "heading": "Real transformations",
+      "subtitle": "See the difference the right approach can make.",
+      "before": "Before",
+      "after": "After",
+      "dateBefore": "Jan 2024",
+      "dateAfter": "Jun 2024"
+    },
+    "testimonials": {
+      "badge": "Real results",
+      "heading": "Success stories from our community",
+      "subtitle": "Real progress from real people. Tap any story to see the full journey with tips that may help yours."
+    },
+    "split": {
+      "heading": "Is this for you?",
+      "forYou": {
+        "title": "This is for you if",
+        "items": [
+          "You have psoriasis or recurring skin flare-ups.",
+          "You feel confused about triggers and routines.",
+          "You want a simple BM explanation before choosing products.",
+          "You prefer education before direct selling."
+        ]
+      },
+      "notFor": {
+        "title": "This is not for",
+        "items": [
+          "Anyone looking for a guaranteed cure.",
+          "Replacing doctor treatment or prescribed medicine.",
+          "Emergency skin problems, infection, bleeding, or severe pain.",
+          "Buying many supplements without checking safety first."
+        ]
+      }
+    },
+    "price": {
+      "heading": "Ready to start with the BM guide?",
+      "subtitle": "Get your copy and start understanding your flare-ups today.",
+      "amount": "RM XX",
+      "cta": "Get My Guide Now"
+    },
+    "productsCta": {
+      "heading": "Already read the guide?",
+      "desc": "Explore research-backed product recommendations for psoriasis support — each with clear explanations of why they help and how to use them safely.",
+      "cta": "Browse Product Guide"
+    },
+    "checklistCta": {
+      "heading": "Not ready to buy yet?",
+      "desc": "Get the free Psoriasis Flare-Up Support Checklist — 7 areas to review before choosing products.",
+      "cta": "Download Free Checklist"
+    },
+    "disclaimer": "Disclaimer: This ebook is for wellness education only and is not medical advice. Psoriasis can require professional diagnosis and treatment. Always speak with a qualified healthcare professional before starting supplements, changing medication, or making major health decisions."
+  },
+  "blog": {
+    "badge": "Calm, practical reading",
+    "heading": "Education Blog",
+    "subtitle": "Calm, practical articles about psoriasis support, routines, and wellness education.",
+    "readMore": "Read more",
+    "filterAll": "All",
+    "posts": [
+      {
+        "title": "Understanding Psoriasis Flare-Ups: A Beginner Guide",
+        "excerpt": "Psoriasis is more than dry skin. Learn what happens in the body during a flare-up and how to approach support calmly.",
+        "category": "Psoriasis Basics",
+        "date": "May 2026"
+      },
+      {
+        "title": "Dairy and Psoriasis: What To Know Before Cutting It Out",
+        "excerpt": "Should you remove dairy from your diet? A calm look at the science, the pantang culture, and how to test your own tolerance.",
+        "category": "Gut, Food & Triggers",
+        "date": "May 2026"
+      },
+      {
+        "title": "The Role of Stress and Sleep in Skin Flare-Ups",
+        "excerpt": "Stress affects sleep, sleep affects recovery, and low recovery can make skin feel worse. A practical look at the cycle.",
+        "category": "Stress, Sleep & Recovery",
+        "date": "April 2026"
+      },
+      {
+        "title": "Supplement Support for Psoriasis: Where To Start",
+        "excerpt": "Before buying supplements, understand the key categories and how to introduce one thing at a time safely.",
+        "category": "Supplement Education",
+        "date": "April 2026"
+      },
+      {
+        "title": "Simple Daily Skin Care Habits That May Help",
+        "excerpt": "You do not need a complicated routine. Gentle, consistent care often makes more difference than many products.",
+        "category": "Skin Barrier & Daily Care",
+        "date": "March 2026"
+      },
+      {
+        "title": "Gut Health and Psoriasis: Why Digestion Matters",
+        "excerpt": "Bloating, discomfort, and irregular digestion can be linked to skin health. A simple guide to observing your patterns.",
+        "category": "Gut, Food & Triggers",
+        "date": "March 2026"
+      }
+    ]
+  },
+  "blogPost": {
+    "back": "Back to blog",
+    "notFound": "Post not found",
+    "cta": {
+      "heading": "Want the complete guide?",
+      "desc": "Get the free Psoriasis Flare-Up Support Checklist with 7 action areas.",
+      "button": "Download Free Checklist"
+    },
+    "content": {
+      "1": {
+        "title": "Understanding Psoriasis Flare-Ups: A Beginner Guide",
+        "body": "Psoriasis is often misunderstood as \"just dry skin.\" But it is more complex than that.\n\nAt its core, psoriasis is linked to immune and inflammatory processes in the body. This does not mean it is something to fear — it means the body is reacting to something, and the skin is one of the places that reaction shows up.\n\nFlare-ups can be influenced by many factors:\n\n• Stress levels\n• Sleep quality\n• Food patterns\n• Digestion and gut comfort\n• Skin products and routines\n• Weather, sweating, or friction\n• Recent illness or infection\n• Medication or supplement changes\n\nThe goal is not to control every factor perfectly. The goal is to understand which ones matter most for your own body.\n\nA simple first step is to observe, not to fix everything at once. Start with one area — sleep, or skincare, or food tracking — and see what changes when you give that area a little more attention.\n\nThis guide helps you do exactly that, one step at a time."
+      }
+    }
+  },
+  "checklist": {
+    "heading": "Psoriasis Flare-Up Support Checklist",
+    "subtitle": "A free 7-area checklist to help you review your routine, identify triggers, and make calmer support decisions — before buying another product.",
+    "areas": {
+      "title": "7 areas covered",
+      "items": [
+        "Skin-barrier care",
+        "Stress management",
+        "Sleep recovery",
+        "Food & triggers",
+        "Gut comfort",
+        "Immune support",
+        "Supplement education"
+      ]
+    },
+    "form": {
+      "title": "Get your free copy",
+      "namePlaceholder": "Your name",
+      "emailPlaceholder": "Your email address",
+      "submit": "Download Free Checklist",
+      "sending": "Sending…",
+      "noSpam": "No spam. Unsubscribe anytime.",
+      "error": "Something went wrong. Please try again."
+    },
+    "softCta": {
+      "text": "Want the full BM guide with deeper product education?",
+      "button": "Get the BM Ebook"
+    },
+    "success": {
+      "heading": "Checklist is on its way!",
+      "text": "We sent the download link to <strong>{{email}}</strong>. Check your inbox (and spam folder).",
+      "back": "Back to Home"
+    }
+  },
+  "ebook": {
+    "badge": "Free From Psoriasis Since 2021",
+    "getNow": "Get It Now",
+    "heading": "Free From Psoriasis Since 2021",
+    "subtitle": "A personal 90-day account of healing psoriasis without steroids or fancy creams.",
+    "details": {
+      "pages": "62 pages",
+      "format": "Instant digital download (PDF)"
+    },
+    "features": {
+      "title": "What's inside",
+      "items": [
+        "🔥 Phase 1 — The Healing Crisis: The part nobody warns you about. When things get worse before they get better.",
+        "🌱 Phase 2 — Progressive Skin Improvement: Day by day, the exact diet, routine, and lifestyle shifts that moved the needle.",
+        "🧘 Phase 3 — Stabilize & Stay Free: Locking in results, protecting your skin long term, and living without steroid dependence.",
+        "Personal food framework — not a rigid diet, but a practical guide to identify triggers",
+        "Healing crisis survival strategies — what I did when it felt impossible",
+        "90-day timeline of real progress, setbacks, and breakthroughs"
+      ]
+    },
+    "price": {
+      "original": "RM 47",
+      "amount": "RM 27",
+      "discount": "Limited launch offer — 40% off",
+      "note": "Instant digital download. Payhip secure checkout.",
+      "cta": "Get My Guide Now"
+    },
+  "checkout": {
+    "backToHome": "Back to home",
+    "heading": "Checkout",
+    "subtitle": "Enter your details to get instant access to the guide.",
+    "contactInfo": "Contact information",
+    "fullName": "Full name",
+    "namePlaceholder": "Your name",
+    "email": "Email address",
+    "digitalNotice": "Digital product — instant delivery",
+    "digitalDesc": "No shipping needed. You'll get the PDF via email after purchase.",
+    "deliveryInfo": "Delivery information",
+    "emailDelivery": "PDF will be sent to this email after payment",
+    "payment": "Payment",
+    "paymentPlaceholder": "Payment gateway will appear here",
+    "completePayment": "Complete Payment",
+    "payNow": "Pay Now — RM 29.90",
+    "processing": "Processing...",
+    "secureNotice": "Your information is secure and will not be shared.",
+    "orderSummary": "Order summary",
+    "subtotal": "Subtotal",
+    "original": "Original price",
+    "discount": "You save",
+    "surcharge": "Processing fee",
+    "total": "Total",
+    "digitalItem": "Digital item — no shipping",
+    "secureBadge": "Secure checkout — powered by Stripe"
+  },
+  "faq": {
+      "title": "FAQ",
+      "items": [
+        {
+          "q": "Is this a cure?",
+          "a": "No. This ebook is for wellness education only. It does not diagnose, treat, or cure psoriasis."
+        },
+        {
+          "q": "Should I stop my medication?",
+          "a": "No. Always follow your doctor's advice. This guide is meant to support your existing routine, not replace medical care."
+        },
+        {
+          "q": "What language is the ebook in?",
+          "a": "This version is in Bahasa Malaysia (BM). An English version is in development."
+        },
+        {
+          "q": "How do I get the ebook after purchase?",
+          "a": "After purchasing on Payhip, you will receive a download link via email."
+        }
+      ]
+    },
+    "testimonial": {
+      "text": "This guide saved me from quitting my diet multiple times. Understanding the healing crisis made all the difference. I wish I had this when I started.",
+      "author": "Aiman R., Healing Journey"
+    }
+  },
+  "faq": {
+    "badge": "Got questions?",
+    "heading": "Frequently Asked Questions",
+    "subtitle": "Common questions about the ebook, products, and how this site works.",
+    "groups": [
+      {
+        "category": "General",
+        "items": [
+          {
+            "q": "Is this a cure?",
+            "a": "No. This ebook and all materials on this site are for wellness education only. They do not diagnose, treat, or cure psoriasis. Psoriasis is a complex condition that often requires professional medical care."
+          },
+          {
+            "q": "Should I stop my medication?",
+            "a": "No. Never stop prescribed medication without speaking to your doctor first. This guide is meant to support your existing routine, not replace it."
+          },
+          {
+            "q": "What is the difference between the BM and English ebook?",
+            "a": "The BM ebook (Panduan Sokongan Psoriasis) is written in Bahasa Malaysia for the local audience. The English ebook (The Psoriasis Flare-Up Support Guide) is adapted for a global audience. They cover similar topics but are not direct translations — each is tailored to its audience."
+          }
+        ]
+      },
+      {
+        "category": "Products",
+        "items": [
+          {
+            "q": "How are products recommended?",
+            "a": "Products are recommended based on general wellness categories (skin barrier, immune, gut, stress/sleep) and common nutrient gaps. We do not claim any product treats or cures psoriasis. Always check ingredients and consult a healthcare professional before purchasing."
+          },
+          {
+            "q": "Are these affiliate links?",
+            "a": "Yes. Some product links are iHerb affiliate links. We may earn a small commission at no extra cost to you. We only recommend products we believe are relevant to the support areas discussed."
+          },
+          {
+            "q": "Do I need to buy supplements?",
+            "a": "No. The guide helps you understand what to look for if you choose to try supplements, but many people find benefit from reviewing their routine, sleep, and food patterns alone."
+          }
+        ]
+      },
+      {
+        "category": "Technical",
+        "items": [
+          {
+            "q": "How do I download my ebook?",
+            "a": "After purchasing on Payhip, you will receive a download link via email. For the free checklist, enter your email on the checklist page and we will send you the PDF link."
+          },
+          {
+            "q": "I did not receive the download email.",
+            "a": "Check your spam or promotions folder. If you still cannot find it, contact us with the email address you used."
+          }
+        ]
+      }
+    ]
+  },
+  "heroProduct": {
+    "editorsPick": "Editor's Pick",
+    "evidence": "{level} evidence",
+    "evidenceLevels": {
+      "strong": "Strong",
+      "moderate": "Moderate",
+      "emerging": "Emerging"
+    },
+    "whyHelps": "Why this helps for psoriasis",
+    "howWorks": "How it works",
+    "dosage": "Dosage",
+    "bestTime": "Best time",
+    "keyIngredients": "Key ingredients",
+    "suitable": "Suitable for",
+    "notSuitable": "Not suitable for",
+    "safety": "Safety notes",
+    "cta": "Check price on iHerb"
+  },
+  "testimonialCarousel": {
+    "allStories": "All success stories",
+    "previous": "Previous",
+    "next": "Next",
+    "goToSlide": "Go to slide {{n}}",
+    "before": "Before",
+    "now": "Now",
+    "progressJourney": "Progress journey",
+    "note": "Note:",
+    "tips": "{{count}} tip for you",
+    "tips_plural": "{{count}} tips for you",
+    "viewDetails": "View details",
+    "seeFullJourney": "See full journey",
+    "progressUpdate": "{{count}} progress update",
+    "progressUpdate_plural": "{{count}} progress updates"
+  },
+  "products": {
+    "badge": "Research-backed recommendations",
+    "heading": "Product Support Guide",
+    "subtitle": "Education-first supplement suggestions for psoriasis support. Each product includes why it helps, how it works, dosage, and safety — so you decide with clarity.",
+    "affiliateBanner": "Affiliate disclosure: Some links are iHerb affiliate links. We may earn a commission at no extra cost to you.",
+    "featured": "Featured product",
+    "filterAll": "All",
+    "empty": "No products in this category yet.",
+    "whyForPsoriasis": "Why for psoriasis:",
+    "suitable": "Suitable",
+    "viewDetails": "View details",
+    "avoidIf": "Avoid if",
+    "safety": "Safety",
+    "cta": "Check price on iHerb",
+    "modal": {
+      "howWorks": "How it works — mechanism of action",
+      "dosage": "Dosage",
+      "bestTime": "Best time",
+      "keyIngredients": "Key ingredients",
+      "suitable": "Suitable",
+      "avoidIf": "Avoid if",
+      "safety": "Safety",
+      "cta": "Check price on iHerb"
+    },
+    "disclaimer": {
+      "title": "Important",
+      "text1": "This guide is for education purposes only. No product listed here treats or cures psoriasis. Always speak with a qualified healthcare professional before starting any supplement — especially if you are on medication, pregnant, nursing, or managing a health condition.",
+      "text2": "Evidence levels are based on available research as of 2026. Individual results vary. Start one supplement at a time, track your response, and adjust with professional guidance."
+    }
+  },
+  "tips": {
+    "badge": "Featured Ebook",
+    "heading": "Get The Psoriasis Flare-Up Support Guide today!",
+    "story": {
+      "p1": "This ebook was created from a real <strong>13-year journey</strong> of living with psoriasis, struggling through flare-ups, pain, frustration, and moments of almost giving up.",
+      "p2": "It is not just a guide. It is a <strong>personal roadmap</strong> for people who feel tired, confused, and alone in their skin journey."
+    },
+    "secretHacks": "Inside, you will learn my Secret Hacks & Daily Routine to reverse my condition.",
+    "learn": {
+      "title": "What you will learn",
+      "items": [
+        "What I wish I understood earlier about psoriasis",
+        "How food, sugar, dairy, gluten, and processed foods may affect inflammation",
+        "Why gut health may be connected to skin flare-ups",
+        "What foods may need to be avoided during the healing phase",
+        "What foods may better support gut recovery",
+        "How to track your own triggers safely",
+        "How to start supporting your body one step at a time"
+      ]
+    },
+    "preview": {
+      "title": "Ebook preview",
+      "bmCover": {
+        "brand": "BebasPsoriasis",
+        "title": "Panduan Sokongan Psoriasis",
+        "subtitle": "Trigger checklist · Routine review"
+      },
+      "enCover": {
+        "brand": "FreeFromPsoriasis",
+        "title": "The Psoriasis Flare-Up Support Guide",
+        "subtitle": "Secret hacks · Daily routine · Recovery"
+      },
+      "spoiler": {
+        "label": "Inside this guide:",
+        "text": "\"For years I thought my psoriasis was just bad skin. I tried every cream, every diet, every doctor. Nothing worked long-term. Then I realised I was treating symptoms, not supporting my body...\"",
+        "footer": "Spoiler — intro page",
+        "peek": "Peek →"
+      }
+    },
+    "spoiler": {
+      "title": "Spoiler: Sample pages inside the guide",
+      "subtitle": "Peek at what you will get before buying",
+      "pages": [
+        {
+          "label": "Page 4",
+          "tag": "Trigger Checklist",
+          "title": "Daily Trigger Tracker",
+          "items": [
+            "☐ Stress level today (1-10): ___",
+            "☐ Hours of sleep: ___",
+            "☐ Water intake: ___ glasses",
+            "☐ Any new skincare products? ___",
+            "☐ Foods eaten that may be triggers: ___"
+          ],
+          "tip": "✦ Tip: Track for 2 weeks before drawing conclusions"
+        },
+        {
+          "label": "Page 12",
+          "tag": "Food & Inflammation",
+          "title": "Foods to be aware of:",
+          "items": [
+            "• Dairy — may increase inflammation in sensitive individuals",
+            "• Gluten — some people report flare-ups after consumption",
+            "• Sugar — can spike insulin and inflammatory markers",
+            "• Processed foods — often high in omega-6"
+          ],
+          "tip": "✦ Try eliminating one group at a time for 3 weeks"
+        },
+        {
+          "label": "Page 18",
+          "tag": "Daily Routine",
+          "title": "My Morning Routine:",
+          "items": [
+            "1. Wake up — drink warm water with lemon",
+            "2. 5-min deep breathing (lower cortisol)",
+            "3. Gentle skincare — fragrance-free only",
+            "4. Breakfast — low sugar, high protein",
+            "5. Morning sunlight (vitamin D)"
+          ],
+          "tip": "✦ Consistency beats intensity every time"
+        },
+        {
+          "label": "Page 24",
+          "tag": "Mindset Shift",
+          "title": "The Shift That Changed Everything:",
+          "items": [
+            "\"I stopped fighting my skin and started supporting it. Psoriasis is not my enemy — it is my body's way of telling me something needs attention.\"",
+            "• From shame → curiosity",
+            "• From fighting → listening",
+            "• From isolation → community"
+          ],
+          "tip": "✦ Your mindset is 50% of the journey"
+        }
+      ]
+    },
+    "bonuses": {
+      "title": "Exclusive Bonuses Included",
+      "items": [
+        {
+          "title": "My Recovery Phase Photos",
+          "desc": "Private recovery-phase images from my own psoriasis journey. These are shared only with serious customers as personal proof and encouragement."
+        },
+        {
+          "title": "My Faster Healing Support Tips",
+          "desc": "The small habits, routines, and lessons that helped me support my body more effectively during the recovery process."
+        },
+        {
+          "title": "My Mindset Shift",
+          "desc": "How I changed the way I saw my condition, my body, and my life during the hardest moments of psoriasis."
+        }
+      ]
+    },
+    "pricing": {
+      "originalPrice": "$67 USD",
+      "discountedPrice": "$27",
+      "currency": "USD",
+      "badge": "Limited time offer — save 60%",
+      "desc": "This guide is for anyone who has looked in the mirror and felt hopeless, tired of hiding their skin, or unsure where to even begin.",
+      "cta": "Get My Guide Now"
+    },
+    "closing": "\"Get your healing support guide today.\"",
+    "gallery": {
+      "title": "Ebook Gallery",
+      "subtitle": "Explore all preview images of the Psoriasis Flare-Up Support Guide",
+      "cta": "Get My Guide Now",
+      "backToTips": "← Back to Tips & Tricks"
+    },
+    "moreResources": "More free resources",
+    "extraTips": [
+      {
+        "title": "Psoriasis Flare-Up Support Checklist",
+        "type": "Free Download",
+        "desc": "A free 7-area checklist to review your routine and identify triggers before buying another product.",
+        "features": [
+          "Skin-barrier care review",
+          "Stress & sleep self-assessment",
+          "Food & trigger tracking prompts",
+          "Supplement education guide"
+        ],
+        "cta": "Download Free"
+      }
+    ]
+  },
+  "thankYou": {
+    "heading": "Thank You for Your Purchase!",
+    "subtitle": "Your transaction was successful. Your ebook is ready to download.",
+    "verifying": "Verifying your payment...",
+    "emailNotice": "Your download link will be sent to your email shortly.",
+    "downloadCta": "Download Your Ebook (PDF)",
+    "nextSteps": {
+      "title": "What to do next",
+      "items": [
+        "Download the PDF and save it to your device.",
+        "Start with the trigger checklist on page 3 — no need to read everything at once.",
+        "Use the 7-day action plan to implement one change at a time.",
+        "When you are ready, explore the product support guide for supplement education."
+      ]
+    },
+    "secondaryCta": {
+      "products": "Product Support Guide",
+      "checklist": "Get the Free Checklist"
+    }
+  },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Sign in to your account",
+    "registerTitle": "Create account",
+    "registerSubtitle": "We'll send a code to your email",
+    "forgotTitle": "Reset password",
+    "forgotSubtitle": "We'll send a code to your email",
+    "verifyTitle": "Verify your email",
+    "resetTitle": "Set new password",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "Min. 8 characters",
+    "newPassword": "New password",
+    "fullName": "Full name",
+    "fullNamePlaceholder": "Your full name",
+    "username": "Username",
+    "optional": "optional",
+    "otpCode": "OTP code",
+    "login": "Log in",
+    "loggingIn": "Logging in...",
+    "logout": "Log out",
+    "register": "Create account",
+    "sendOtp": "Send OTP code",
+    "sending": "Sending...",
+    "createAccount": "Create account",
+    "creating": "Creating account...",
+    "resetPassword": "Reset password",
+    "resetting": "Resetting...",
+    "otpSent": "A 6-digit code has been sent to your email. It expires in 10 minutes.",
+    "noAccount": "Don't have an account? Create one",
+    "haveAccount": "Already have an account?",
+    "backToLogin": "Back to login",
+    "backToHome": "Back to home",
+    "back": "Back",
+    "forgotPassword": "Forgot password?",
+    "rememberPassword": "Remember your password?"
+  },
+  "aisha": {
+    "back": "← Back to home",
+    "badge": "Real story",
+    "yearsOld": "years old",
+    "beforeQuote": "Before",
+    "afterQuote": "After",
+    "summary": "Summary",
+    "journey": "Kak Acha's Progress Journey",
+    "journeySub": "Month by month — what she did, what helped, and the results.",
+    "note": "Note:",
+    "tips": "{{count}} tip",
+    "tips_plural": "{{count}} tips",
+    "ctaHeading": "Start Your Own Journey",
+    "ctaSub": "Get the same guide that helped Kak Acha take control of her skin.",
+    "cta": "Get My Guide Now"
+  }
+}

@@ -1,0 +1,640 @@
+{
+  "common": {
+    "brand": "FreeFromPsoriasis",
+    "brandBm": "BebasPsoriasis"
+  },
+  "topbar": {
+    "nav": {
+      "tips": "Tip & Trik",
+      "checklist": "Senarai Semak",
+      "products": "Produk",
+      "faq": "FAQ",
+      "story": "Cerita Saya"
+    },
+    "cta": "Panduan Percuma",
+    "toggleMenu": "Togol menu",
+    "language": "Bahasa"
+  },
+  "footer": {
+    "tagline": "Pendidikan kesejahteraan untuk mereka yang menghadapi psoriasis dan masalah kulit — dengan jelas, bukan kekeliruan.",
+    "education": {
+      "title": "Pendidikan",
+      "blog": "Blog",
+      "checklist": "Senarai Semak Percuma",
+      "faq": "FAQ"
+    },
+    "products": {
+      "title": "Produk",
+      "tips": "Tip & Trik",
+      "productSupport": "Sokongan Produk"
+    },
+    "legal": {
+      "title": "Perundangan",
+      "notMedical": "Bukan nasihat perubatan",
+      "affiliate": "Penafian afiliasi"
+    },
+    "copyright": "© {year} FreeFromPsoriasis / BebasPsoriasis. Pendidikan kesejahteraan sahaja.",
+    "disclaimer": "Dibuat dengan penuh perhatian — bukan pengganti nasihat perubatan."
+  },
+  "landing": {
+    "hero": {
+      "badge": "Bebas Psoriasis Sejak 2021",
+      "heading": "Langkah demi langkah apa yang saya lakukan untuk sembuh dari psoriasis yang menyakitkan — tanpa steroid, tanpa krim mahal.",
+      "subheading": "Ini bukan buku perubatan. Ini adalah catatan peribadi saya — 90 hari segala apa yang saya lakukan, rasa, dan lalui ketika psoriasis saya berada pada tahap paling teruk.",
+      "ctaPrimary": "Dapatkan E-Book Saya",
+      "ctaSecondary": "Ketahui Lebih Lanjut",
+      "tags": [
+        "Muat turun digital segera",
+        "Utamakan pendidikan",
+        "Bukan nasihat perubatan"
+      ],
+      "cover": {
+        "brand": "BebasPsoriasis",
+        "title": "Panduan Sokongan Psoriasis",
+        "subtitle": "Senarai semak pencetus. Kajian rutin. Pendidikan produk."
+      }
+    },
+    "learn": {
+      "badge": "Apa yang ada di dalam",
+      "heading": "Tiga fasa menuju pemulihan",
+      "items": [
+        {
+          "title": "🔥 Bermula",
+          "desc": "Bahagian yang tidak diberitahu oleh sesiapa. Apabila keadaan menjadi lebih teruk sebelum menjadi lebih baik. Kulit anda suar, badan anda melawan, dan kebanyakan orang menyerah kalah di sini. Saya akan membimbing anda melalui apa yang saya lalui dan bagaimana saya bertahan ketika ia terasa mustahil."
+        },
+        {
+          "title": "🌱 Maju",
+          "desc": "Hari demi hari, perubahan mula kelihatan. Saya kongsikan diet tepat, rutin harian, dan perubahan gaya hidup yang membuat perbezaan — dan apa yang saya potong sepenuhnya."
+        },
+        {
+          "title": "🧘 Berkembang",
+          "desc": "Tidak perlu lagi bergantung pada krim steroid untuk berfungsi. Fasa ini tentang mengunci hasil, melindungi kulit anda jangka panjang, dan membina kehidupan di mana psoriasis tidak lagi mengawal anda."
+        }
+      ]
+    },
+    "quote": {
+      "text": "Penyembuhan semula jadi mengambil masa dan mungkin sangat perlahan. Tetapi dengan pendekatan yang betul — pelan diet, gaya hidup, minda dan suplemen yang sesuai — perubahan boleh berlaku.",
+      "author": "by Acachiaa"
+    },
+    "beforeAfter": {
+      "heading": "Transformasi sebenar",
+      "subtitle": "Lihat perbezaan yang boleh dilakukan oleh pendekatan yang betul.",
+      "before": "Sebelum",
+      "after": "Selepas",
+      "dateBefore": "Jan 2024",
+      "dateAfter": "Jun 2024"
+    },
+    "testimonials": {
+      "badge": "Hasil sebenar",
+      "heading": "Kisah kejayaan daripada komuniti kami",
+      "subtitle": "Perkembangan sebenar daripada orang sebenar. Ketik mana-mana cerita untuk melihat perjalanan penuh dengan tip yang mungkin membantu anda."
+    },
+    "split": {
+      "heading": "Ini untuk anda?",
+      "forYou": {
+        "title": "Ini untuk anda jika",
+        "items": [
+          "Anda mempunyai psoriasis atau masalah kulit berulang.",
+          "Anda berasa keliru tentang pencetus dan rutin.",
+          "Anda mahukan penjelasan mudah dalam BM sebelum memilih produk.",
+          "Anda mengutamakan pendidikan sebelum jualan langsung."
+        ]
+      },
+      "notFor": {
+        "title": "Ini bukan untuk",
+        "items": [
+          "Sesiapa yang mencari penawar pasti.",
+          "Menggantikan rawatan doktor atau ubat preskripsi.",
+          "Masalah kulit kecemasan, jangkitan, pendarahan, atau kesakitan teruk.",
+          "Membeli banyak suplemen tanpa memeriksa keselamatan terlebih dahulu."
+        ]
+      }
+    },
+    "price": {
+      "heading": "Bersedia untuk memulakan dengan panduan BM?",
+      "subtitle": "Dapatkan salinan anda dan mula memahami suar anda hari ini.",
+      "amount": "RM XX",
+      "cta": "Dapatkan Panduan Saya Sekarang"
+    },
+    "productsCta": {
+      "heading": "Sudah baca panduan ini?",
+      "desc": "Terokai cadangan produk berasaskan penyelidikan untuk sokongan psoriasis — setiap satu dengan penjelasan jelas mengapa ia membantu dan cara menggunakannya dengan selamat.",
+      "cta": "Lihat Panduan Produk"
+    },
+    "checklistCta": {
+      "heading": "Belum bersedia untuk membeli?",
+      "desc": "Dapatkan Senarai Semak Sokongan Suar Psoriasis percuma — 7 bidang untuk dikaji sebelum memilih produk.",
+      "cta": "Muat Turun Senarai Semak Percuma"
+    },
+    "disclaimer": "Penafian: E-book ini adalah untuk pendidikan kesejahteraan sahaja dan bukan nasihat perubatan. Psoriasis mungkin memerlukan diagnosis dan rawatan profesional. Sentiasa berbincang dengan profesional penjagaan kesihatan yang bertauliah sebelum memulakan suplemen, menukar ubat, atau membuat keputusan kesihatan yang besar."
+  },
+  "blog": {
+    "badge": "Bacaan yang tenang dan praktikal",
+    "heading": "Blog Pendidikan",
+    "subtitle": "Artikel yang tenang dan praktikal tentang sokongan psoriasis, rutin, dan pendidikan kesejahteraan.",
+    "readMore": "Baca lagi",
+    "filterAll": "Semua",
+    "posts": [
+      {
+        "title": "Memahami Suar Psoriasis: Panduan Pemula",
+        "excerpt": "Psoriasis lebih daripada kulit kering. Ketahui apa yang berlaku dalam badan semasa suar dan cara mendekati sokongan dengan tenang.",
+        "category": "Asas Psoriasis",
+        "date": "Mei 2026"
+      },
+      {
+        "title": "Tenusu dan Psoriasis: Apa Yang Perlu Tahu Sebelum Berhenti",
+        "excerpt": "Perlukah anda mengeluarkan tenusu daripada diet? Lihat secara tenang pada sains, budaya pantang, dan cara menguji toleransi anda sendiri.",
+        "category": "Usus, Makanan & Pencetus",
+        "date": "Mei 2026"
+      },
+      {
+        "title": "Peranan Tekanan dan Tidur dalam Suar Kulit",
+        "excerpt": "Tekanan menjejaskan tidur, tidur menjejaskan pemulihan, dan pemulihan rendah boleh membuat kulit berasa lebih teruk. Lihat secara praktikal pada kitaran ini.",
+        "category": "Tekanan, Tidur & Pemulihan",
+        "date": "April 2026"
+      },
+      {
+        "title": "Sokongan Suplemen untuk Psoriasis: Di Mana Untuk Mulakan",
+        "excerpt": "Sebelum membeli suplemen, fahami kategori utama dan cara memperkenalkan satu perkara pada satu masa dengan selamat.",
+        "category": "Pendidikan Suplemen",
+        "date": "April 2026"
+      },
+      {
+        "title": "Tabiat Penjagaan Kulit Harian Mudah Yang Mungkin Membantu",
+        "excerpt": "Anda tidak memerlukan rutin yang rumit. Penjagaan yang lembut dan konsisten sering memberi lebih perbezaan daripada banyak produk.",
+        "category": "Penjagaan Kulit & Harian",
+        "date": "Mac 2026"
+      },
+      {
+        "title": "Kesihatan Usus dan Psoriasis: Mengapa Penghadaman Penting",
+        "excerpt": "Kembung, ketidakselesaan, dan penghadaman tidak teratur boleh dikaitkan dengan kesihatan kulit. Panduan mudah untuk memerhati corak anda.",
+        "category": "Usus, Makanan & Pencetus",
+        "date": "Mac 2026"
+      }
+    ]
+  },
+  "blogPost": {
+    "back": "Kembali ke blog",
+    "notFound": "Catatan tidak ditemui",
+    "cta": {
+      "heading": "Mahukan panduan lengkap?",
+      "desc": "Dapatkan Senarai Semak Sokongan Suar Psoriasis percuma dengan 7 bidang tindakan.",
+      "button": "Muat Turun Senarai Semak Percuma"
+    },
+    "content": {
+      "1": {
+        "title": "Memahami Suar Psoriasis: Panduan Pemula",
+        "body": "Psoriasis sering disalah anggap sebagai \"kulit kering semata-mata.\" Tetapi ia lebih kompleks daripada itu.\n\nPada intinya, psoriasis dikaitkan dengan proses imun dan keradangan dalam badan. Ini tidak bermakna ia perlu ditakuti — ia bermakna badan sedang bertindak balas terhadap sesuatu, dan kulit adalah salah satu tempat tindak balas itu muncul.\n\nSuar boleh dipengaruhi oleh pelbagai faktor:\n\n• Tahap tekanan\n• Kualiti tidur\n• Corak pemakanan\n• Penghadaman dan keselesaan usus\n• Produk dan rutin kulit\n• Cuaca, peluh, atau geseran\n• Penyakit atau jangkitan baru-baru ini\n• Perubahan ubat atau suplemen\n\nMatlamatnya bukan untuk mengawal setiap faktor dengan sempurna. Matlamatnya adalah untuk memahami yang mana paling penting untuk badan anda sendiri.\n\nLangkah pertama yang mudah ialah memerhati, bukan membetulkan semuanya sekaligus. Mulakan dengan satu bidang — tidur, atau penjagaan kulit, atau penjejakan makanan — dan lihat apa yang berubah apabila anda memberi lebih perhatian kepada bidang itu.\n\nPanduan ini membantu anda melakukan perkara itu, satu langkah pada satu masa."
+      }
+    }
+  },
+  "checklist": {
+    "heading": "Senarai Semak Sokongan Suar Psoriasis",
+    "subtitle": "Senarai semak 7 bidang percuma untuk membantu anda mengkaji rutin, mengenal pasti pencetus, dan membuat keputusan sokongan yang lebih tenang — sebelum membeli produk lain.",
+    "areas": {
+      "title": "7 bidang dilindungi",
+      "items": [
+        "Penjagaan kulit",
+        "Pengurusan tekanan",
+        "Pemulihan tidur",
+        "Makanan & pencetus",
+        "Keselesaan usus",
+        "Sokongan imun",
+        "Pendidikan suplemen"
+      ]
+    },
+    "form": {
+      "title": "Dapatkan salinan percuma anda",
+      "namePlaceholder": "Nama anda",
+      "emailPlaceholder": "Alamat e-mel anda",
+      "submit": "Muat Turun Senarai Semak Percuma",
+      "sending": "Menghantar…",
+      "noSpam": "Tiada spam. Berhenti langgan pada bila-bila masa.",
+      "error": "Ada masalah. Sila cuba lagi."
+    },
+    "softCta": {
+      "text": "Mahukan panduan BM penuh dengan pendidikan produk yang lebih mendalam?",
+      "button": "Dapatkan E-book BM"
+    },
+    "success": {
+      "heading": "Senarai semak sedang dalam perjalanan!",
+      "text": "Kami hantar pautan muat turun ke <strong>{{email}}</strong>. Sila periksa peti masuk (dan folder spam).",
+      "back": "Kembali ke Laman Utama"
+    }
+  },
+  "ebook": {
+    "badge": "Bebas Psoriasis Sejak 2021",
+    "getNow": "Dapatkan Sekarang",
+    "heading": "Bebas Psoriasis Sejak 2021",
+    "subtitle": "Catatan peribadi 90 hari penyembuhan psoriasis tanpa steroid atau krim mahal.",
+    "details": {
+      "pages": "62 muka surat",
+      "format": "Muat turun digital segera (PDF)"
+    },
+    "features": {
+      "title": "Kandungan",
+      "items": [
+        "🔥 Fasa 1 — Krisis Penyembuhan: Bahagian yang tidak diberitahu oleh sesiapa. Apabila keadaan menjadi lebih teruk sebelum menjadi lebih baik.",
+        "🌱 Fasa 2 — Peningkatan Kulit Progresif: Hari demi hari, diet tepat, rutin harian, dan perubahan gaya hidup yang membuat perbezaan.",
+        "🧘 Fasa 3 — Stabilkan & Kekal Bebas: Mengunci hasil, melindungi kulit jangka panjang, dan hidup tanpa bergantung pada steroid.",
+        "Rangka kerja makanan peribadi — bukan diet ketat, tetapi panduan praktikal untuk mengenal pasti pencetus",
+        "Strategi survival krisis penyembuhan — apa yang saya lakukan ketika ia terasa mustahil",
+        "Garis masa 90 hari kemajuan sebenar, cabaran, dan kejayaan"
+      ]
+    },
+    "price": {
+      "original": "RM 47",
+      "amount": "RM 27",
+      "discount": "Tawaran pelancaran terhad — potongan 40%",
+      "note": "Muat turun digital segera. Pembayaran selamat Payhip.",
+      "cta": "Dapatkan Panduan Saya Sekarang"
+    },
+  "checkout": {
+    "backToHome": "Kembali ke laman utama",
+    "heading": "Checkout",
+    "subtitle": "Masukkan butiran anda untuk mendapatkan akses segera ke panduan ini.",
+    "contactInfo": "Maklumat perhubungan",
+    "fullName": "Nama penuh",
+    "namePlaceholder": "Nama anda",
+    "email": "Alamat e-mel",
+    "digitalNotice": "Produk digital — penghantaran segera",
+    "digitalDesc": "Tiada penghantaran fizikal. Anda akan terima PDF melalui e-mel selepas pembelian.",
+    "deliveryInfo": "Maklumat penghantaran",
+    "emailDelivery": "PDF akan dihantar ke e-mel ini selepas pembayaran",
+    "payment": "Pembayaran",
+    "paymentPlaceholder": "Gerbang pembayaran akan muncul di sini",
+    "completePayment": "Selesaikan Pembayaran",
+    "payNow": "Bayar Sekarang — RM 29.90",
+    "processing": "Memproses...",
+    "secureNotice": "Maklumat anda adalah selamat dan tidak akan dikongsi.",
+    "orderSummary": "Ringkasan pesanan",
+    "subtotal": "Subjumlah",
+    "original": "Harga asal",
+    "discount": "Anda jimat",
+    "surcharge": "Yuran pemprosesan",
+    "total": "Jumlah",
+    "digitalItem": "Item digital — tiada penghantaran",
+    "secureBadge": "Checkout selamat — dikuasakan oleh Stripe"
+  },
+  "faq": {
+      "title": "Soalan Lazim",
+      "items": [
+        {
+          "q": "Ini penawar?",
+          "a": "Tidak. E-book ini adalah untuk pendidikan kesejahteraan sahaja. Ia tidak mendiagnosis, merawat, atau menyembuhkan psoriasis."
+        },
+        {
+          "q": "Perlukah saya berhenti ubat saya?",
+          "a": "Tidak. Sentiasa ikut nasihat doktor anda. Panduan ini bertujuan menyokong rutin sedia ada anda, bukan menggantikan penjagaan perubatan."
+        },
+        {
+          "q": "E-book ini dalam bahasa apa?",
+          "a": "Versi ini dalam Bahasa Malaysia (BM). Versi Bahasa Inggeris sedang dalam pembangunan."
+        },
+        {
+          "q": "Bagaimana saya dapatkan e-book selepas pembelian?",
+          "a": "Selepas membeli di Payhip, anda akan menerima pautan muat turun melalui e-mel."
+        }
+      ]
+    },
+    "testimonial": {
+      "text": "Panduan ini menyelamatkan saya daripada berhenti diet berkali-kali. Memahami krisis penyembuhan membuat semua perbezaan. Saya harap saya ada ini ketika mula.",
+      "author": "Aiman R., Perjalanan Penyembuhan"
+    }
+  },
+  "faq": {
+    "badge": "Ada soalan?",
+    "heading": "Soalan Lazim",
+    "subtitle": "Soalan lazim tentang e-book, produk, dan cara laman web ini berfungsi.",
+    "groups": [
+      {
+        "category": "Umum",
+        "items": [
+          {
+            "q": "Ini penawar?",
+            "a": "Tidak. E-book ini dan semua bahan di laman ini adalah untuk pendidikan kesejahteraan sahaja. Ia tidak mendiagnosis, merawat, atau menyembuhkan psoriasis. Psoriasis adalah keadaan kompleks yang sering memerlukan penjagaan perubatan profesional."
+          },
+          {
+            "q": "Perlukah saya berhenti ubat saya?",
+            "a": "Tidak. Jangan sesekali berhenti ubat preskripsi tanpa berbincang dengan doktor anda terlebih dahulu. Panduan ini bertujuan menyokong rutin sedia ada anda, bukan menggantikannya."
+          },
+          {
+            "q": "Apakah perbezaan antara e-book BM dan Inggeris?",
+            "a": "E-book BM (Panduan Sokongan Psoriasis) ditulis dalam Bahasa Malaysia untuk penonton tempatan. E-book Inggeris (The Psoriasis Flare-Up Support Guide) disesuaikan untuk penonton global. Kandungannya serupa tetapi bukan terjemahan langsung — setiap satu disesuaikan untuk audiensnya."
+          }
+        ]
+      },
+      {
+        "category": "Produk",
+        "items": [
+          {
+            "q": "Bagaimana produk disyorkan?",
+            "a": "Produk disyorkan berdasarkan kategori kesejahteraan umum (pelindung kulit, imun, usus, tekanan/tidur) dan jurang nutrisi biasa. Kami tidak mendakwa mana-mana produk merawat atau menyembuhkan psoriasis. Sentiasa periksa ramuan dan rujuk profesional penjagaan kesihatan sebelum membeli."
+          },
+          {
+            "q": "Ini pautan afiliasi?",
+            "a": "Ya. Beberapa pautan produk adalah pautan afiliasi iHerb. Kami mungkin mendapat komisen kecil tanpa kos tambahan kepada anda. Kami hanya mengesyorkan produk yang kami percaya relevan dengan bidang sokongan yang dibincangkan."
+          },
+          {
+            "q": "Adakah saya perlu membeli suplemen?",
+            "a": "Tidak. Panduan ini membantu anda memahami apa yang perlu dicari jika anda ingin mencuba suplemen, tetapi ramai orang mendapat manfaat daripada mengkaji rutin, tidur, dan corak pemakanan mereka sahaja."
+          }
+        ]
+      },
+      {
+        "category": "Teknikal",
+        "items": [
+          {
+            "q": "Bagaimana saya muat turun e-book saya?",
+            "a": "Selepas membeli di Payhip, anda akan menerima pautan muat turun melalui e-mel. Untuk senarai semak percuma, masukkan e-mel anda di halaman senarai semak dan kami akan hantar pautan PDF."
+          },
+          {
+            "q": "Saya tidak terima e-mel muat turun.",
+            "a": "Periksa folder spam atau promosi anda. Jika masih tidak jumpa, hubungi kami dengan alamat e-mel yang anda gunakan."
+          }
+        ]
+      }
+    ]
+  },
+  "heroProduct": {
+    "editorsPick": "Pilihan Editor",
+    "evidence": "Bukti {{level}}",
+    "evidenceLevels": {
+      "strong": "Kuat",
+      "moderate": "Sederhana",
+      "emerging": "Baru"
+    },
+    "whyHelps": "Mengapa ini membantu untuk psoriasis",
+    "howWorks": "Cara ia berfungsi",
+    "dosage": "Dos",
+    "bestTime": "Masa terbaik",
+    "keyIngredients": "Ramuan utama",
+    "suitable": "Sesuai untuk",
+    "notSuitable": "Tidak sesuai untuk",
+    "safety": "Nota keselamatan",
+    "cta": "Semak harga di iHerb"
+  },
+  "testimonialCarousel": {
+    "allStories": "Semua kisah kejayaan",
+    "previous": "Sebelum",
+    "next": "Seterusnya",
+    "goToSlide": "Pergi ke slaid {{n}}",
+    "before": "Sebelum",
+    "now": "Sekarang",
+    "progressJourney": "Perjalanan perkembangan",
+    "note": "Nota:",
+    "tips": "{{count}} tip untuk anda",
+    "tips_plural": "{{count}} tip untuk anda",
+    "viewDetails": "Lihat butiran",
+    "seeFullJourney": "Lihat perjalanan penuh",
+    "progressUpdate": "{{count}} kemas kini perkembangan",
+    "progressUpdate_plural": "{{count}} kemas kini perkembangan"
+  },
+  "products": {
+    "badge": "Cadangan berasaskan penyelidikan",
+    "heading": "Panduan Sokongan Produk",
+    "subtitle": "Cadangan suplemen yang mengutamakan pendidikan untuk sokongan psoriasis. Setiap produk termasuk mengapa ia membantu, cara ia berfungsi, dos, dan keselamatan — supaya anda membuat keputusan dengan jelas.",
+    "affiliateBanner": "Penafian afiliasi: Beberapa pautan adalah pautan afiliasi iHerb. Kami mungkin mendapat komisen tanpa kos tambahan kepada anda.",
+    "featured": "Produk pilihan",
+    "filterAll": "Semua",
+    "empty": "Tiada produk dalam kategori ini lagi.",
+    "whyForPsoriasis": "Mengapa untuk psoriasis:",
+    "suitable": "Sesuai",
+    "viewDetails": "Lihat butiran",
+    "avoidIf": "Elakkan jika",
+    "safety": "Keselamatan",
+    "cta": "Semak harga di iHerb",
+    "modal": {
+      "howWorks": "Cara ia berfungsi — mekanisme tindakan",
+      "dosage": "Dos",
+      "bestTime": "Masa terbaik",
+      "keyIngredients": "Ramuan utama",
+      "suitable": "Sesuai",
+      "avoidIf": "Elakkan jika",
+      "safety": "Keselamatan",
+      "cta": "Semak harga di iHerb"
+    },
+    "disclaimer": {
+      "title": "Penting",
+      "text1": "Panduan ini untuk tujuan pendidikan sahaja. Tiada produk yang disenaraikan di sini merawat atau menyembuhkan psoriasis. Sentiasa berbincang dengan profesional penjagaan kesihatan yang bertauliah sebelum memulakan sebarang suplemen — terutamanya jika anda mengambil ubat, hamil, menyusu, atau menguruskan keadaan kesihatan.",
+      "text2": "Tahap bukti adalah berdasarkan penyelidikan yang tersedia setakat 2026. Keputusan individu berbeza. Mulakan satu suplemen pada satu masa, jejaki tindak balas anda, dan laraskan dengan panduan profesional."
+    }
+  },
+  "tips": {
+    "badge": "E-book Pilihan",
+    "heading": "Dapatkan Panduan Sokongan Suar Psoriasis hari ini!",
+    "story": {
+      "p1": "E-book ini dicipta daripada <strong>perjalanan 13 tahun</strong> sebenar hidup dengan psoriasis, bergelut melalui suar, kesakitan, kekecewaan, dan saat-saat hampir berputus asa.",
+      "p2": "Ia bukan sekadar panduan. Ia adalah <strong>peta jalan peribadi</strong> untuk mereka yang berasa letih, keliru, dan bersendirian dalam perjalanan kulit mereka."
+    },
+    "secretHacks": "Di dalamnya, anda akan mempelajari Rahsia & Rutin Harian saya untuk membalikkan keadaan saya.",
+    "learn": {
+      "title": "Apa yang anda akan pelajari",
+      "items": [
+        "Apa yang saya harap saya faham lebih awal tentang psoriasis",
+        "Bagaimana makanan, gula, tenusu, gluten, dan makanan diproses boleh menjejaskan keradangan",
+        "Mengapa kesihatan usus mungkin berkaitan dengan suar kulit",
+        "Makanan apa yang mungkin perlu dielakkan semasa fasa penyembuhan",
+        "Makanan apa yang lebih baik menyokong pemulihan usus",
+        "Cara menjejak pencetus anda sendiri dengan selamat",
+        "Cara mula menyokong badan anda satu langkah pada satu masa"
+      ]
+    },
+    "preview": {
+      "title": "Pratonton E-book",
+      "bmCover": {
+        "brand": "BebasPsoriasis",
+        "title": "Panduan Sokongan Psoriasis",
+        "subtitle": "Senarai semak pencetus · Kajian rutin"
+      },
+      "enCover": {
+        "brand": "FreeFromPsoriasis",
+        "title": "The Psoriasis Flare-Up Support Guide",
+        "subtitle": "Rahsia · Rutin harian · Pemulihan"
+      },
+      "spoiler": {
+        "label": "Di dalam panduan ini:",
+        "text": "\"Selama bertahun-tahun saya fikir psoriasis saya hanya kulit bermasalah. Saya cuba setiap krim, setiap diet, setiap doktor. Tiada yang berhasil jangka panjang. Kemudian saya sedar saya hanya merawat gejala, bukan menyokong badan saya...\"",
+        "footer": "Spoiler — halaman pengenalan",
+        "peek": "Intai →"
+      }
+    },
+    "spoiler": {
+      "title": "Spoiler: Contoh halaman di dalam panduan",
+      "subtitle": "Intai apa yang anda akan dapat sebelum membeli",
+      "pages": [
+        {
+          "label": "Halaman 4",
+          "tag": "Senarai Semak Pencetus",
+          "title": "Penjejak Pencetus Harian",
+          "items": [
+            "☐ Tahap tekanan hari ini (1-10): ___",
+            "☐ Jam tidur: ___",
+            "☐ Pengambilan air: ___ gelas",
+            "☐ Ada produk penjagaan kulit baru? ___",
+            "☐ Makanan yang dimakan mungkin pencetus: ___"
+          ],
+          "tip": "✦ Tip: Jejak selama 2 minggu sebelum membuat kesimpulan"
+        },
+        {
+          "label": "Halaman 12",
+          "tag": "Makanan & Keradangan",
+          "title": "Makanan yang perlu diambil perhatian:",
+          "items": [
+            "• Tenusu — boleh meningkatkan keradangan pada individu sensitif",
+            "• Gluten — sesetengah orang melaporkan suar selepas pengambilan",
+            "• Gula — boleh meningkatkan insulin dan penanda keradangan",
+            "• Makanan diproses — selalunya tinggi omega-6"
+          ],
+          "tip": "✦ Cuba hapuskan satu kumpulan pada satu masa selama 3 minggu"
+        },
+        {
+          "label": "Halaman 18",
+          "tag": "Rutin Harian",
+          "title": "Rutin Pagi Saya:",
+          "items": [
+            "1. Bangun — minum air suam dengan lemon",
+            "2. Pernafasan dalam 5 minit (rendahkan kortisol)",
+            "3. Penjagaan kulit lembut — tanpa pewangi sahaja",
+            "4. Sarapan — rendah gula, tinggi protein",
+            "5. Cahaya matahari pagi (vitamin D)"
+          ],
+          "tip": "✦ Konsistensi mengatasi intensiti setiap masa"
+        },
+        {
+          "label": "Halaman 24",
+          "tag": "Perubahan Minda",
+          "title": "Perubahan Yang Mengubah Segalanya:",
+          "items": [
+            "\"Saya berhenti melawan kulit saya dan mula menyokongnya. Psoriasis bukan musuh saya — ia adalah cara badan memberikan isyarat bahawa ada sesuatu yang perlu diberi perhatian.\"",
+            "• Dari malu → ingin tahu",
+            "• Dari melawan → mendengar",
+            "• Dari pengasingan → komuniti"
+          ],
+          "tip": "✦ Minda anda adalah 50% daripada perjalanan"
+        }
+      ]
+    },
+    "bonuses": {
+      "title": "Bonus Eksklusif Disertakan",
+      "items": [
+        {
+          "title": "Foto Fasa Pemulihan Saya",
+          "desc": "Imej fasa pemulihan peribadi dari perjalanan psoriasis saya sendiri. Ini dikongsi hanya dengan pelanggan serius sebagai bukti dan galakan peribadi."
+        },
+        {
+          "title": "Tip Sokongan Penyembuhan Lebih Cepat Saya",
+          "desc": "Tabiat kecil, rutin, dan pengajaran yang membantu saya menyokong badan saya dengan lebih berkesan semasa proses pemulihan."
+        },
+        {
+          "title": "Perubahan Minda Saya",
+          "desc": "Bagaimana saya mengubah cara saya melihat keadaan saya, badan saya, dan kehidupan saya semasa detik-detik paling sukar psoriasis."
+        }
+      ]
+    },
+    "pricing": {
+      "originalPrice": "$67 USD",
+      "discountedPrice": "$27",
+      "currency": "USD",
+      "badge": "Tawaran terhad — jimat 60%",
+      "desc": "Panduan ini untuk sesiapa yang pernah melihat cermin dan berasa putus asa, letih menyembunyikan kulit mereka, atau tidak pasti di mana hendak memulakan.",
+      "cta": "Dapatkan Panduan Saya Sekarang"
+    },
+    "closing": "\"Dapatkan panduan sokongan penyembuhan anda hari ini.\"",
+    "gallery": {
+      "title": "Galeri E-book",
+      "subtitle": "Terokai semua gambar pratonton Panduan Sokongan Suar Psoriasis",
+      "cta": "Dapatkan Panduan Saya Sekarang",
+      "backToTips": "← Kembali ke Tip & Trik"
+    },
+    "moreResources": "Sumber percuma lain",
+    "extraTips": [
+      {
+        "title": "Senarai Semak Sokongan Suar Psoriasis",
+        "type": "Muat Turun Percuma",
+        "desc": "Senarai semak 7 bidang percuma untuk mengkaji rutin anda dan mengenal pasti pencetus sebelum membeli produk lain.",
+        "features": [
+          "Kajian penjagaan kulit",
+          "Penilaian kendiri tekanan & tidur",
+          "Promt penjejakan makanan & pencetus",
+          "Panduan pendidikan suplemen"
+        ],
+        "cta": "Muat Turun Percuma"
+      }
+    ]
+  },
+  "thankYou": {
+    "heading": "Terima Kasih atas Pembelian Anda!",
+    "subtitle": "Transaksi anda berjaya. E-book anda sedia untuk muat turun.",
+    "verifying": "Mengesahkan pembayaran anda...",
+    "emailNotice": "Pautan muat turun akan dihantar ke e-mel anda sebentar lagi.",
+    "downloadCta": "Muat Turun E-book Anda (PDF)",
+    "nextSteps": {
+      "title": "Langkah seterusnya",
+      "items": [
+        "Muat turun PDF dan simpan ke peranti anda.",
+        "Mulakan dengan senarai semak pencetus di halaman 3 — tidak perlu baca semuanya sekaligus.",
+        "Gunakan pelan tindakan 7 hari untuk melaksanakan satu perubahan pada satu masa.",
+        "Apabila anda bersedia, terokai panduan sokongan produk untuk pendidikan suplemen."
+      ]
+    },
+    "secondaryCta": {
+      "products": "Panduan Sokongan Produk",
+      "checklist": "Dapatkan Senarai Semak Percuma"
+    }
+  },
+  "auth": {
+    "loginTitle": "Selamat kembali",
+    "loginSubtitle": "Log masuk ke akaun anda",
+    "registerTitle": "Buat akaun",
+    "registerSubtitle": "Kami akan hantar kod ke e-mel anda",
+    "forgotTitle": "Set semula kata laluan",
+    "forgotSubtitle": "Kami akan hantar kod ke e-mel anda",
+    "verifyTitle": "Sahkan e-mel anda",
+    "resetTitle": "Tetapkan kata laluan baharu",
+    "email": "E-mel",
+    "emailPlaceholder": "anda@email.com",
+    "password": "Kata laluan",
+    "passwordPlaceholder": "Min. 8 aksara",
+    "newPassword": "Kata laluan baharu",
+    "fullName": "Nama penuh",
+    "fullNamePlaceholder": "Nama penuh anda",
+    "username": "Nama pengguna",
+    "optional": "pilihan",
+    "otpCode": "Kod OTP",
+    "login": "Log masuk",
+    "loggingIn": "Sedang log masuk...",
+    "logout": "Log keluar",
+    "register": "Buat akaun",
+    "sendOtp": "Hantar kod OTP",
+    "sending": "Menghantar...",
+    "createAccount": "Buat akaun",
+    "creating": "Sedang buat akaun...",
+    "resetPassword": "Set semula kata laluan",
+    "resetting": "Sedang set semula...",
+    "otpSent": "Kod 6-digit telah dihantar ke e-mel anda. Tamat tempoh dalam 10 minit.",
+    "noAccount": "Tiada akaun? Buat satu",
+    "haveAccount": "Sudah ada akaun?",
+    "backToLogin": "Kembali ke log masuk",
+    "backToHome": "Kembali ke laman utama",
+    "back": "Kembali",
+    "forgotPassword": "Lupa kata laluan?",
+    "rememberPassword": "Ingat kata laluan anda?"
+  },
+  "aisha": {
+    "back": "← Kembali ke laman utama",
+    "badge": "Kisah sebenar",
+    "yearsOld": "tahun",
+    "beforeQuote": "Sebelum",
+    "afterQuote": "Selepas",
+    "summary": "Ringkasan",
+    "journey": "Perjalanan Kemajuan Kak Acha",
+    "journeySub": "Bulan demi bulan — apa yang dia lakukan, apa yang membantu, dan hasilnya.",
+    "note": "Nota:",
+    "tips": "{{count}} tip",
+    "tips_plural": "{{count}} tip",
+    "ctaHeading": "Mulakan Perjalanan Anda Sendiri",
+    "ctaSub": "Dapatkan panduan yang sama yang membantu Kak Acha mengawal kulitnya.",
+    "cta": "Dapatkan Panduan Saya Sekarang"
+  }
+}
