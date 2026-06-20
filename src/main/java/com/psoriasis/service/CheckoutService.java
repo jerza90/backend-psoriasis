@@ -12,6 +12,7 @@ import com.psoriasis.model.PaymentOrder;
 import com.psoriasis.repository.PaymentOrderRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -37,9 +38,11 @@ public class CheckoutService {
     private String frontendUrl;
 
     private final PaymentOrderRepository orderRepository;
+    private final EbookDeliveryService deliveryService;
 
-    public CheckoutService(PaymentOrderRepository orderRepository) {
+    public CheckoutService(PaymentOrderRepository orderRepository, EbookDeliveryService deliveryService) {
         this.orderRepository = orderRepository;
+        this.deliveryService = deliveryService;
     }
 
     @PostConstruct
@@ -126,10 +129,35 @@ public class CheckoutService {
             }
 
             orderRepository.save(order);
+            deliveryService.generateAndSend(order);
         } catch (StripeException e) {
             order.setPaymentStatus("Paid");
             order.setStatus("Completed");
             orderRepository.save(order);
+            deliveryService.generateAndSend(order);
         }
+    }
+
+    public ResponseEntity<Map<String, Object>> getSessionStatus(String sessionId) {
+        PaymentOrder order = orderRepository.findByStripeSessionId(sessionId).orElse(null);
+        if (order == null) {
+            return ResponseEntity.ok(Map.of("payment_status", "unknown"));
+        }
+        return ResponseEntity.ok(Map.of(
+                "payment_status", "Paid".equals(order.getPaymentStatus()) ? "paid" : "unpaid",
+                "download_ready", order.getDownloadToken() != null
+        ));
+    }
+
+    public String requestDownload(String sessionId) {
+        PaymentOrder order = orderRepository.findByStripeSessionId(sessionId)
+                .orElseThrow(() -> new RuntimeException("Session not found"));
+        if (!"Paid".equals(order.getPaymentStatus())) {
+            throw new RuntimeException("Payment not completed");
+        }
+        if (order.getDownloadToken() == null) {
+            deliveryService.generateAndSend(order);
+        }
+        return frontendUrl + "/api/ebook/download/" + order.getDownloadToken();
     }
 }

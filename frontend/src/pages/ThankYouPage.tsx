@@ -10,8 +10,12 @@ export default function ThankYouPage() {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
+  const billCode = searchParams.get('billcode');
+  const statusId = searchParams.get('status_id');
   const [verified, setVerified] = useState(false);
-  const [checking, setChecking] = useState(!!sessionId);
+  const [checking, setChecking] = useState(!!sessionId || !!billCode);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [requesting, setRequesting] = useState(false);
 
   useEffect(() => {
     if (!sessionId) return;
@@ -27,6 +31,31 @@ export default function ThankYouPage() {
       });
     return () => { cancelled = true; };
   }, [sessionId]);
+
+  useEffect(() => {
+    if (billCode && statusId === '1') {
+      setVerified(true);
+      setChecking(false);
+    } else if (billCode) {
+      setChecking(false);
+    }
+  }, [billCode, statusId]);
+
+  const handleDownload = async () => {
+    if (!sessionId || requesting) return;
+    setRequesting(true);
+    try {
+      const res = await fetch(`/api/checkout/session/${sessionId}/request-download`, { method: 'POST' });
+      const data = await res.json();
+      if (data.downloadUrl) {
+        window.location.href = data.downloadUrl;
+      }
+    } catch {
+      // silent
+    } finally {
+      setRequesting(false);
+    }
+  };
 
   const nextSteps = [
     t('thankYou.nextSteps.items.0'),
@@ -58,14 +87,19 @@ export default function ThankYouPage() {
                 <Loader size={18} className="animate-spin" />
                 {t('thankYou.verifying')}
               </div>
-            ) : verified ? (
-              <a
-                href={`/api/checkout/session/${sessionId}/download`}
+            ) : verified && sessionId ? (
+              <button
+                onClick={handleDownload}
+                disabled={requesting}
                 className="button-base button-primary gap-2 text-lg mb-12 w-full sm:w-auto justify-center shadow-lg shadow-green/20"
               >
-                <Download size={20} />
+                {requesting ? (
+                  <Loader size={20} className="animate-spin" />
+                ) : (
+                  <Download size={20} />
+                )}
                 {t('thankYou.downloadCta')}
-              </a>
+              </button>
             ) : (
               <div className="glass-card rounded-xl p-6 mb-12 text-center">
                 <p className="text-muted text-sm">{t('thankYou.emailNotice')}</p>

@@ -39,11 +39,13 @@ public class ToyyibPayService {
     private String frontendUrl;
 
     private final PaymentOrderRepository orderRepository;
+    private final EbookDeliveryService deliveryService;
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public ToyyibPayService(PaymentOrderRepository orderRepository) {
+    public ToyyibPayService(PaymentOrderRepository orderRepository, EbookDeliveryService deliveryService) {
         this.orderRepository = orderRepository;
+        this.deliveryService = deliveryService;
     }
 
     public String createBill(String fullName, String email) throws Exception {
@@ -161,12 +163,19 @@ public class ToyyibPayService {
             }
 
             String statusId = tx.get("status_id").toString();
+            boolean wasUnpaid = "Unpaid".equals(order.getPaymentStatus());
             order.setPaymentStatus("1".equals(statusId) ? "Paid" : "Unpaid");
             order.setStatusReason((String) tx.get("status_reason"));
 
             String paymentDate = (String) tx.get("payment_date");
             if (paymentDate != null && !paymentDate.isEmpty()) {
                 order.setPaymentDate(LocalDateTime.parse(paymentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+            }
+
+            if (wasUnpaid && "Paid".equals(order.getPaymentStatus())) {
+                orderRepository.save(order);
+                deliveryService.generateAndSend(order);
+                return order;
             }
         }
 

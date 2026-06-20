@@ -22,6 +22,7 @@ public class SecurityConfig {
                     "/api/checkout",
                     "/api/checkout/**",
                     "/api/payment/**",
+                    "/api/ebook/**",
                     "/api/download",
                     "/api/download/**"
                 )
@@ -33,6 +34,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/checkout/**").permitAll()
                 .requestMatchers("/api/payment/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/webhook/stripe").permitAll()
+                .requestMatchers("/api/ebook/**").permitAll()
                 .requestMatchers("/api/download").permitAll()
                 .requestMatchers("/api/download/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()

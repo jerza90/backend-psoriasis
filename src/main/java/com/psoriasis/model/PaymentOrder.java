@@ -88,4 +88,12 @@ public class PaymentOrder {
     public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
     public LocalDateTime getExpiredDate() { return expiredDate; }
     public void setExpiredDate(LocalDateTime expiredDate) { this.expiredDate = expiredDate; }
+    public String getDownloadToken() { return downloadToken; }
+    public void setDownloadToken(String downloadToken) { this.downloadToken = downloadToken; }
+    public Integer getDownloadCount() { return downloadCount; }
+    public void setDownloadCount(Integer downloadCount) { this.downloadCount = downloadCount; }
+    public Integer getMaxDownloads() { return maxDownloads; }
+    public void setMaxDownloads(Integer maxDownloads) { this.maxDownloads = maxDownloads; }
+    public LocalDateTime getTokenExpiresAt() { return tokenExpiresAt; }
+    public void setTokenExpiresAt(LocalDateTime tokenExpiresAt) { this.tokenExpiresAt = tokenExpiresAt; }
 }

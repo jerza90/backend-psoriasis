@@ -10,4 +10,5 @@ public interface PaymentOrderRepository extends JpaRepository<PaymentOrder, Long
     Optional<PaymentOrder> findByStripeSessionId(String stripeSessionId);
     Optional<PaymentOrder> findByOrderRef(String orderRef);
     Optional<PaymentOrder> findByStripePaymentIntentId(String stripePaymentIntentId);
+    Optional<PaymentOrder> findByDownloadToken(String downloadToken);
 }
