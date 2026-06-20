@@ -24,6 +24,16 @@
   --animate-fade-in: fade-in 0.4s ease-out forwards;
   --animate-scale-in: scale-in 0.3s ease-out;
   --animate-wave: wave 8s ease-in-out infinite alternate;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  --animate-float-slow: float-slow 9s ease-in-out infinite;
+  --animate-float-slower: float-slow 14s ease-in-out infinite;
+}
+
+/* ---- Depth system: layered shadows for a richer glass feel ---- */
+@theme {
+  --shadow-soft: 0 1px 2px rgba(26, 46, 58, 0.04), 0 4px 16px rgba(42, 143, 168, 0.06);
+  --shadow-card: 0 2px 6px rgba(26, 46, 58, 0.05), 0 10px 30px rgba(42, 143, 168, 0.1);
+  --shadow-float: 0 8px 24px rgba(26, 46, 58, 0.08), 0 24px 64px rgba(42, 143, 168, 0.16);
 }
 
 @keyframes fade-up {
@@ -54,6 +64,18 @@
   100% { opacity: 1; transform: translateY(0) rotate(0deg); }
 }
 
+/* Diagonal light sweep for primary buttons */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Gentle vertical drift for ambient background blobs */
+@keyframes float-slow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(0, -22px) scale(1.04); }
+}
+
 @utility animate-drop-in {
   animation: drop-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
@@ -68,6 +90,17 @@
     line-height: 1.5;
     background: var(--color-ocean-deep);
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* Respect users who prefer less motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
   }
   body::before {
     content: '';
@@ -126,11 +159,14 @@
   animation: wave 12s ease-in-out infinite alternate;
 }
 
+/* Lit-edge highlight: a thin top sheen layered on top of the border.
+   Shared by all glass surfaces for a premium, light-catching feel. */
 @utility glass {
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 @utility glass-strong {
@@ -138,6 +174,7 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 @utility glass-card {
@@ -145,14 +182,21 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 8px 32px rgba(42, 143, 168, 0.12);
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 @utility glass-card-hover {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
   &:hover {
     background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 12px 48px rgba(42, 143, 168, 0.2);
+    box-shadow: var(--shadow-float), inset 0 1px 0 rgba(255, 255, 255, 0.65);
     border-color: rgba(42, 157, 143, 0.3);
+    transform: translateY(-4px);
+  }
+  &:focus-visible {
+    outline: 2px solid rgba(42, 157, 143, 0.5);
+    outline-offset: 2px;
   }
 }
 
@@ -161,9 +205,16 @@
   border: 1px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   &:focus {
-    border-color: rgba(42, 157, 143, 0.4);
-    box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+    border-color: rgba(42, 157, 143, 0.5);
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    outline: none;
+  }
+  &::placeholder {
+    color: rgba(90, 122, 138, 0.55);
   }
 }
 
@@ -186,14 +237,40 @@
 }
 
 @utility button-primary {
+  position: relative;
   background: linear-gradient(135deg, var(--color-green), var(--color-leaf));
   color: white;
   border: none;
-  box-shadow: 0 4px 20px rgba(42, 157, 143, 0.25);
+  box-shadow: 0 4px 20px rgba(42, 157, 143, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+
+  /* Light sweep that travels across the button on hover */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 70%
+    );
+    background-size: 200% 100%;
+    background-position: -200% 0;
+    pointer-events: none;
+    transition: background-position 0.7s ease;
+  }
 
   &:hover {
-    box-shadow: 0 6px 30px rgba(42, 157, 143, 0.35);
+    box-shadow: 0 8px 32px rgba(42, 157, 143, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
     transform: translateY(-2px);
+  }
+  &:hover::after {
+    background-position: 200% 0;
+  }
+  &:focus-visible {
+    outline: 2px solid rgba(42, 157, 143, 0.6);
+    outline-offset: 2px;
   }
 }
 
@@ -250,8 +327,26 @@
   font-weight: 900;
 }
 
+/* Card / section-title scale — replaces ad-hoc text-[clamp(...)] values */
+@utility clamp-heading-sm {
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-weight: 800;
+}
+
 @utility gradient-green {
   background: linear-gradient(135deg, var(--color-green), var(--color-leaf));
+}
+
+/* Leaf-leaning accent for the secondary brand avatar tone */
+@utility gradient-leaf {
+  background: linear-gradient(135deg, var(--color-leaf), var(--color-ocean-teal));
+}
+
+/* Brand-aligned avatar fallback (replaces off-palette purple) */
+@utility avatar-gradient {
+  background: linear-gradient(135deg, var(--color-ocean-teal), var(--color-green));
 }
 
 @utility gradient-warm {
@@ -264,4 +359,47 @@
 
 @utility gradient-subtle {
   background: linear-gradient(180deg, rgba(42, 157, 143, 0.04) 0%, transparent 100%);
+}
+
+/* ---- Micro-interaction & layout helpers ---- */
+
+/* Generic lift-on-hover for interactive cards/links */
+@utility lift {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-float);
+  }
+}
+
+/* The repeated "icon + uppercase tracked label" badge, formalized */
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-green);
+}
+
+/* Thin, premium top divider used inside cards/sections */
+@utility hairline {
+  border-top: 1px solid rgba(26, 46, 58, 0.07);
+}
+
+/* ---- Scroll-reveal primitives (paired with useScrollReveal hook) ---- */
+/* Hidden state: nudged down, faded out. Revealed state: at rest. */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+@utility reveal-visible {
+  opacity: 1;
+  transform: none;
 }

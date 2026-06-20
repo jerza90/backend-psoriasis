@@ -1,101 +1,134 @@
 package com.psoriasis.service;
 
+import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.BalanceTransaction;
+import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
+import com.stripe.net.RequestOptions;
 import com.stripe.param.checkout.SessionCreateParams;
-import com.psoriasis.dto.CheckoutRequest;
-import com.psoriasis.dto.CheckoutResponse;
-import com.psoriasis.model.Order;
-import com.psoriasis.repository.OrderRepository;
+import com.stripe.param.checkout.SessionRetrieveParams;
+import com.psoriasis.model.PaymentOrder;
+import com.psoriasis.repository.PaymentOrderRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class CheckoutService {
 
-    private final OrderRepository orderRepository;
+    @Value("${stripe.secret-key}")
+    private String stripeSecretKey;
 
-    @Value("${app.stripe.surcharge-rate}")
-    private double surchargeRate;
+    @Value("${stripe.price-bm}")
+    private String priceBm;
 
-    @Value("${app.stripe.surcharge-fixed}")
-    private double surchargeFixed;
+    @Value("${stripe.price-en}")
+    private String priceEn;
 
-    @Value("${app.stripe.currency}")
-    private String currency;
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
-    @Value("${app.stripe.success-url}")
-    private String successUrl;
+    private final PaymentOrderRepository orderRepository;
 
-    @Value("${app.stripe.cancel-url}")
-    private String cancelUrl;
-
-    public CheckoutService(OrderRepository orderRepository) {
+    public CheckoutService(PaymentOrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
-    public CheckoutResponse createCheckoutSession(CheckoutRequest req) throws StripeException {
-        BigDecimal baseAmount = new BigDecimal("27.00");
-        BigDecimal fixed = BigDecimal.valueOf(surchargeFixed);
-        BigDecimal rate = BigDecimal.valueOf(surchargeRate);
+    @PostConstruct
+    public void init() {
+        Stripe.apiKey = stripeSecretKey;
+    }
 
-        BigDecimal surcharge = baseAmount.multiply(rate).add(fixed)
-                .setScale(2, RoundingMode.HALF_UP);
-        BigDecimal total = baseAmount.add(surcharge).setScale(2, RoundingMode.HALF_UP);
-        long totalCents = total.multiply(new BigDecimal("100")).longValue();
+    public String createCheckoutSession(String fullName, String email, String product) throws StripeException {
+        String priceId = "bm".equals(product) ? priceBm : priceEn;
+        String orderRef = "EN-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        String successUrl = frontendUrl + "/thank-you?session_id={CHECKOUT_SESSION_ID}";
+        String cancelUrl = frontendUrl + "/checkout";
 
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl(successUrl)
                 .setCancelUrl(cancelUrl)
-                .putAllMetadata(java.util.Map.of(
-                        "product_type", req.getProductType(),
-                        "product_id", req.getProductId(),
-                        "full_name", req.getFullName() != null ? req.getFullName() : ""
+                .setCustomerEmail(email)
+                .addLineItem(
+                        SessionCreateParams.LineItem.builder()
+                                .setPrice(priceId)
+                                .setQuantity(1L)
+                                .build()
+                )
+                .putAllMetadata(Map.of(
+                        "fullName", fullName,
+                        "email", email,
+                        "product", product,
+                        "orderRef", orderRef
                 ))
-                .setCustomerEmail(req.getEmail())
-                .addLineItem(SessionCreateParams.LineItem.builder()
-                        .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
-                                .setCurrency(currency)
-                                .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                        .setName("Free From Psoriasis Since 2021")
-                                        .setDescription("BM guide — healing crisis & food restrictions")
-                                        .build())
-                                .setUnitAmount(totalCents)
-                                .build())
-                        .setQuantity(1L)
-                        .build())
                 .build();
 
         Session session = Session.create(params);
 
-        Order order = new Order();
-        order.setEmail(req.getEmail());
-        order.setFullName(req.getFullName());
-        order.setProductType(req.getProductType());
-        order.setProductId(req.getProductId());
-        order.setAmount(baseAmount);
-        order.setSurcharge(surcharge);
-        order.setTotal(total);
-        order.setCurrency(currency.toUpperCase());
-        order.setStatus("pending");
+        PaymentOrder order = new PaymentOrder();
+        order.setOrderRef(orderRef);
+        order.setPaymentMethod("STRIPE");
+        order.setCustomerName(fullName);
+        order.setCustomerEmail(email);
+        order.setProductName("en".equals(product) ? "English Guide" : "Panduan Sokongan Psoriasis");
+        order.setAmount(new BigDecimal(session.getAmountTotal().doubleValue() / 100, java.math.MathContext.DECIMAL64));
+        order.setCurrency("USD");
+        order.setPaymentStatus("Unpaid");
+        order.setStatus("Active");
         order.setStripeSessionId(session.getId());
+        order.setCreatedDate(LocalDateTime.now());
         orderRepository.save(order);
 
-        return new CheckoutResponse(session.getId(), session.getUrl(), baseAmount, surcharge, total, currency.toUpperCase());
-    }
-
-    public Session retrieveSession(String sessionId) throws StripeException {
-        return Session.retrieve(sessionId);
+        return session.getUrl();
     }
 
     public void handlePaymentSuccess(String sessionId) {
-        Order order = orderRepository.findByStripeSessionId(sessionId).orElse(null);
-        if (order != null && "pending".equals(order.getStatus())) {
-            order.setStatus("completed");
+        PaymentOrder order = orderRepository.findByStripeSessionId(sessionId).orElse(null);
+        if (order == null || !"Unpaid".equals(order.getPaymentStatus())) return;
+
+        try {
+            SessionRetrieveParams params = SessionRetrieveParams.builder()
+                    .addExpand("payment_intent")
+                    .addExpand("payment_intent.latest_charge")
+                    .addExpand("payment_intent.latest_charge.balance_transaction")
+                    .build();
+
+            Session session = Session.retrieve(sessionId, params, (RequestOptions) null);
+            PaymentIntent pi = session.getPaymentIntentObject();
+
+            order.setStripePaymentIntentId(pi.getId());
+            order.setPaymentChannel("Credit Card");
+            order.setPaymentStatus("Paid");
+            order.setStatus("Completed");
+
+            if (pi.getLatestChargeObject() != null) {
+                BalanceTransaction bt = pi.getLatestChargeObject().getBalanceTransactionObject();
+                if (bt != null) {
+                    long feeCents = bt.getFee();
+                    long netCents = bt.getNet();
+                    order.setTransactionCharge(new BigDecimal(feeCents).divide(BigDecimal.valueOf(100), 2, java.math.RoundingMode.HALF_UP));
+                    order.setNettReceived(new BigDecimal(netCents).divide(BigDecimal.valueOf(100), 2, java.math.RoundingMode.HALF_UP));
+                }
+            }
+
+            if (pi.getCreated() != null) {
+                order.setPaymentDate(LocalDateTime.ofInstant(
+                        Instant.ofEpochSecond(pi.getCreated()), ZoneId.systemDefault()));
+            }
+
+            orderRepository.save(order);
+        } catch (StripeException e) {
+            order.setPaymentStatus("Paid");
+            order.setStatus("Completed");
             orderRepository.save(order);
         }
     }

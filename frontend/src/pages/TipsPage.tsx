@@ -3,6 +3,7 @@ import { BookOpen, Check, ArrowRight, Sparkles, Star, Heart, Clock, Gift, Images
 import { Link } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
+import Eyebrow from '../components/Eyebrow';
 
 export default function TipsPage() {
   const { t } = useTranslation();
@@ -65,17 +66,14 @@ export default function TipsPage() {
 
         <div className="relative container-main max-w-[800px] mx-auto">
           <div className="animate-fade-up">
-            <div className="inline-flex items-center gap-2 text-green font-bold text-xs uppercase tracking-widest mb-4">
-              <BookOpen size={14} />
-              {t('tips.badge')}
-            </div>
+            <Eyebrow icon={BookOpen} className="mb-4">{t('tips.badge')}</Eyebrow>
 
             <h1 className="clamp-heading-md mb-4">
               {t('tips.heading')}
             </h1>
 
             {/* Personal story */}
-            <div className="glass rounded-xl p-6 mb-6">
+            <div className="glass-card rounded-xl p-6 mb-6">
               <div className="flex items-start gap-3">
                 <span className="w-10 h-10 rounded-full gradient-green flex items-center justify-center shrink-0 mt-1">
                   <Heart size={20} className="text-white" />
@@ -107,7 +105,7 @@ export default function TipsPage() {
             </div>
 
             {/* What you'll learn */}
-            <div className="glass rounded-xl p-6 mb-6">
+            <div className="glass-card rounded-xl p-6 mb-6">
               <h3 className="font-bold text-xs text-muted uppercase tracking-widest mb-4">{t('tips.learn.title')}</h3>
               <div className="space-y-3">
                 {learnBullets.map((b) => (
@@ -143,7 +141,7 @@ export default function TipsPage() {
                     className="aspect-[0.72] p-5 flex flex-col justify-between relative"
                     style={{
                       background:
-                        'linear-gradient(145deg, rgba(15,40,71,0.85), rgba(10,22,40,0.5)), radial-gradient(circle at 30% 20%, rgba(78,205,196,0.12) 0 16%, transparent 17%), radial-gradient(circle at 78% 76%, rgba(42,143,168,0.15) 0 18%, transparent 19%), #0f2847',
+                        'linear-gradient(145deg, rgba(26,46,58,0.85), rgba(42,157,143,0.5)), radial-gradient(circle at 30% 20%, rgba(126,214,181,0.2) 0 16%, transparent 17%), radial-gradient(circle at 78% 76%, rgba(168,220,232,0.2) 0 18%, transparent 19%), #1a2e3a',
                     }}
                   >
                     <div className="text-green text-xs font-black uppercase tracking-wider">{t('tips.preview.enCover.brand')}</div>
@@ -161,7 +159,7 @@ export default function TipsPage() {
                     className="aspect-[0.72] p-5 flex flex-col justify-between relative"
                     style={{
                       background:
-                        'linear-gradient(145deg, rgba(255,248,240,0.95), rgba(255,255,255,0.6)), radial-gradient(circle at 50% 30%, #f7e8d8 0 20%, transparent 21%), #faf3eb',
+                        'linear-gradient(145deg, rgba(212,232,240,0.95), rgba(255,255,255,0.6)), radial-gradient(circle at 50% 30%, rgba(168,220,232,0.6) 0 20%, transparent 21%), #d4e8f0',
                     }}
                   >
                     <div className="text-[10px] font-mono text-muted/60 leading-relaxed line-clamp-6">
@@ -263,7 +261,7 @@ export default function TipsPage() {
             </details>
 
             {/* Bonuses */}
-            <div className="glass rounded-xl p-6 mb-6">
+            <div className="glass-card rounded-xl p-6 mb-6">
               <div className="flex items-center gap-2 mb-4">
                 <Gift size={18} className="text-rose" />
                 <h3 className="font-bold text-sm text-ink">{t('tips.bonuses.title')}</h3>
@@ -311,7 +309,7 @@ export default function TipsPage() {
             </div>
 
             {/* Emotional closing */}
-            <div className="glass rounded-xl p-6 text-center mb-8">
+            <div className="glass-card rounded-xl p-6 text-center mb-8">
               <p className="text-sm text-muted leading-relaxed italic">
                 {t('tips.closing')}
               </p>
@@ -367,7 +365,7 @@ export default function TipsPage() {
       {/* Disclaimer */}
       <section className="section-top border-b-0">
         <div className="container-main">
-          <div className="glass rounded-xl p-5 max-w-[800px] mx-auto">
+          <div className="glass-card rounded-xl p-5 max-w-[800px] mx-auto">
             <p className="text-muted text-xs leading-relaxed">
               {t('landing.disclaimer')}
             </p>

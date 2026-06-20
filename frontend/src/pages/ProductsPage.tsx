@@ -56,7 +56,7 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
               {product.testimonialImage ? (
                 <img src={product.testimonialImage} alt={product.testimonialAuthor || 'Testimonial'} className="w-12 h-12 rounded-full object-cover shrink-0" />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center shrink-0 text-white font-bold text-lg">
+                <div className="w-12 h-12 rounded-full avatar-gradient flex items-center justify-center shrink-0 text-white font-bold text-lg">
                   {product.testimonialAuthor?.charAt(0) || 'U'}
                 </div>
               )}

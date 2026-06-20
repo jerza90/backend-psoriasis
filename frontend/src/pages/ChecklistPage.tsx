@@ -64,7 +64,7 @@ export default function ChecklistPage() {
 
           {!submitted ? (
             <div className="animate-fade-up [animation-delay:0.1s]">
-              <div className="glass rounded-xl p-6 mb-6">
+              <div className="glass-card rounded-xl p-6 mb-6">
                 <h2 className="font-bold text-xs text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
                   <Sparkles size={14} />
                   {t('checklist.areas.title')}
@@ -81,7 +81,7 @@ export default function ChecklistPage() {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="glass rounded-xl p-7">
+              <form onSubmit={handleSubmit} className="glass-card rounded-xl p-7">
                 <h2 className="font-bold text-xs text-muted uppercase tracking-widest mb-5">
                   {t('checklist.form.title')}
                 </h2>
@@ -97,7 +97,7 @@ export default function ChecklistPage() {
                         placeholder={t('checklist.form.namePlaceholder')}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/70 border border-white/60 text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-green/30 backdrop-blur-sm transition-all"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl glass-input text-sm outline-none transition-all"
                       />
                     </div>
                   </div>
@@ -112,7 +112,7 @@ export default function ChecklistPage() {
                         placeholder={t('checklist.form.emailPlaceholder')}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/70 border border-white/60 text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-green/30 backdrop-blur-sm transition-all"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl glass-input text-sm outline-none transition-all"
                       />
                     </div>
                   </div>
@@ -144,7 +144,7 @@ export default function ChecklistPage() {
               </div>
             </div>
           ) : (
-            <div className="glass rounded-2xl p-10 text-center animate-scale-in">
+            <div className="glass-card rounded-2xl p-10 text-center animate-scale-in">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full gradient-green mb-5 shadow-lg shadow-green/20">
                 <Check size={36} className="text-white" />
               </div>

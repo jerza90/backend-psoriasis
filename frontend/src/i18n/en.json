@@ -249,6 +249,32 @@
       "note": "Instant digital download. Payhip secure checkout.",
       "cta": "Get My Guide Now"
     },
+    "faq": {
+      "title": "FAQ",
+      "items": [
+        {
+          "q": "Is this a cure?",
+          "a": "No. This ebook is for wellness education only. It does not diagnose, treat, or cure psoriasis."
+        },
+        {
+          "q": "Should I stop my medication?",
+          "a": "No. Always follow your doctor's advice. This guide is meant to support your existing routine, not replace medical care."
+        },
+        {
+          "q": "What language is the ebook in?",
+          "a": "This version is in Bahasa Malaysia (BM). An English version is in development."
+        },
+        {
+          "q": "How do I get the ebook after purchase?",
+          "a": "After purchasing on Payhip, you will receive a download link via email."
+        }
+      ]
+    },
+    "testimonial": {
+      "text": "This guide saved me from quitting my diet multiple times. Understanding the healing crisis made all the difference. I wish I had this when I started.",
+      "author": "Aiman R., Healing Journey"
+    }
+  },
   "checkout": {
     "backToHome": "Back to home",
     "heading": "Checkout",
@@ -275,32 +301,6 @@
     "total": "Total",
     "digitalItem": "Digital item — no shipping",
     "secureBadge": "Secure checkout — powered by Stripe"
-  },
-  "faq": {
-      "title": "FAQ",
-      "items": [
-        {
-          "q": "Is this a cure?",
-          "a": "No. This ebook is for wellness education only. It does not diagnose, treat, or cure psoriasis."
-        },
-        {
-          "q": "Should I stop my medication?",
-          "a": "No. Always follow your doctor's advice. This guide is meant to support your existing routine, not replace medical care."
-        },
-        {
-          "q": "What language is the ebook in?",
-          "a": "This version is in Bahasa Malaysia (BM). An English version is in development."
-        },
-        {
-          "q": "How do I get the ebook after purchase?",
-          "a": "After purchasing on Payhip, you will receive a download link via email."
-        }
-      ]
-    },
-    "testimonial": {
-      "text": "This guide saved me from quitting my diet multiple times. Understanding the healing crisis made all the difference. I wish I had this when I started.",
-      "author": "Aiman R., Healing Journey"
-    }
   },
   "faq": {
     "badge": "Got questions?",

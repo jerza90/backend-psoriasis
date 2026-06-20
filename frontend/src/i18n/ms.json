@@ -249,6 +249,32 @@
       "note": "Muat turun digital segera. Pembayaran selamat Payhip.",
       "cta": "Dapatkan Panduan Saya Sekarang"
     },
+    "faq": {
+      "title": "Soalan Lazim",
+      "items": [
+        {
+          "q": "Ini penawar?",
+          "a": "Tidak. E-book ini adalah untuk pendidikan kesejahteraan sahaja. Ia tidak mendiagnosis, merawat, atau menyembuhkan psoriasis."
+        },
+        {
+          "q": "Perlukah saya berhenti ubat saya?",
+          "a": "Tidak. Sentiasa ikut nasihat doktor anda. Panduan ini bertujuan menyokong rutin sedia ada anda, bukan menggantikan penjagaan perubatan."
+        },
+        {
+          "q": "E-book ini dalam bahasa apa?",
+          "a": "Versi ini dalam Bahasa Malaysia (BM). Versi Bahasa Inggeris sedang dalam pembangunan."
+        },
+        {
+          "q": "Bagaimana saya dapatkan e-book selepas pembelian?",
+          "a": "Selepas membeli di Payhip, anda akan menerima pautan muat turun melalui e-mel."
+        }
+      ]
+    },
+    "testimonial": {
+      "text": "Panduan ini menyelamatkan saya daripada berhenti diet berkali-kali. Memahami krisis penyembuhan membuat semua perbezaan. Saya harap saya ada ini ketika mula.",
+      "author": "Aiman R., Perjalanan Penyembuhan"
+    }
+  },
   "checkout": {
     "backToHome": "Kembali ke laman utama",
     "heading": "Checkout",
@@ -275,32 +301,6 @@
     "total": "Jumlah",
     "digitalItem": "Item digital — tiada penghantaran",
     "secureBadge": "Checkout selamat — dikuasakan oleh Stripe"
-  },
-  "faq": {
-      "title": "Soalan Lazim",
-      "items": [
-        {
-          "q": "Ini penawar?",
-          "a": "Tidak. E-book ini adalah untuk pendidikan kesejahteraan sahaja. Ia tidak mendiagnosis, merawat, atau menyembuhkan psoriasis."
-        },
-        {
-          "q": "Perlukah saya berhenti ubat saya?",
-          "a": "Tidak. Sentiasa ikut nasihat doktor anda. Panduan ini bertujuan menyokong rutin sedia ada anda, bukan menggantikan penjagaan perubatan."
-        },
-        {
-          "q": "E-book ini dalam bahasa apa?",
-          "a": "Versi ini dalam Bahasa Malaysia (BM). Versi Bahasa Inggeris sedang dalam pembangunan."
-        },
-        {
-          "q": "Bagaimana saya dapatkan e-book selepas pembelian?",
-          "a": "Selepas membeli di Payhip, anda akan menerima pautan muat turun melalui e-mel."
-        }
-      ]
-    },
-    "testimonial": {
-      "text": "Panduan ini menyelamatkan saya daripada berhenti diet berkali-kali. Memahami krisis penyembuhan membuat semua perbezaan. Saya harap saya ada ini ketika mula.",
-      "author": "Aiman R., Perjalanan Penyembuhan"
-    }
   },
   "faq": {
     "badge": "Ada soalan?",

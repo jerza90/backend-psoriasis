@@ -3,6 +3,7 @@ import { ArrowLeft, Shield } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
+import ScrollReveal from '../components/ScrollReveal';
 
 export default function BlogPostPage() {
   const { t } = useTranslation();
@@ -46,7 +47,7 @@ export default function BlogPostPage() {
           {t('blogPost.back')}
         </Link>
 
-        <h1 className="text-[clamp(28px,5vw,44px)] font-black leading-[0.95] mb-6 animate-fade-up">{post.title}</h1>
+        <h1 className="clamp-heading-md mb-6 animate-fade-up">{post.title}</h1>
 
         <div className="text-muted leading-relaxed space-y-4 animate-fade-up [animation-delay:0.1s]">
           {post.body.split('\n\n').map((para, i) => {
@@ -64,18 +65,20 @@ export default function BlogPostPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-12 glass rounded-xl p-8 text-center animate-fade-up">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full gradient-green mb-4 shadow-lg shadow-green/20">
-            <Shield size={22} className="text-white" />
+        <ScrollReveal className="mt-12">
+          <div className="glass-card rounded-xl p-8 text-center">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full gradient-green mb-4 shadow-lg shadow-green/20">
+              <Shield size={22} className="text-white" />
+            </div>
+            <h2 className="font-bold text-xl mb-2">{t('blogPost.cta.heading')}</h2>
+            <p className="text-muted text-sm mb-5 max-w-[400px] mx-auto leading-relaxed">
+              {t('blogPost.cta.desc')}
+            </p>
+            <Link to="/checklist" className="button-base button-primary gap-2 text-sm shadow-lg shadow-green/20">
+              {t('blogPost.cta.button')}
+            </Link>
           </div>
-          <h2 className="font-bold text-xl mb-2">{t('blogPost.cta.heading')}</h2>
-          <p className="text-muted text-sm mb-5 max-w-[400px] mx-auto leading-relaxed">
-            {t('blogPost.cta.desc')}
-          </p>
-          <Link to="/checklist" className="button-base button-primary gap-2 text-sm shadow-lg shadow-green/20">
-            {t('blogPost.cta.button')}
-          </Link>
-        </div>
+        </ScrollReveal>
       </article>
 
       <Footer />
