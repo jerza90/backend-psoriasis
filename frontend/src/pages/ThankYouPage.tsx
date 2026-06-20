@@ -4,27 +4,65 @@ import { Check, Download, BookOpen, Loader } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
+import ScrollReveal from '../components/ScrollReveal';
 
 export default function ThankYouPage() {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
+  const billCode = searchParams.get('billcode');
+  const statusId = searchParams.get('status_id');
   const [verified, setVerified] = useState(false);
-  const [checking, setChecking] = useState(true);
+  const [checking, setChecking] = useState(!!sessionId || !!billCode);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [requesting, setRequesting] = useState(false);
 
   useEffect(() => {
-    if (sessionId) {
-      fetch(`/api/checkout/session/${sessionId}`)
-        .then(res => res.json())
-        .then(session => {
-          if (session.payment_status === 'paid') setVerified(true);
-        })
-        .catch(() => {})
-        .finally(() => setChecking(false));
-    } else {
+    if (!sessionId) return;
+    let cancelled = false;
+    fetch(`/api/checkout/session/${sessionId}`)
+      .then(res => res.json())
+      .then(session => {
+        if (!cancelled && session.payment_status === 'paid') setVerified(true);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setChecking(false);
+      });
+    return () => { cancelled = true; };
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (billCode && statusId === '1') {
+      setVerified(true);
+      setChecking(false);
+    } else if (billCode) {
       setChecking(false);
     }
-  }, [sessionId]);
+  }, [billCode, statusId]);
+
+  const handleDownload = async () => {
+    if (!sessionId || requesting) return;
+    setRequesting(true);
+    try {
+      const res = await fetch(`/api/checkout/session/${sessionId}/request-download`, { method: 'POST' });
+      const data = await res.json();
+      if (data.downloadUrl) {
+        window.location.href = data.downloadUrl;
+      }
+    } catch {
+      // silent
+    } finally {
+      setRequesting(false);
+    }
+  };
+
+  const nextSteps = [
+    t('thankYou.nextSteps.items.0'),
+    t('thankYou.nextSteps.items.1'),
+    t('thankYou.nextSteps.items.2'),
+    t('thankYou.nextSteps.items.3'),
+  ];
 
   return (
     <div className="min-h-screen">
@@ -49,30 +87,43 @@ export default function ThankYouPage() {
                 <Loader size={18} className="animate-spin" />
                 {t('thankYou.verifying')}
               </div>
-            ) : verified ? (
-              <a
-                href={`/api/checkout/session/${sessionId}/download`}
+            ) : verified && sessionId ? (
+              <button
+                onClick={handleDownload}
+                disabled={requesting}
                 className="button-base button-primary gap-2 text-lg mb-12 w-full sm:w-auto justify-center shadow-lg shadow-green/20"
               >
-                <Download size={20} />
+                {requesting ? (
+                  <Loader size={20} className="animate-spin" />
+                ) : (
+                  <Download size={20} />
+                )}
                 {t('thankYou.downloadCta')}
-              </a>
+              </button>
             ) : (
-              <p className="text-muted/60 text-sm mb-12">{t('thankYou.emailNotice')}</p>
+              <div className="glass-card rounded-xl p-6 mb-12 text-center">
+                <p className="text-muted text-sm">{t('thankYou.emailNotice')}</p>
+              </div>
             )}
           </div>
 
-          <div className="glass rounded-xl p-7 animate-fade-up [animation-delay:0.15s]">
-            <h2 className="font-bold text-xs text-muted uppercase tracking-widest mb-4">
-              {t('thankYou.nextSteps.title')}
-            </h2>
-            <ol className="space-y-3 text-sm text-muted list-decimal list-inside">
-              <li className="leading-relaxed">{t('thankYou.nextSteps.items.0')}</li>
-              <li className="leading-relaxed">{t('thankYou.nextSteps.items.1')}</li>
-              <li className="leading-relaxed">{t('thankYou.nextSteps.items.2')}</li>
-              <li className="leading-relaxed">{t('thankYou.nextSteps.items.3')}</li>
-            </ol>
-          </div>
+          <ScrollReveal delay={150}>
+            <div className="glass-card rounded-xl p-7">
+              <h2 className="font-bold text-xs text-muted uppercase tracking-widest mb-5">
+                {t('thankYou.nextSteps.title')}
+              </h2>
+              <ol className="space-y-4">
+                {nextSteps.map((step, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm text-muted leading-relaxed">
+                    <span className="w-7 h-7 rounded-full gradient-green flex items-center justify-center shrink-0 text-xs font-bold text-white">
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </ScrollReveal>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8 animate-fade-up [animation-delay:0.2s]">
             <Link to="/products" className="button-base button-secondary gap-2">

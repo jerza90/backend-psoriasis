@@ -227,7 +227,7 @@ export default function TestimonialCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   const isPaused = useRef(false);
-  const idleTimer = useRef<ReturnType<typeof setTimeout>>();
+  const idleTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const featured = testimonials.filter((t) => t.featured);
   const allDoubled = [...testimonials, ...testimonials];

@@ -1,4 +1,4 @@
-import { BookOpen, Check, ArrowRight, Sparkles, Shield, AlertTriangle, Info, Star, FileText, Clock } from 'lucide-react';
+import { BookOpen, Check, ArrowRight, Shield, AlertTriangle, FileText, Clock } from 'lucide-react';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import { useTranslation } from 'react-i18next';
@@ -109,7 +109,7 @@ export default function EbookPage() {
             <div className="text-center mb-8 animate-fade-up">
               <h2 className="clamp-heading-md">{t('ebook.features.title')}</h2>
             </div>
-            <div className="glass rounded-xl p-7 md:p-9 animate-fade-up">
+            <div className="glass-card rounded-xl p-7 md:p-9 animate-fade-up">
               <ul className="space-y-4">
                 {features.map((f) => (
                   <li key={f} className="flex items-start gap-3 text-sm md:text-base">
@@ -130,7 +130,7 @@ export default function EbookPage() {
         <div className="container-main">
           <div className="max-w-[800px] mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="glass rounded-xl p-7 animate-fade-up">
+              <div className="glass-card rounded-xl p-7 animate-fade-up">
                 <div className="flex items-center gap-2 mb-4">
                   <Shield size={18} className="text-green" />
                   <h3 className="font-bold text-lg">{t('landing.split.forYou.title')}</h3>
@@ -146,7 +146,7 @@ export default function EbookPage() {
                   ))}
                 </ul>
               </div>
-              <div className="glass rounded-xl p-7 animate-fade-up [animation-delay:0.1s]">
+              <div className="glass-card rounded-xl p-7 animate-fade-up [animation-delay:0.1s]">
                 <div className="flex items-center gap-2 mb-4">
                   <AlertTriangle size={18} className="text-rose" />
                   <h3 className="font-bold text-lg">{t('landing.split.notFor.title')}</h3>
@@ -171,8 +171,8 @@ export default function EbookPage() {
       <section className="section-top">
         <div className="container-main">
           <div className="max-w-[700px] mx-auto">
-            <div className="glass rounded-xl p-7 md:p-9 animate-fade-up text-center">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mx-auto mb-4 text-white font-bold text-2xl">A</div>
+            <div className="glass-card rounded-xl p-7 md:p-9 animate-fade-up text-center">
+              <div className="w-16 h-16 rounded-full avatar-gradient flex items-center justify-center mx-auto mb-4 text-white font-bold text-2xl shadow-lg shadow-green/15">A</div>
               <p className="text-muted text-base md:text-lg leading-relaxed italic mb-4">"{t('ebook.testimonial.text')}"</p>
               <p className="text-sm text-muted/60 font-semibold">— {t('ebook.testimonial.author')}</p>
             </div>
@@ -191,7 +191,7 @@ export default function EbookPage() {
               {faqs.map((faq) => (
                 <details
                   key={faq.q}
-                  className="glass rounded-xl p-5 group open:bg-white/50 transition-all cursor-pointer"
+                  className="glass-card rounded-xl p-5 group open:bg-white/50 transition-all cursor-pointer"
                 >
                   <summary className="font-bold text-sm list-none flex items-center justify-between gap-3">
                     {faq.q}
@@ -205,15 +205,15 @@ export default function EbookPage() {
         </div>
       </section>
 
-      {/* Bottom CTA */}
+          {/* Bottom CTA */}
       <section className="section-top">
         <div className="container-main">
-          <div className="max-w-[400px] mx-auto animate-fade-up text-center">
-            <a href="#" className="button-base button-primary gap-2 w-full justify-center shadow-lg shadow-green/20 text-lg py-4">
+          <div className="max-w-[400px] mx-auto text-center">
+            <Link to="/checkout" className="button-base button-primary gap-2 w-full justify-center shadow-lg shadow-green/20 text-lg py-4">
               <BookOpen size={22} />
               {t('ebook.price.cta')} — {t('ebook.price.amount')}
               <ArrowRight size={22} />
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -221,7 +221,7 @@ export default function EbookPage() {
       {/* Disclaimer */}
       <section className="section-top border-b-0">
         <div className="container-main">
-          <div className="glass rounded-xl p-6 max-w-[900px] mx-auto">
+          <div className="glass-card rounded-xl p-6 max-w-[900px] mx-auto">
             <p className="text-muted text-xs leading-relaxed">
               {t('landing.disclaimer')}
             </p>

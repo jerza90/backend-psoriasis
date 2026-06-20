@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { testimonials } from '../data/testimonials';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
+import Eyebrow from '../components/Eyebrow';
 
 export default function AishaPage() {
   const { t } = useTranslation();
@@ -34,10 +35,7 @@ export default function AishaPage() {
                 className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover ring-4 ring-white/40 shadow-lg shrink-0"
               />
               <div className="text-center md:text-left flex-1">
-                <div className="inline-flex items-center gap-2 text-green font-bold text-xs uppercase tracking-widest mb-2">
-                  <Sparkles size={14} />
-                  {t('aisha.badge')}
-                </div>
+                <Eyebrow icon={Sparkles} className="mb-2">{t('aisha.badge')}</Eyebrow>
                 <h1 className="text-3xl md:text-4xl font-black leading-tight mb-2">{aisha.name}</h1>
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 text-sm text-muted mb-4">
                   <span className="flex items-center gap-1">
@@ -78,7 +76,7 @@ export default function AishaPage() {
               <p className="text-xs text-muted/60 mt-1.5">{t('aisha.afterQuote')}</p>
             </div>
           </div>
-          <div className="glass rounded-xl p-5 mt-4 animate-fade-up [animation-delay:0.15s]">
+          <div className="glass-card rounded-xl p-5 mt-4 animate-fade-up [animation-delay:0.15s]">
             <div className="flex items-center gap-2 text-green font-bold text-xs uppercase tracking-widest mb-3">
               <Award size={14} />
               {t('aisha.summary')}
@@ -213,6 +211,7 @@ export default function AishaPage() {
       {/* CTA */}
       <section className="relative overflow-hidden py-14">
         <div className="absolute inset-0 gradient-green" />
+        <div className="absolute top-[-30%] right-[-20%] w-[60%] h-[60%] rounded-full bg-white/5 blur-3xl animate-float-slow" />
         <div className="relative container-main text-center">
           <h2 className="text-2xl md:text-3xl font-black text-white mb-3">{t('aisha.ctaHeading')}</h2>
           <p className="text-[rgba(255,255,255,0.85)] text-lg mb-6 max-w-[500px] mx-auto">{t('aisha.ctaSub')}</p>

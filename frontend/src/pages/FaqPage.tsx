@@ -1,6 +1,8 @@
 import { Sparkles } from 'lucide-react';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
+import Eyebrow from '../components/Eyebrow';
+import ScrollReveal from '../components/ScrollReveal';
 import { useTranslation } from 'react-i18next';
 
 export default function FaqPage() {
@@ -38,21 +40,20 @@ export default function FaqPage() {
 
       <section className="container-main pt-16 pb-12">
         <div className="max-w-[680px] mx-auto">
-          <div className="text-center mb-12 animate-fade-up">
-            <div className="inline-flex items-center gap-2 text-green font-bold text-xs uppercase tracking-widest mb-3">
-              <Sparkles size={14} />
-              {t('faq.badge')}
-            </div>
-            <h1 className="clamp-heading-md mb-3">
-              {t('faq.heading')}
-            </h1>
-            <p className="text-muted text-lg max-w-[500px] mx-auto leading-relaxed">
-              {t('faq.subtitle')}
-            </p>
+          <div className="text-center mb-12">
+            <ScrollReveal>
+              <Eyebrow icon={Sparkles} className="mb-3">{t('faq.badge')}</Eyebrow>
+              <h1 className="clamp-heading-md mb-3">
+                {t('faq.heading')}
+              </h1>
+              <p className="text-muted text-lg max-w-[500px] mx-auto leading-relaxed">
+                {t('faq.subtitle')}
+              </p>
+            </ScrollReveal>
           </div>
 
           {faqGroups.map((group, gi) => (
-            <div key={group.category} className="mb-10 animate-fade-up" style={{ animationDelay: `${0.1 * gi}s` }}>
+            <ScrollReveal key={group.category} delay={100 * gi} className="mb-10 block">
               <h2 className="font-bold text-xs text-muted uppercase tracking-widest mb-4">
                 {group.category}
               </h2>
@@ -60,7 +61,7 @@ export default function FaqPage() {
                 {group.items.map((faq) => (
                   <details
                     key={faq.q}
-                    className="glass rounded-xl p-5 group open:bg-white/70 transition-all cursor-pointer"
+                    className="glass-card rounded-xl p-5 group open:bg-white/80 transition-all cursor-pointer"
                   >
                     <summary className="font-bold text-sm list-none flex items-center justify-between gap-3">
                       {faq.q}
@@ -72,7 +73,7 @@ export default function FaqPage() {
                   </details>
                 ))}
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </section>

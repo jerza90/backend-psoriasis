@@ -26,6 +26,7 @@ export default function Topbar() {
   return (
     <header className="sticky top-0 z-50">
       <div className="absolute inset-0 glass-strong" />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
       <div className="relative container-main flex items-center justify-between min-h-[64px] gap-4">
         <Link to="/" className="flex items-center gap-2.5 font-extrabold no-underline text-ink z-10">
           <span
@@ -61,7 +62,7 @@ export default function Topbar() {
 
           <Link
             to="/checklist"
-            className="button-base button-primary gap-2 text-sm"
+            className="button-base button-primary gap-2 text-sm ml-1"
           >
             <BookOpen size={16} />
             {t('topbar.cta')}
@@ -111,16 +112,22 @@ export default function Topbar() {
               )}
             </div>
           ) : (
-            <Link
-              to="/login"
-              className="button-base button-white gap-2 text-sm"
-            >
-              <LogIn size={16} />
-              {t('auth.login')}
-              <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-white/50 text-muted ml-1">
+            <>
+              <button
+                onClick={toggleLanguage}
+                className="px-2.5 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg border border-white/30 hover:bg-white/50 transition-colors"
+                aria-label={t('topbar.language')}
+              >
                 {i18n.language === 'ms' ? 'EN' : 'BM'}
-              </span>
-            </Link>
+              </button>
+              <Link
+                to="/login"
+                className="button-base button-white gap-2 text-sm"
+              >
+                <LogIn size={16} />
+                {t('auth.login')}
+              </Link>
+            </>
           )}
         </nav>
 
@@ -153,7 +160,7 @@ export default function Topbar() {
 
       {open && (
         <div className="md:hidden animate-fade-in">
-          <div className="absolute inset-x-0 top-full glass-strong border-t border-white/20">
+          <div className="absolute inset-x-0 top-full glass-strong border-t border-white/20 shadow-[var(--shadow-float)]">
             <nav className="container-main py-4 flex flex-col gap-1">
               {navLinks.map((l) =>
                 l.href.startsWith('/') ? (

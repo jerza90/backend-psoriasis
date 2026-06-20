@@ -1,0 +1,25 @@
+CREATE TABLE toyyipay_orders (
+    id                  BIGSERIAL       PRIMARY KEY,
+    bill_code           VARCHAR(255),
+    bill_name           VARCHAR(255),
+    bill_ref_no         VARCHAR(255),
+    status              VARCHAR(50),
+    billed_to           VARCHAR(255),
+    contact_no          VARCHAR(50),
+    email               VARCHAR(255),
+    allowed_channel     VARCHAR(100),
+    payment_status      VARCHAR(50),
+    created_date        TIMESTAMP,
+    expired_date        TIMESTAMP,
+
+    ref_no              VARCHAR(255),
+    payment_channel     VARCHAR(100),
+    paid_amount         DECIMAL(10,2),
+    transaction_charge  DECIMAL(10,2),
+    nett_received       DECIMAL(10,2),
+    payer_name          VARCHAR(255),
+    payer_phone         VARCHAR(50),
+    payer_email         VARCHAR(255),
+    status_reason       VARCHAR(255),
+    payment_date        TIMESTAMP
+);

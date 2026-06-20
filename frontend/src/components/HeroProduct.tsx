@@ -28,6 +28,7 @@ export default function HeroProduct() {
     <section className="relative overflow-hidden rounded-2xl mb-8">
       <div className="absolute inset-0 gradient-green opacity-10" />
       <div className="absolute top-[-20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-white/5 blur-3xl" />
+      <div className="absolute bottom-[-15%] left-[-10%] w-[35%] h-[35%] rounded-full bg-leaf/10 blur-3xl" />
 
       <div className="relative glass-strong rounded-2xl p-7 md:p-9">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-8 items-start">
@@ -179,7 +180,7 @@ export default function HeroProduct() {
             {p.testimonialImage ? (
               <img src={p.testimonialImage} alt={p.testimonialAuthor || 'Testimonial'} className="w-12 h-12 rounded-full object-cover shrink-0" />
             ) : (
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center shrink-0 text-white font-bold text-lg">
+              <div className="w-12 h-12 rounded-full avatar-gradient flex items-center justify-center shrink-0 text-white font-bold text-lg">
                 {p.testimonialAuthor?.charAt(0) || 'U'}
               </div>
             )}

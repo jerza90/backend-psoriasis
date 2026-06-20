@@ -1,4 +1,4 @@
-package com.psoriasis.config;
+package com.acachiaa.store.config;
 
 import com.stripe.Stripe;
 import jakarta.annotation.PostConstruct;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class StripeConfig {
 
-    @Value("${app.stripe.secret-key}")
+    @Value("${stripe.secret-key}")
     private String secretKey;
 
     @PostConstruct
