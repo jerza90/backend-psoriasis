@@ -14,6 +14,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -40,7 +41,9 @@ public class ToyyibPayService {
 
     private final PaymentOrderRepository orderRepository;
     private final EbookDeliveryService deliveryService;
-    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final HttpClient httpClient = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ToyyibPayService(PaymentOrderRepository orderRepository, EbookDeliveryService deliveryService) {
@@ -134,49 +137,55 @@ public class ToyyibPayService {
         PaymentOrder order = orderRepository.findByBillCode(billCode)
                 .orElseThrow(() -> new RuntimeException("Order not found: " + billCode));
 
-        if (raw.startsWith("No")) {
-            return order;
-        }
-
-        if (raw.startsWith("{")) {
+        if (raw.startsWith("No") || raw.startsWith("{")) {
             return order;
         }
 
         List<Map<String, Object>> transactions = objectMapper.readValue(raw, new TypeReference<List<Map<String, Object>>>() {});
 
-        if (!transactions.isEmpty()) {
-            Map<String, Object> tx = transactions.get(0);
-            order.setRefNo((String) tx.get("ref_no"));
-            order.setPaymentChannel((String) tx.get("payment_channel"));
+        if (transactions.isEmpty()) {
+            return order;
+        }
 
-            String paidAmount = tx.get("paid_amount").toString();
-            order.setAmount(new BigDecimal(paidAmount));
-            order.setTransactionCharge(new BigDecimal(tx.get("transaction_charge").toString()));
-            order.setNettReceived(new BigDecimal(tx.get("nett_received").toString()));
+        Map<String, Object> tx = transactions.get(0);
 
-            Object payerInfo = tx.get("bill_payer_info");
-            if (payerInfo instanceof Map) {
-                Map<String, Object> payer = (Map<String, Object>) payerInfo;
-                order.setCustomerName((String) payer.get("name"));
-                order.setCustomerPhone((String) payer.get("phone_no"));
-                order.setCustomerEmail((String) payer.get("email"));
+        order.setRefNo((String) tx.get("billpaymentInvoiceNo"));
+        order.setPaymentChannel((String) tx.get("billpaymentChannel"));
+
+        Object paidAmount = tx.get("billpaymentAmount");
+        if (paidAmount != null) {
+            order.setAmount(new BigDecimal(paidAmount.toString()));
+        }
+
+        Object charge = tx.get("transactionCharge");
+        if (charge != null) {
+            order.setTransactionCharge(new BigDecimal(charge.toString()));
+        }
+
+        String statusId = String.valueOf(tx.getOrDefault("billpaymentStatus", "0"));
+        boolean wasUnpaid = "Unpaid".equals(order.getPaymentStatus());
+        boolean isPaid = "1".equals(statusId);
+        order.setPaymentStatus(isPaid ? "Paid" : "Unpaid");
+
+        if (tx.containsKey("billTo")) order.setCustomerName((String) tx.get("billTo"));
+        if (tx.containsKey("billEmail")) order.setCustomerEmail((String) tx.get("billEmail"));
+        if (tx.containsKey("billPhone")) order.setCustomerPhone((String) tx.get("billPhone"));
+
+        Object paymentDateObj = tx.get("billPaymentDate");
+        if (paymentDateObj != null) {
+            String paymentDate = paymentDateObj.toString();
+            if (!paymentDate.isEmpty()) {
+                try {
+                    order.setPaymentDate(LocalDateTime.parse(paymentDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+                } catch (Exception ignored) {}
             }
+        }
 
-            String statusId = tx.get("status_id").toString();
-            boolean wasUnpaid = "Unpaid".equals(order.getPaymentStatus());
-            order.setPaymentStatus("1".equals(statusId) ? "Paid" : "Unpaid");
-            order.setStatusReason((String) tx.get("status_reason"));
-
-            String paymentDate = (String) tx.get("payment_date");
-            if (paymentDate != null && !paymentDate.isEmpty()) {
-                order.setPaymentDate(LocalDateTime.parse(paymentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-            }
-
-            if (wasUnpaid && "Paid".equals(order.getPaymentStatus())) {
-                orderRepository.save(order);
-                deliveryService.generateAndSend(order);
-                return order;
-            }
+        if (wasUnpaid && isPaid) {
+            order.setStatus("Completed");
+            orderRepository.save(order);
+            deliveryService.generateAndSend(order);
+            return order;
         }
 
         orderRepository.save(order);

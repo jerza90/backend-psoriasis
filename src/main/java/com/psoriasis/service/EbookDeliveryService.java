@@ -35,8 +35,8 @@ public class EbookDeliveryService {
     @Value("${app.ebook.token-expire-hours}")
     private int tokenExpireHours;
 
-    @Value("${frontend.url}")
-    private String frontendUrl;
+    @Value("${app.ebook.download-base-url}")
+    private String downloadBaseUrl;
 
     public EbookDeliveryService(PaymentOrderRepository orderRepository, EmailService emailService) {
         this.orderRepository = orderRepository;
@@ -51,7 +51,7 @@ public class EbookDeliveryService {
         order.setTokenExpiresAt(LocalDateTime.now().plusHours(tokenExpireHours));
         orderRepository.save(order);
 
-        String downloadLink = frontendUrl + "/api/ebook/download/" + token;
+        String downloadLink = downloadBaseUrl + "/" + token;
         String productName = order.getProductName();
 
         try {
