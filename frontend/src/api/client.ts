@@ -40,8 +40,8 @@ export async function verifyRegistration(
   password: string,
   fullName: string,
   username?: string,
-): Promise<{ message: string; userId: number }> {
-  return request<{ message: string; userId: number }>('/auth/verify-registration', {
+): Promise<{ message: string; userId: number; role: string }> {
+  return request<{ message: string; userId: number; role: string }>('/auth/verify-registration', {
     method: 'POST',
     body: JSON.stringify({ email, otpCode, password, fullName, username }),
   });
@@ -86,4 +86,155 @@ export async function checkEmailExists(email: string): Promise<boolean> {
 
 export async function getUserByUsername(username: string): Promise<User> {
   return request<User>(`/users/username/${encodeURIComponent(username)}`);
+}
+
+export interface AffiliateProfile {
+  id: number;
+  name: string;
+  email: string;
+  referralCode: string;
+  bio?: string | null;
+  pageTitle?: string | null;
+  pageIntro?: string | null;
+  storyTitle?: string | null;
+  storySummary?: string | null;
+  storyBody?: string | null;
+  blogTitle?: string | null;
+  blogExcerpt?: string | null;
+  blogUrl?: string | null;
+  blogImageUrl?: string | null;
+  tipsTitle?: string | null;
+  tipsText?: string | null;
+  guideTitle?: string | null;
+  guideText?: string | null;
+  progressTitle?: string | null;
+  progressText?: string | null;
+  avatarUrl?: string | null;
+  socialLinks?: string | null;
+  paymentInfo?: string | null;
+  commissionRate: string;
+  totalEarned: string;
+  totalPaid: string;
+  status: string;
+  referralLink: string;
+  createdAt: string;
+}
+
+export interface AffiliateProfileUpdateInput {
+  name?: string;
+  avatarUrl?: string;
+  bio?: string;
+  pageTitle?: string;
+  pageIntro?: string;
+  storyTitle?: string;
+  storySummary?: string;
+  storyBody?: string;
+  socialLinks?: string;
+  paymentInfo?: string;
+  blogTitle?: string;
+  blogExcerpt?: string;
+  blogUrl?: string;
+  blogImageUrl?: string;
+  tipsTitle?: string;
+  tipsText?: string;
+  guideTitle?: string;
+  guideText?: string;
+  progressTitle?: string;
+  progressText?: string;
+}
+
+export interface AdminTestimonialProgressInput {
+  dateLabel: string;
+  title: string;
+  description: string;
+  notes: string;
+  tips: string[];
+  images: string[];
+  productTags: { name: string; slug?: string }[];
+  details: Record<string, unknown>;
+  sortOrder: number;
+}
+
+export interface AdminTestimonialInput {
+  affiliateId?: number | null;
+  name: string;
+  location: string;
+  conditionDuration: string;
+  categories: string[];
+  summary: string;
+  initialQuote: string;
+  resultQuote: string;
+  featured: boolean;
+  avatarUrl: string;
+  lang: string;
+  sortOrder: number;
+  status: string;
+  progressHistory: AdminTestimonialProgressInput[];
+}
+
+export interface TestimonialResponse {
+  id: number;
+  name: string;
+  location: string;
+  conditionDuration: string;
+  categories: string[];
+  summary: string;
+  initialQuote: string;
+  resultQuote: string;
+  featured: boolean;
+  avatarUrl: string;
+  lang: string;
+  progressHistory: {
+    id: number;
+    dateLabel: string;
+    title: string;
+    description: string;
+    notes: string;
+    tips: string[];
+    images: string[];
+    productTags: { name: string; slug?: string }[];
+    details?: Record<string, unknown>;
+  }[];
+}
+
+export async function listAdminTestimonials(): Promise<TestimonialResponse[]> {
+  return request<TestimonialResponse[]>('/admin/testimonials');
+}
+
+export async function createAdminTestimonial(data: AdminTestimonialInput): Promise<TestimonialResponse> {
+  return request<TestimonialResponse>('/admin/testimonials', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateAdminTestimonial(id: number, data: AdminTestimonialInput): Promise<TestimonialResponse> {
+  return request<TestimonialResponse>(`/admin/testimonials/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteAdminTestimonial(id: number): Promise<{ message: string }> {
+  return request<{ message: string }>(`/admin/testimonials/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function getAffiliateProfile(email: string): Promise<AffiliateProfile> {
+  return request<AffiliateProfile>(`/affiliate/profile?email=${encodeURIComponent(email)}`);
+}
+
+export async function updateAffiliateProfile(
+  email: string,
+  data: AffiliateProfileUpdateInput,
+): Promise<AffiliateProfile> {
+  return request<AffiliateProfile>(`/affiliate/profile?email=${encodeURIComponent(email)}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getPublicAffiliateProfile(code: string): Promise<AffiliateProfile> {
+  return request<AffiliateProfile>(`/affiliate/public?code=${encodeURIComponent(code)}`);
 }

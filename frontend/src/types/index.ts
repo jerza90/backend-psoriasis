@@ -10,6 +10,7 @@ export interface User {
   username: string;
   email: string;
   fullName: string | null;
+  role: string;
   enabled: boolean;
   createdAt: string;
   updatedAt: string;
@@ -20,6 +21,7 @@ export interface AuthUser {
   email: string;
   fullName: string;
   username: string;
+  role: string;
 }
 
 export interface ChecklistFormData {

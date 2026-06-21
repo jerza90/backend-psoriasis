@@ -4,7 +4,7 @@ import { login as apiLogin } from '../api/client';
 
 interface AuthContextType {
   user: AuthUser | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<AuthUser>;
   logout: () => void;
   setUser: (user: AuthUser) => void;
   isLoading: boolean;
@@ -15,7 +15,9 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(() => {
     const stored = localStorage.getItem('auth_user');
-    return stored ? JSON.parse(stored) : null;
+    if (!stored) return null;
+    const parsed = JSON.parse(stored) as AuthUser;
+    return { ...parsed, role: parsed.role || 'user' };
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const u = await apiLogin(email, password);
       setUser(u);
       localStorage.setItem('auth_user', JSON.stringify(u));
+      return u;
     } finally {
       setIsLoading(false);
     }

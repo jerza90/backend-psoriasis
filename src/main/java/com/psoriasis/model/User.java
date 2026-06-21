@@ -29,6 +29,9 @@ public class User {
     @Column(name = "full_name")
     private String fullName;
 
+    @Column(nullable = false, length = 20)
+    private String role = "user";
+
     private boolean enabled = false;
 
     @Column(name = "otp_code")

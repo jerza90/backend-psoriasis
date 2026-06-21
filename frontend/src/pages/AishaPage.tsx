@@ -1,14 +1,32 @@
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Clock, MapPin, Calendar, Tag, Lightbulb, Quote, Sparkles, Heart, Award, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getTestimonials } from '../data/testimonials';
+import { useTestimonialById } from '../hooks/useTestimonials';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import Eyebrow from '../components/Eyebrow';
 
 export default function AishaPage() {
   const { t, i18n } = useTranslation();
-  const aisha = getTestimonials(i18n.language).find((x) => x.id === 't1')!;
+  const lang = i18n.language;
+  const aishaId = lang === 'ms' ? 2 : 1;
+  const { testimonial: aisha, loading, error } = useTestimonialById(aishaId);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted">Loading...</p>
+      </div>
+    );
+  }
+
+  if (error || !aisha) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted">{t('checkout.error')}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -30,7 +48,7 @@ export default function AishaPage() {
           <div className="glass-card rounded-2xl p-8 md:p-10 max-w-[800px] mx-auto animate-fade-up">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
               <img
-                src={aisha.avatar}
+                src={aisha.avatarUrl}
                 alt={aisha.name}
                 className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover ring-4 ring-white/40 shadow-lg shrink-0"
               />

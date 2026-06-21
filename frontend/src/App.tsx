@@ -16,6 +16,9 @@ import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import AdminTestimonialsPage from './pages/AdminTestimonialsPage';
+import AffiliateDashboardPage from './pages/AffiliateDashboardPage';
+import AffiliatePublicPage from './pages/AffiliatePublicPage';
 
 export default function App() {
   useEffect(() => {
@@ -41,6 +44,9 @@ export default function App() {
           <Route path="/blog/:id" element={<BlogPostPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/thank-you" element={<ThankYouPage />} />
+          <Route path="/affiliate/dashboard" element={<AffiliateDashboardPage />} />
+          <Route path="/affiliate/:referralCode" element={<AffiliatePublicPage />} />
+          <Route path="/admin/testimonials" element={<AdminTestimonialsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />

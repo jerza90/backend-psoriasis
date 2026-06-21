@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Quote, ArrowRight, ChevronRight, Clock, Lightbulb, X, Lock } from 'lucide-react';
-import { getTestimonials, type Testimonial, type ProgressEntry } from '../data/testimonials';
+import { useTestimonials } from '../hooks/useTestimonials';
+import type { TestimonialData as Testimonial, ProgressEntry } from '../hooks/useTestimonials';
 
 function ProgressModal({
   testimonial,
@@ -11,7 +12,7 @@ function ProgressModal({
   onClose: () => void;
 }) {
   const { t } = useTranslation();
-  const [expandedTip, setExpandedTip] = useState<string | null>(null);
+  const [expandedTip, setExpandedTip] = useState<number | null>(null);
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12 md:p-8 md:pt-12 overflow-y-auto">
@@ -29,7 +30,7 @@ function ProgressModal({
           <div className="flex items-start justify-between mb-6">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <img src={testimonial.avatar} alt={testimonial.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
+                <img src={testimonial.avatarUrl} alt={testimonial.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
                 <div>
                   <h3 className="font-bold text-lg">{testimonial.name}</h3>
                   <p className="text-muted text-xs"><Lock size={12} className="inline text-muted/40" /></p>
@@ -100,8 +101,8 @@ function ProgressEntryCard({
   entry: ProgressEntry;
   index: number;
   isLast: boolean;
-  expandedTip: string | null;
-  onToggleTip: (id: string | null) => void;
+  expandedTip: number | null;
+  onToggleTip: (id: number | null) => void;
 }) {
   const { t } = useTranslation();
   return (
@@ -197,7 +198,7 @@ function CarouselCard({
       <div className="relative z-10">
         {/* Header */}
         <div className="flex items-center gap-2 mb-2">
-          <img src={testimonial.avatar} alt={testimonial.name} className="w-8 h-8 rounded-full object-cover shrink-0 ring-2 ring-white/40" />
+           <img src={testimonial.avatarUrl} alt={testimonial.name} className="w-8 h-8 rounded-full object-cover shrink-0 ring-2 ring-white/40" />
           <div>
             <h3 className="font-bold text-xs text-ink">{testimonial.name}</h3>
             <p className="text-muted text-[10px]"><Lock size={10} className="inline text-muted/40" /></p>
@@ -231,7 +232,7 @@ export default function TestimonialCarousel() {
   const isPaused = useRef(false);
   const idleTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  const testimonials = getTestimonials(i18n.language);
+  const { testimonials, loading } = useTestimonials(i18n.language);
   const featured = testimonials.filter((t) => t.featured);
   const allDoubled = [...testimonials, ...testimonials];
 
@@ -270,6 +271,8 @@ export default function TestimonialCarousel() {
     return () => cancelAnimationFrame(animId);
   }, []);
 
+  if (loading || testimonials.length === 0) return null;
+
   return (
     <div>
       {/* Featured cards row */}
@@ -284,7 +287,7 @@ export default function TestimonialCarousel() {
             onKeyDown={(e) => { if (e.key === 'Enter') setSelectedTestimonial(item); }}
           >
             <div className="flex items-center gap-3 mb-3">
-              <img src={item.avatar} alt={item.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
+              <img src={item.avatarUrl} alt={item.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
               <div>
                 <h3 className="font-bold text-sm">{item.name}</h3>
                 <p className="text-muted text-xs"><Lock size={12} className="inline text-muted/40" /></p>

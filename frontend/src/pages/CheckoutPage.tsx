@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Lock, ArrowLeft, Mail, Download, AlertTriangle, Globe, MapPin, Banknote } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 
@@ -14,11 +14,14 @@ const PRODUCTS: Record<ProductType, { price: string; original: string | null; to
 
 export default function CheckoutPage() {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
   const [product, setProduct] = useState<ProductType>('bm');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const referralCode = searchParams.get('ref') || undefined;
 
   const selected = PRODUCTS[product];
 
@@ -33,7 +36,7 @@ export default function CheckoutPage() {
       const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/checkout/create-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName: name, email, product }),
+        body: JSON.stringify({ fullName: name, email, product, referralCode }),
       });
 
       if (!res.ok) {

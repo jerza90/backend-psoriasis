@@ -41,6 +41,11 @@ public class PaymentOrder {
     private Integer maxDownloads;
     private LocalDateTime tokenExpiresAt;
 
+    private String referralCode;
+    private Long affiliateId;
+    private BigDecimal commissionRate;
+    private BigDecimal commissionAmount;
+
     public Long getId() { return id; }
     public String getOrderRef() { return orderRef; }
     public void setOrderRef(String orderRef) { this.orderRef = orderRef; }
@@ -96,4 +101,12 @@ public class PaymentOrder {
     public void setMaxDownloads(Integer maxDownloads) { this.maxDownloads = maxDownloads; }
     public LocalDateTime getTokenExpiresAt() { return tokenExpiresAt; }
     public void setTokenExpiresAt(LocalDateTime tokenExpiresAt) { this.tokenExpiresAt = tokenExpiresAt; }
+    public String getReferralCode() { return referralCode; }
+    public void setReferralCode(String referralCode) { this.referralCode = referralCode; }
+    public Long getAffiliateId() { return affiliateId; }
+    public void setAffiliateId(Long affiliateId) { this.affiliateId = affiliateId; }
+    public BigDecimal getCommissionRate() { return commissionRate; }
+    public void setCommissionRate(BigDecimal commissionRate) { this.commissionRate = commissionRate; }
+    public BigDecimal getCommissionAmount() { return commissionAmount; }
+    public void setCommissionAmount(BigDecimal commissionAmount) { this.commissionAmount = commissionAmount; }
 }

@@ -30,7 +30,8 @@ public class AuthController {
                     "id", user.getId(),
                     "email", user.getEmail(),
                     "fullName", user.getFullName() != null ? user.getFullName() : "",
-                    "username", user.getUsername()
+                    "username", user.getUsername(),
+                    "role", user.getRole()
             ));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -59,7 +60,8 @@ public class AuthController {
             );
             return ResponseEntity.ok(Map.of(
                     "message", "Registration successful",
-                    "userId", user.getId()
+                    "userId", user.getId(),
+                    "role", user.getRole()
             ));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
