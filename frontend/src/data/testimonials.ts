@@ -38,7 +38,7 @@ const enAisha: Testimonial = {
   resultQuote:
     "Now I am free from Psoriasis and have started enjoying the life I had long dreamed of.",
   featured: true,
-  avatar: "https://i.pravatar.cc/150?u=acachiaa@psoriasis",
+  avatar: "/images/acacahiaa.jpg",
   progressHistory: [
     {
       id: "p1",
@@ -442,7 +442,7 @@ const msAisha: Testimonial = {
   resultQuote:
     "Kini saya bebas dari Psoriasis dan mula menikmati hidup yang telah lama saya impikan.",
   featured: true,
-  avatar: "https://i.pravatar.cc/150?u=acachiaa@psoriasis",
+  avatar: "/images/acacahiaa.jpg",
   progressHistory: [
     {
       id: "p1",
