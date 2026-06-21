@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Clock, MapPin, Calendar, Tag, Lightbulb, Quote, Sparkles, Heart, Award } from 'lucide-react';
+import { ArrowLeft, Clock, MapPin, Calendar, Tag, Lightbulb, Quote, Sparkles, Heart, Award, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getTestimonials } from '../data/testimonials';
 import Topbar from '../components/Topbar';
@@ -40,11 +40,11 @@ export default function AishaPage() {
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 text-sm text-muted mb-4">
                   <span className="flex items-center gap-1">
                     <MapPin size={14} />
-                    {aisha.location}
+                    <Lock size={14} className="text-muted/40" />
                   </span>
                   <span className="flex items-center gap-1">
                     <Calendar size={14} />
-                    {aisha.age} {t('aisha.yearsOld')}
+                    <Lock size={14} className="text-muted/40" />
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock size={14} />

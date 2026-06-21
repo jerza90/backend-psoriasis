@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Quote, ArrowRight, ChevronRight, Clock, Lightbulb, X } from 'lucide-react';
+import { Quote, ArrowRight, ChevronRight, Clock, Lightbulb, X, Lock } from 'lucide-react';
 import { getTestimonials, type Testimonial, type ProgressEntry } from '../data/testimonials';
 
 function ProgressModal({
@@ -32,7 +32,7 @@ function ProgressModal({
                 <img src={testimonial.avatar} alt={testimonial.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
                 <div>
                   <h3 className="font-bold text-lg">{testimonial.name}</h3>
-                  <p className="text-muted text-xs">{testimonial.age} years · {testimonial.location}</p>
+                  <p className="text-muted text-xs"><Lock size={12} className="inline text-muted/40" /></p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-1.5 mt-3">
@@ -198,7 +198,7 @@ function CarouselCard({
           <img src={testimonial.avatar} alt={testimonial.name} className="w-8 h-8 rounded-full object-cover shrink-0 ring-2 ring-white/40" />
           <div>
             <h3 className="font-bold text-xs text-ink">{testimonial.name}</h3>
-            <p className="text-muted text-[10px]">{testimonial.age} · {testimonial.location}</p>
+            <p className="text-muted text-[10px]"><Lock size={10} className="inline text-muted/40" /></p>
           </div>
         </div>
 
@@ -285,7 +285,7 @@ export default function TestimonialCarousel() {
               <img src={item.avatar} alt={item.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
               <div>
                 <h3 className="font-bold text-sm">{item.name}</h3>
-                <p className="text-muted text-xs">{item.age} · {item.location}</p>
+                <p className="text-muted text-xs"><Lock size={12} className="inline text-muted/40" /></p>
               </div>
             </div>
             <div className="flex flex-wrap gap-1.5 mb-3">
