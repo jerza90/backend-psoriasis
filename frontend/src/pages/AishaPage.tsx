@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Clock, MapPin, Calendar, Tag, Lightbulb, Quote, Sparkles, Heart, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { testimonials } from '../data/testimonials';
+import { getTestimonials } from '../data/testimonials';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import Eyebrow from '../components/Eyebrow';
 
 export default function AishaPage() {
-  const { t } = useTranslation();
-  const aisha = testimonials.find((x) => x.id === 't1')!;
+  const { t, i18n } = useTranslation();
+  const aisha = getTestimonials(i18n.language).find((x) => x.id === 't1')!;
 
   return (
     <div className="min-h-screen">

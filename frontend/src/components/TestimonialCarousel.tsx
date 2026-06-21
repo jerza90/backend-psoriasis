@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Quote, ArrowRight, ChevronRight, Clock, Lightbulb, X } from 'lucide-react';
-import { testimonials, type Testimonial, type ProgressEntry } from '../data/testimonials';
+import { getTestimonials, type Testimonial, type ProgressEntry } from '../data/testimonials';
 
 function ProgressModal({
   testimonial,
@@ -223,12 +223,13 @@ function CarouselCard({
 }
 
 export default function TestimonialCarousel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   const isPaused = useRef(false);
   const idleTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
+  const testimonials = getTestimonials(i18n.language);
   const featured = testimonials.filter((t) => t.featured);
   const allDoubled = [...testimonials, ...testimonials];
 
