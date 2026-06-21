@@ -87,3 +87,81 @@ export async function checkEmailExists(email: string): Promise<boolean> {
 export async function getUserByUsername(username: string): Promise<User> {
   return request<User>(`/users/username/${encodeURIComponent(username)}`);
 }
+
+export interface AdminTestimonialProgressInput {
+  dateLabel: string;
+  title: string;
+  description: string;
+  notes: string;
+  tips: string[];
+  images: string[];
+  productTags: { name: string; slug?: string }[];
+  details: Record<string, unknown>;
+  sortOrder: number;
+}
+
+export interface AdminTestimonialInput {
+  affiliateId?: number | null;
+  name: string;
+  location: string;
+  conditionDuration: string;
+  categories: string[];
+  summary: string;
+  initialQuote: string;
+  resultQuote: string;
+  featured: boolean;
+  avatarUrl: string;
+  lang: string;
+  sortOrder: number;
+  status: string;
+  progressHistory: AdminTestimonialProgressInput[];
+}
+
+export interface TestimonialResponse {
+  id: number;
+  name: string;
+  location: string;
+  conditionDuration: string;
+  categories: string[];
+  summary: string;
+  initialQuote: string;
+  resultQuote: string;
+  featured: boolean;
+  avatarUrl: string;
+  lang: string;
+  progressHistory: {
+    id: number;
+    dateLabel: string;
+    title: string;
+    description: string;
+    notes: string;
+    tips: string[];
+    images: string[];
+    productTags: { name: string; slug?: string }[];
+    details?: Record<string, unknown>;
+  }[];
+}
+
+export async function listAdminTestimonials(): Promise<TestimonialResponse[]> {
+  return request<TestimonialResponse[]>('/admin/testimonials');
+}
+
+export async function createAdminTestimonial(data: AdminTestimonialInput): Promise<TestimonialResponse> {
+  return request<TestimonialResponse>('/admin/testimonials', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateAdminTestimonial(id: number, data: AdminTestimonialInput): Promise<TestimonialResponse> {
+  return request<TestimonialResponse>(`/admin/testimonials/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteAdminTestimonial(id: number): Promise<{ message: string }> {
+  return request<{ message: string }>(`/admin/testimonials/${id}`, {
+    method: 'DELETE',
+  });
+}

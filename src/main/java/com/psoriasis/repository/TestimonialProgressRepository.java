@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TestimonialProgressRepository extends JpaRepository<TestimonialProgress, Long> {
     List<TestimonialProgress> findByTestimonialIdOrderBySortOrderAsc(Long testimonialId);
+    void deleteByTestimonialId(Long testimonialId);
 }
