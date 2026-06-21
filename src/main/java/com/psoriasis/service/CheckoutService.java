@@ -42,10 +42,12 @@ public class CheckoutService {
 
     private final PaymentOrderRepository orderRepository;
     private final EbookDeliveryService deliveryService;
+    private final AffiliateService affiliateService;
 
-    public CheckoutService(PaymentOrderRepository orderRepository, EbookDeliveryService deliveryService) {
+    public CheckoutService(PaymentOrderRepository orderRepository, EbookDeliveryService deliveryService, AffiliateService affiliateService) {
         this.orderRepository = orderRepository;
         this.deliveryService = deliveryService;
+        this.affiliateService = affiliateService;
     }
 
     @PostConstruct
@@ -53,11 +55,21 @@ public class CheckoutService {
         Stripe.apiKey = stripeSecretKey;
     }
 
-    public String createCheckoutSession(String fullName, String email, String product) throws StripeException {
+    public String createCheckoutSession(String fullName, String email, String product, String referralCode) throws StripeException {
         String priceId = "bm".equals(product) ? priceBm : priceEn;
         String orderRef = "EN-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String successUrl = frontendUrl + "/thank-you?session_id={CHECKOUT_SESSION_ID}";
         String cancelUrl = frontendUrl + "/checkout";
+
+        Map<String, String> metadata = new java.util.HashMap<>(Map.of(
+                "fullName", fullName,
+                "email", email,
+                "product", product,
+                "orderRef", orderRef
+        ));
+        if (referralCode != null && !referralCode.isBlank()) {
+            metadata.put("referralCode", referralCode);
+        }
 
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
@@ -70,12 +82,7 @@ public class CheckoutService {
                                 .setQuantity(1L)
                                 .build()
                 )
-                .putAllMetadata(Map.of(
-                        "fullName", fullName,
-                        "email", email,
-                        "product", product,
-                        "orderRef", orderRef
-                ))
+                .putAllMetadata(metadata)
                 .build();
 
         Session session = Session.create(params);
@@ -92,6 +99,9 @@ public class CheckoutService {
         order.setStatus("Active");
         order.setStripeSessionId(session.getId());
         order.setCreatedDate(LocalDateTime.now());
+        if (referralCode != null && !referralCode.isBlank()) {
+            order.setReferralCode(referralCode);
+        }
         orderRepository.save(order);
 
         return session.getUrl();
@@ -132,11 +142,17 @@ public class CheckoutService {
             }
 
             orderRepository.save(order);
+            if (order.getReferralCode() != null && order.getAffiliateId() == null) {
+                affiliateService.trackConversion(order.getReferralCode(), order);
+            }
             deliveryService.generateAndSend(order);
         } catch (StripeException e) {
             order.setPaymentStatus("Paid");
             order.setStatus("Completed");
             orderRepository.save(order);
+            if (order.getReferralCode() != null && order.getAffiliateId() == null) {
+                affiliateService.trackConversion(order.getReferralCode(), order);
+            }
             deliveryService.generateAndSend(order);
         }
     }

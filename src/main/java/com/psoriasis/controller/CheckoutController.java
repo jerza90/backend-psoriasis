@@ -30,14 +30,16 @@ public class CheckoutController {
             if ("bm".equals(request.getProduct())) {
                 String url = toyyibPayService.createBill(
                         request.getFullName(),
-                        request.getEmail()
+                        request.getEmail(),
+                        request.getReferralCode()
                 );
                 return ResponseEntity.ok(Map.of("url", url));
             }
             String url = checkoutService.createCheckoutSession(
                     request.getFullName(),
                     request.getEmail(),
-                    request.getProduct()
+                    request.getProduct(),
+                    request.getReferralCode()
             );
             return ResponseEntity.ok(Map.of("url", url));
         } catch (Exception e) {

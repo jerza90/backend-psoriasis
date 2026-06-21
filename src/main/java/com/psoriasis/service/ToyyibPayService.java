@@ -41,17 +41,23 @@ public class ToyyibPayService {
 
     private final PaymentOrderRepository orderRepository;
     private final EbookDeliveryService deliveryService;
+    private final AffiliateService affiliateService;
     private final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
             .build();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public ToyyibPayService(PaymentOrderRepository orderRepository, EbookDeliveryService deliveryService) {
+    public ToyyibPayService(PaymentOrderRepository orderRepository, EbookDeliveryService deliveryService, AffiliateService affiliateService) {
         this.orderRepository = orderRepository;
         this.deliveryService = deliveryService;
+        this.affiliateService = affiliateService;
     }
 
     public String createBill(String fullName, String email) throws Exception {
+        return createBill(fullName, email, null);
+    }
+
+    public String createBill(String fullName, String email, String referralCode) throws Exception {
         String billRef = "BM-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String returnUrl = frontendUrl + "/thank-you?billcode={billcode}&status_id={status_id}";
 
@@ -111,6 +117,9 @@ public class ToyyibPayService {
         order.setBillCode(billCode);
         order.setCreatedDate(LocalDateTime.now());
         order.setExpiredDate(LocalDateTime.now().plusDays(1));
+        if (referralCode != null && !referralCode.isBlank()) {
+            order.setReferralCode(referralCode);
+        }
         orderRepository.save(order);
 
         return baseUrl + "/" + billCode;
@@ -184,6 +193,9 @@ public class ToyyibPayService {
         if (wasUnpaid && isPaid) {
             order.setStatus("Completed");
             orderRepository.save(order);
+            if (order.getReferralCode() != null && order.getAffiliateId() == null) {
+                affiliateService.trackConversion(order.getReferralCode(), order);
+            }
             deliveryService.generateAndSend(order);
             return order;
         }

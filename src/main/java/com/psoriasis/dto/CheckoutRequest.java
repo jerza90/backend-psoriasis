@@ -17,6 +17,8 @@ public class CheckoutRequest {
     @Pattern(regexp = "bm|en", message = "Product must be 'bm' or 'en'")
     private String product;
 
+    private String referralCode;
+
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
 
@@ -25,4 +27,7 @@ public class CheckoutRequest {
 
     public String getProduct() { return product; }
     public void setProduct(String product) { this.product = product; }
+
+    public String getReferralCode() { return referralCode; }
+    public void setReferralCode(String referralCode) { this.referralCode = referralCode; }
 }
