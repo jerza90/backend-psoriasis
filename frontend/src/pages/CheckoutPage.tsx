@@ -7,9 +7,9 @@ import Footer from '../components/Footer';
 
 type ProductType = 'bm' | 'en';
 
-const PRODUCTS: Record<ProductType, { label: string; price: string; original: string | null; total: string; surcharge: string | null; currency: string; paymentMethod: string }> = {
-  bm: { label: 'Panduan BM', price: 'RM 39', original: 'RM 49', total: 'RM 39', surcharge: null, currency: 'RM', paymentMethod: 'FPX / Bank Transfer' },
-  en: { label: 'English Guide', price: '$27', original: '$67', total: '$28.50', surcharge: '$1.50', currency: '$', paymentMethod: 'Credit Card' },
+const PRODUCTS: Record<ProductType, { price: string; original: string | null; total: string; surcharge: string | null; currency: string }> = {
+  bm: { price: 'RM 39', original: 'RM 49', total: 'RM 39', surcharge: null, currency: 'RM' },
+  en: { price: '$27', original: '$67', total: '$28.50', surcharge: '$1.50', currency: '$' },
 };
 
 export default function CheckoutPage() {
@@ -50,7 +50,7 @@ export default function CheckoutPage() {
     }
   };
 
-  const productLabel = product === 'bm' ? 'Panduan BM' : 'English Guide';
+  const productLabel = product === 'bm' ? t('checkout.bmLabel') : t('checkout.enLabel');
   const productImage = product === 'bm'
     ? '/e-book-landing-pages/e-book-promo-free-resipe.jpg'
     : '/e-book-landing-pages/default-ebook-page.jpg';
@@ -85,16 +85,16 @@ export default function CheckoutPage() {
                   <span className="w-7 h-7 rounded-full bg-green/10 flex items-center justify-center">
                     <MapPin size={14} className="text-green" />
                   </span>
-                  <span className="text-sm font-bold">Panduan BM</span>
+                  <span className="text-sm font-bold">{t('checkout.bmLabel')}</span>
                 </div>
                 <div className={`flex items-baseline gap-2 ${product !== 'bm' ? 'opacity-50' : ''}`}>
                   <p className="text-lg font-black text-green">RM 39</p>
                   <p className="text-sm text-muted/40 line-through">RM 49</p>
                 </div>
-                <p className={`text-[10px] text-muted/60 mt-0.5 ${product !== 'bm' ? 'opacity-50' : ''}`}>Local — Bahasa Malaysia &middot; Save 20%</p>
+                <p className={`text-[10px] text-muted/60 mt-0.5 ${product !== 'bm' ? 'opacity-50' : ''}`}>{t('checkout.bmDesc')} &middot; {t('checkout.bmSave')}</p>
                 <p className={`flex items-center gap-1 text-[10px] text-amber-600 mt-1 ${product !== 'bm' ? 'opacity-50' : ''}`}>
                   <Banknote size={10} />
-                  FPX / Bank Transfer
+                  {t('checkout.fpxPayment')}
                 </p>
                 {product === 'bm' && (
                   <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-green flex items-center justify-center">
@@ -115,16 +115,16 @@ export default function CheckoutPage() {
                   <span className="w-7 h-7 rounded-full bg-green/10 flex items-center justify-center">
                     <Globe size={14} className="text-green" />
                   </span>
-                  <span className="text-sm font-bold">English Guide</span>
+                  <span className="text-sm font-bold">{t('checkout.enLabel')}</span>
                 </div>
                 <div className={`flex items-baseline gap-2 ${product !== 'en' ? 'opacity-50' : ''}`}>
                   <p className="text-lg font-black text-green">$27</p>
                   <p className="text-sm text-muted/40 line-through">$67</p>
                 </div>
-                <p className={`text-[10px] text-muted/60 mt-0.5 ${product !== 'en' ? 'opacity-50' : ''}`}>International — English &middot; Save 60%</p>
+                <p className={`text-[10px] text-muted/60 mt-0.5 ${product !== 'en' ? 'opacity-50' : ''}`}>{t('checkout.enDesc')} &middot; {t('checkout.enSave')}</p>
                 <p className={`flex items-center gap-1 text-[10px] text-muted/60 mt-1 ${product !== 'en' ? 'opacity-50' : ''}`}>
                   <Lock size={10} />
-                  Credit Card
+                  {t('checkout.creditCard')}
                 </p>
                 {product === 'en' && (
                   <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-green flex items-center justify-center">
@@ -191,10 +191,10 @@ export default function CheckoutPage() {
                 className="button-base button-primary gap-2 w-full justify-center shadow-lg shadow-green/20 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {product === 'bm' ? <Banknote size={18} /> : <Lock size={18} />}
-                {loading ? t('checkout.processing') : `${t('checkout.payNow')} — ${selected.total}`}
+                {loading ? t('checkout.processing') : t('checkout.payNow')}
               </button>
               <p className="text-xs text-muted/50 text-center mt-3">
-                {product === 'bm' ? 'Pay via FPX / online banking' : t('checkout.secureNotice')}
+                  {product === 'bm' ? t('checkout.payViaFpx') : t('checkout.secureNotice')}
               </p>
             </form>
           </div>
@@ -256,7 +256,7 @@ export default function CheckoutPage() {
 
               <div className="flex items-center gap-1.5 mt-4 text-xs text-muted/50 justify-center">
                 {product === 'bm' ? <Banknote size={12} /> : <Lock size={12} />}
-                {product === 'bm' ? 'FPX / Bank Transfer' : t('checkout.secureBadge')}
+                  {product === 'bm' ? t('checkout.fpxPayment') : t('checkout.secureBadge')}
               </div>
             </div>
           </div>

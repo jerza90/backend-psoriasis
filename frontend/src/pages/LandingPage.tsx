@@ -216,7 +216,7 @@ export default function LandingPage() {
               {/* Left page - Ebook cover */}
               <div className="relative bg-gradient-to-br from-amber-50 to-amber-100/80 flex items-center justify-center p-0 min-h-[260px] overflow-hidden">
                 <img
-                  src="/e-book-landing-pages/e-book-reader-success-story-6.jpg"
+                  src="/e-book-landing-pages/e-book-reader-success-story-6.png"
                   alt="BebasPsoriasis Ebook"
                   className="w-full h-full object-cover"
                 />

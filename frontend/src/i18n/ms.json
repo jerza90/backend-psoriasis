@@ -39,10 +39,10 @@
   "landing": {
     "hero": {
       "badge": "Bebas Psoriasis Sejak 2021",
-      "heading": "Langkah demi langkah apa yang saya lakukan untuk sembuh dari psoriasis yang menyakitkan — tanpa steroid, tanpa krim mahal.",
-      "subheading": "Ini bukan buku perubatan. Ini adalah catatan peribadi saya — 90 hari segala apa yang saya lakukan, rasa, dan lalui ketika psoriasis saya berada pada tahap paling teruk.",
-      "ctaPrimary": "Dapatkan E-Book Saya",
-      "ctaSecondary": "Ketahui Lebih Lanjut",
+      "heading": "13 Tahun Berjuang Dengan Psoriasis — Dan Akhirnya Saya Bebas",
+      "subheading": "Badan kita tahu cara untuk sembuh. Saya buktikan sendiri — 90 hari, 100% alami, dan hasilnya!",
+      "ctaPrimary": "Dapatkan E-Book",
+      "ctaSecondary": "Lebih Lanjut",
       "tags": [
         "Muat turun digital segera",
         "Utamakan pendidikan",
@@ -73,7 +73,7 @@
       ]
     },
     "quote": {
-      "text": "Penyembuhan semula jadi mengambil masa dan mungkin sangat perlahan. Tetapi dengan pendekatan yang betul — pelan diet, gaya hidup, minda dan suplemen yang sesuai — perubahan boleh berlaku.",
+      "text": "Proses sembuh ambil masa; ia proses yang panjang dan meletihkan. Adakala kita rasa nak menyerah kalah. Tapi bila kita jaga usus, kawal minda, dan disiplinkan pemakanan, kulit akan mula sembuh. Perubahan itu benar. Diri saya buktinya.",
       "author": "by Acachiaa"
     },
     "beforeAfter": {
@@ -114,7 +114,7 @@
       "heading": "Bersedia untuk memulakan dengan panduan BM?",
       "subtitle": "Dapatkan salinan anda dan mula memahami suar anda hari ini.",
       "amount": "RM XX",
-      "cta": "Dapatkan Panduan Saya Sekarang"
+      "cta": "Dapatkan Segera"
     },
     "productsCta": {
       "heading": "Sudah baca panduan ini?",
@@ -134,7 +134,7 @@
         { "chapter": "Garis Masa 90 Hari Kemajuan", "page": "ms 30" },
         { "chapter": "Perlindungan Kulit Jangka Panjang", "page": "ms 42" }
       ],
-      "cta": "Dapatkan Panduan Saya Sekarang"
+      "cta": "Dapatkan Segera"
     },
     "checklistCta": {
       "heading": "Belum bersedia untuk membeli?",
@@ -262,7 +262,7 @@
       "amount": "RM 27",
       "discount": "Tawaran pelancaran terhad — potongan 40%",
       "note": "Muat turun digital segera. Pembayaran selamat Payhip.",
-      "cta": "Dapatkan Panduan Saya Sekarang"
+      "cta": "Dapatkan Segera"
     },
     "faq": {
       "title": "Soalan Lazim",
@@ -305,7 +305,7 @@
     "payment": "Pembayaran",
     "paymentPlaceholder": "Gerbang pembayaran akan muncul di sini",
     "completePayment": "Selesaikan Pembayaran",
-    "payNow": "Bayar Sekarang — RM 29.90",
+    "payNow": "Buat Bayaran",
     "processing": "Memproses...",
     "secureNotice": "Maklumat anda adalah selamat dan tidak akan dikongsi.",
     "orderSummary": "Ringkasan pesanan",
@@ -315,7 +315,16 @@
     "surcharge": "Yuran pemprosesan",
     "total": "Jumlah",
     "digitalItem": "Item digital — tiada penghantaran",
-    "secureBadge": "Checkout selamat — dikuasakan oleh Stripe"
+    "secureBadge": "Checkout selamat — dikuasakan oleh Stripe",
+    "bmLabel": "Panduan BM",
+    "bmDesc": "Tempatan — Bahasa Malaysia",
+    "bmSave": "Jimat 20%",
+    "enLabel": "Panduan Inggeris",
+    "enDesc": "Antarabangsa — English",
+    "enSave": "Jimat 60%",
+    "fpxPayment": "FPX / Pindahan Bank",
+    "creditCard": "Kad Kredit",
+    "payViaFpx": "Bayar melalui FPX / online banking"
   },
   "faq": {
     "badge": "Ada soalan?",
@@ -553,13 +562,13 @@
       "currency": "USD",
       "badge": "Tawaran terhad — jimat 60%",
       "desc": "Panduan ini untuk sesiapa yang pernah melihat cermin dan berasa putus asa, letih menyembunyikan kulit mereka, atau tidak pasti di mana hendak memulakan.",
-      "cta": "Dapatkan Panduan Saya Sekarang"
+      "cta": "Dapatkan Segera"
     },
     "closing": "\"Dapatkan panduan sokongan penyembuhan anda hari ini.\"",
     "gallery": {
       "title": "Galeri E-book",
       "subtitle": "Terokai semua gambar pratonton Panduan Sokongan Suar Psoriasis",
-      "cta": "Dapatkan Panduan Saya Sekarang",
+      "cta": "Dapatkan Segera",
       "backToTips": "← Kembali ke Tip & Trik"
     },
     "moreResources": "Sumber percuma lain",
@@ -650,6 +659,6 @@
     "tips_plural": "{{count}} tip",
     "ctaHeading": "Mulakan Perjalanan Anda Sendiri",
     "ctaSub": "Dapatkan panduan yang sama yang membantu Kak Acha mengawal kulitnya.",
-    "cta": "Dapatkan Panduan Saya Sekarang"
+    "cta": "Dapatkan Segera"
   }
 }
