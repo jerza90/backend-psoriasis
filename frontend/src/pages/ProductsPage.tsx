@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ShoppingCart, Shield, Info, ExternalLink, Star, Search, X } from 'lucide-react';
+import { ShoppingCart, Shield, AlertTriangle, Info, ExternalLink, Star, Search, X } from 'lucide-react';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import HeroProduct from '../components/HeroProduct';
