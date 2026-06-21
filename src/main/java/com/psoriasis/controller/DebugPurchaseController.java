@@ -1,6 +1,8 @@
 package com.psoriasis.controller;
 
 import com.psoriasis.dto.MockPurchaseRequest;
+import com.psoriasis.dto.response.DebugPurchaseResponse;
+import com.psoriasis.dto.response.ErrorResponse;
 import com.psoriasis.model.PaymentOrder;
 import com.psoriasis.repository.PaymentOrderRepository;
 import com.psoriasis.service.EbookDeliveryService;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -36,10 +37,10 @@ public class DebugPurchaseController {
     public ResponseEntity<?> mockPurchase(@Valid @RequestBody MockPurchaseRequest request,
                                           @RequestHeader(value = "X-Debug-Token", required = false) String token) {
         if (debugEmailToken == null || debugEmailToken.isBlank()) {
-            return ResponseEntity.status(503).body(Map.of("error", "Debug email token is not configured"));
+            return ResponseEntity.status(503).body(new ErrorResponse("Debug email token is not configured"));
         }
         if (token == null || !debugEmailToken.equals(token)) {
-            return ResponseEntity.status(403).body(Map.of("error", "Invalid debug token"));
+            return ResponseEntity.status(403).body(new ErrorResponse("Invalid debug token"));
         }
 
         PaymentOrder order = new PaymentOrder();
@@ -72,11 +73,11 @@ public class DebugPurchaseController {
         orderRepository.save(order);
         deliveryService.generateAndSend(order);
 
-        return ResponseEntity.ok(Map.of(
-                "message", "Mock purchase created and emails sent",
-                "orderRef", order.getOrderRef(),
-                "customerEmail", order.getCustomerEmail(),
-                "downloadUrl", downloadBaseUrl + "/" + order.getDownloadToken()
+        return ResponseEntity.ok(new DebugPurchaseResponse(
+                "Mock purchase created and emails sent",
+                order.getOrderRef(),
+                order.getCustomerEmail(),
+                downloadBaseUrl + "/" + order.getDownloadToken()
         ));
     }
 }

@@ -2,13 +2,13 @@ package com.psoriasis.controller;
 
 import com.psoriasis.dto.TestimonialAdminRequest;
 import com.psoriasis.dto.TestimonialResponse;
+import com.psoriasis.dto.response.MessageResponse;
 import com.psoriasis.service.TestimonialService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/testimonials")
@@ -36,8 +36,8 @@ public class AdminTestimonialController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> delete(@PathVariable Long id) {
         testimonialService.delete(id);
-        return ResponseEntity.ok(Map.of("message", "Testimonial deleted"));
+        return ResponseEntity.ok(new MessageResponse("Testimonial deleted"));
     }
 }

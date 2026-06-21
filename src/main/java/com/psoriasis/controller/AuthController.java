@@ -5,12 +5,14 @@ import com.psoriasis.dto.LoginRequest;
 import com.psoriasis.dto.RegisterRequest;
 import com.psoriasis.dto.ResetPasswordRequest;
 import com.psoriasis.dto.VerifyRegistrationRequest;
+import com.psoriasis.dto.response.AuthResponse;
+import com.psoriasis.dto.response.ErrorResponse;
+import com.psoriasis.dto.response.MessageResponse;
+import com.psoriasis.dto.response.RegistrationResponse;
 import com.psoriasis.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,15 +28,15 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {
             var user = userService.login(request.getEmail(), request.getPassword());
-            return ResponseEntity.ok(Map.of(
-                    "id", user.getId(),
-                    "email", user.getEmail(),
-                    "fullName", user.getFullName() != null ? user.getFullName() : "",
-                    "username", user.getUsername(),
-                    "role", user.getRole()
+            return ResponseEntity.ok(new AuthResponse(
+                    user.getId(),
+                    user.getEmail(),
+                    user.getFullName() != null ? user.getFullName() : "",
+                    user.getUsername(),
+                    user.getRole()
             ));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -42,9 +44,9 @@ public class AuthController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         try {
             userService.sendRegistrationOtp(request.getEmail());
-            return ResponseEntity.ok(Map.of("message", "OTP sent to your email"));
+            return ResponseEntity.ok(new MessageResponse("OTP sent to your email"));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -58,13 +60,9 @@ public class AuthController {
                     request.getFullName(),
                     request.getUsername()
             );
-            return ResponseEntity.ok(Map.of(
-                    "message", "Registration successful",
-                    "userId", user.getId(),
-                    "role", user.getRole()
-            ));
+            return ResponseEntity.ok(new RegistrationResponse("Registration successful", user.getId(), user.getRole()));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -72,9 +70,9 @@ public class AuthController {
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         try {
             userService.sendForgotPasswordOtp(request.getEmail());
-            return ResponseEntity.ok(Map.of("message", "OTP sent to your email"));
+            return ResponseEntity.ok(new MessageResponse("OTP sent to your email"));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -82,9 +80,9 @@ public class AuthController {
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         try {
             userService.resetPassword(request.getEmail(), request.getOtpCode(), request.getNewPassword());
-            return ResponseEntity.ok(Map.of("message", "Password reset successful"));
+            return ResponseEntity.ok(new MessageResponse("Password reset successful"));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 }
