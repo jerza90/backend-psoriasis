@@ -23,7 +23,7 @@ export default function ThankYouPage() {
     if (!sessionId) return;
     let cancelled = false;
     fetch(`${API}/api/checkout/session/${sessionId}`)
-      .then(res => res.json())
+      .then(res => res.text().then((text) => (text ? safeParseJson(text) : {})))
       .then(session => {
         if (!cancelled && session.payment_status === 'paid') setVerified(true);
       })
@@ -77,11 +77,11 @@ export default function ThankYouPage() {
       let url: string | null = null;
       if (sessionId) {
         const res = await fetch(`${API}/api/checkout/session/${sessionId}/request-download`, { method: 'POST' });
-        const data = await res.json();
+        const data = await readJsonSafe(res);
         url = data.downloadUrl;
       } else if (billCode) {
         const res = await fetch(`${API}/api/payment/toyyipay-download?billCode=${billCode}`, { method: 'POST' });
-        const data = await res.json();
+        const data = await readJsonSafe(res);
         url = `${API}/api/ebook/download/${data.downloadUrl}`;
       }
       if (url) window.location.href = url;
@@ -174,4 +174,17 @@ export default function ThankYouPage() {
       <Footer />
     </div>
   );
+}
+
+async function readJsonSafe(response: Response): Promise<any> {
+  const text = await response.text();
+  return text ? safeParseJson(text) : {};
+}
+
+function safeParseJson(text: string): any {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {};
+  }
 }

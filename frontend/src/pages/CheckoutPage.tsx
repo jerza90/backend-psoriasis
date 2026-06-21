@@ -40,11 +40,14 @@ export default function CheckoutPage() {
       });
 
       if (!res.ok) {
-        const err = await res.json();
+        const err = await parseJsonSafe(res);
         throw new Error(err.error || 'Checkout failed');
       }
 
-      const data = await res.json();
+      const data = await parseJsonSafe(res);
+      if (!data?.url) {
+        throw new Error('Checkout link was not returned');
+      }
       window.location.href = data.url;
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
@@ -269,4 +272,14 @@ export default function CheckoutPage() {
       <Footer />
     </div>
   );
+}
+
+async function parseJsonSafe(response: Response): Promise<any> {
+  const text = await response.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {};
+  }
 }
