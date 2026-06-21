@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ShoppingCart, Shield, AlertTriangle, Info, ExternalLink, Star, Search, X } from 'lucide-react';
+import { ShoppingCart, Shield, Info, ExternalLink, Star, Search, X } from 'lucide-react';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import HeroProduct from '../components/HeroProduct';
@@ -205,14 +205,6 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen">
       <Topbar />
-
-      {/* Affiliate disclosure */}
-      <div className="border-b border-[rgba(26,46,58,0.06)] bg-gradient-subtle">
-        <div className="container-main py-3 flex items-center gap-2 text-xs text-muted">
-          <AlertTriangle size={14} className="text-gold shrink-0" />
-          {t('products.affiliateBanner')}
-        </div>
-      </div>
 
       <section className="container-main pt-10 pb-16">
         <div className="max-w-[900px] mx-auto">
