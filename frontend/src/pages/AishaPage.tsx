@@ -190,7 +190,7 @@ export default function AishaPage() {
                         <summary className="flex items-center gap-1.5 text-xs text-green font-semibold cursor-pointer hover:gap-2 transition-all list-none">
                           <Lightbulb size={14} />
                           {t('aisha.tips', { count: entry.tips.length })}
-                          <span className="ml-auto text-muted transition-transform group-open:rotate-180 text-xs">▾</span>
+                          <span className="ml-auto text-muted transition-transform group-open:rotate-180 text-lg font-bold">▾</span>
                         </summary>
                         <div className="mt-2 space-y-1.5">
                           {entry.tips.map((tip, j) => (
