@@ -1,9 +1,9 @@
 package com.psoriasis.mapper;
 
-import com.psoriasis.dto.response.AffiliateConversionResponse;
-import com.psoriasis.dto.response.AffiliateConversionsResponse;
-import com.psoriasis.dto.response.AffiliatePublicResponse;
-import com.psoriasis.dto.response.AffiliateResponse;
+import com.psoriasis.dto.response.AffiliateConversionResponseDTO;
+import com.psoriasis.dto.response.AffiliateConversionsResponseDTO;
+import com.psoriasis.dto.response.AffiliatePublicResponseDTO;
+import com.psoriasis.dto.response.AffiliateResponseDTO;
 import com.psoriasis.model.Affiliate;
 import com.psoriasis.model.ReferralConversion;
 import org.springframework.stereotype.Component;
@@ -13,8 +13,8 @@ import java.util.List;
 @Component
 public class AffiliateMapper {
 
-    public AffiliateResponse toResponse(Affiliate affiliate, String referralLink) {
-        AffiliateResponse response = new AffiliateResponse();
+    public AffiliateResponseDTO toResponse(Affiliate affiliate, String referralLink) {
+        AffiliateResponseDTO response = new AffiliateResponseDTO();
         response.setId(affiliate.getId());
         response.setName(affiliate.getName());
         response.setEmail(affiliate.getEmail());
@@ -47,8 +47,8 @@ public class AffiliateMapper {
         return response;
     }
 
-    public AffiliatePublicResponse toPublicResponse(Affiliate affiliate, String referralLink) {
-        AffiliatePublicResponse response = new AffiliatePublicResponse();
+    public AffiliatePublicResponseDTO toPublicResponse(Affiliate affiliate, String referralLink) {
+        AffiliatePublicResponseDTO response = new AffiliatePublicResponseDTO();
         response.setId(affiliate.getId());
         response.setName(affiliate.getName());
         response.setBio(affiliate.getBio());
@@ -74,15 +74,15 @@ public class AffiliateMapper {
         return response;
     }
 
-    public AffiliateConversionsResponse toConversionsResponse(List<ReferralConversion> conversions) {
-        List<AffiliateConversionResponse> items = conversions.stream()
+    public AffiliateConversionsResponseDTO toConversionsResponse(List<ReferralConversion> conversions) {
+        List<AffiliateConversionResponseDTO> items = conversions.stream()
                 .map(this::toConversionResponse)
                 .toList();
-        return new AffiliateConversionsResponse(items.size(), items);
+        return new AffiliateConversionsResponseDTO(items.size(), items);
     }
 
-    public AffiliateConversionResponse toConversionResponse(ReferralConversion conversion) {
-        AffiliateConversionResponse response = new AffiliateConversionResponse();
+    public AffiliateConversionResponseDTO toConversionResponse(ReferralConversion conversion) {
+        AffiliateConversionResponseDTO response = new AffiliateConversionResponseDTO();
         response.setId(conversion.getId());
         response.setOrderAmount(conversion.getOrderAmount());
         response.setCommissionAmount(conversion.getCommissionAmount());

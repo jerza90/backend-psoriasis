@@ -1,12 +1,12 @@
 package com.psoriasis.dto.response;
 
-public class PaymentStatusResponse implements ApiResponse {
+public class PaymentStatusResponseDTO {
     private String paymentStatus;
     private boolean downloadReady;
 
-    public PaymentStatusResponse() {}
+    public PaymentStatusResponseDTO() {}
 
-    public PaymentStatusResponse(String paymentStatus, boolean downloadReady) {
+    public PaymentStatusResponseDTO(String paymentStatus, boolean downloadReady) {
         this.paymentStatus = paymentStatus;
         this.downloadReady = downloadReady;
     }

@@ -8,7 +8,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.net.RequestOptions;
 import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.param.checkout.SessionRetrieveParams;
-import com.psoriasis.dto.response.PaymentStatusResponse;
+import com.psoriasis.dto.response.PaymentStatusResponseDTO;
 import com.psoriasis.model.PaymentOrder;
 import com.psoriasis.repository.PaymentOrderRepository;
 import jakarta.annotation.PostConstruct;
@@ -157,12 +157,12 @@ public class CheckoutService {
         }
     }
 
-    public PaymentStatusResponse getSessionStatus(String sessionId) {
+    public PaymentStatusResponseDTO getSessionStatus(String sessionId) {
         PaymentOrder order = orderRepository.findByStripeSessionId(sessionId).orElse(null);
         if (order == null) {
-            return new PaymentStatusResponse("unknown", false);
+            return new PaymentStatusResponseDTO("unknown", false);
         }
-        return new PaymentStatusResponse(
+        return new PaymentStatusResponseDTO(
                 "Paid".equals(order.getPaymentStatus()) ? "paid" : "unpaid",
                 order.getDownloadToken() != null
         );

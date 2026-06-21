@@ -1,6 +1,6 @@
 package com.psoriasis.controller;
 
-import com.psoriasis.dto.response.ErrorResponse;
+import com.psoriasis.dto.response.ErrorResponseDTO;
 import com.psoriasis.service.EbookDeliveryService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -23,12 +23,12 @@ public class EbookDownloadController {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleError(RuntimeException e) {
+    public ResponseEntity<ErrorResponseDTO> handleError(RuntimeException e) {
         String msg = e.getMessage();
         HttpStatus status = msg.contains("expired") ? HttpStatus.GONE
                 : msg.contains("limit") ? HttpStatus.FORBIDDEN
                 : msg.contains("Invalid") ? HttpStatus.NOT_FOUND
                 : HttpStatus.INTERNAL_SERVER_ERROR;
-        return ResponseEntity.status(status).body(new ErrorResponse(msg));
+        return ResponseEntity.status(status).body(new ErrorResponseDTO(msg));
     }
 }

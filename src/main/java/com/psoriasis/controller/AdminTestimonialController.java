@@ -2,7 +2,7 @@ package com.psoriasis.controller;
 
 import com.psoriasis.dto.TestimonialAdminRequest;
 import com.psoriasis.dto.TestimonialResponse;
-import com.psoriasis.dto.response.MessageResponse;
+import com.psoriasis.dto.response.MessageResponseDTO;
 import com.psoriasis.service.TestimonialService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +36,8 @@ public class AdminTestimonialController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageResponse> delete(@PathVariable Long id) {
+    public ResponseEntity<MessageResponseDTO> delete(@PathVariable Long id) {
         testimonialService.delete(id);
-        return ResponseEntity.ok(new MessageResponse("Testimonial deleted"));
+        return ResponseEntity.ok(new MessageResponseDTO("Testimonial deleted"));
     }
 }

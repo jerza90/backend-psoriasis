@@ -1,8 +1,8 @@
 package com.psoriasis.service;
 
-import com.psoriasis.dto.response.AffiliateConversionsResponse;
-import com.psoriasis.dto.response.AffiliatePublicResponse;
-import com.psoriasis.dto.response.AffiliateResponse;
+import com.psoriasis.dto.response.AffiliateConversionsResponseDTO;
+import com.psoriasis.dto.response.AffiliatePublicResponseDTO;
+import com.psoriasis.dto.response.AffiliateResponseDTO;
 import com.psoriasis.mapper.AffiliateMapper;
 import com.psoriasis.model.Affiliate;
 import com.psoriasis.model.PaymentOrder;
@@ -44,7 +44,7 @@ public class AffiliateService {
         this.affiliateMapper = affiliateMapper;
     }
 
-    public AffiliateResponse register(String name, String email, String bio, String socialLinks, String paymentInfo) {
+    public AffiliateResponseDTO register(String name, String email, String bio, String socialLinks, String paymentInfo) {
         if (affiliateRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already registered as affiliate");
         }
@@ -68,23 +68,23 @@ public class AffiliateService {
         return affiliateMapper.toResponse(saved, buildReferralLink(saved.getReferralCode()));
     }
 
-    public Optional<AffiliatePublicResponse> findByReferralCode(String code) {
+    public Optional<AffiliatePublicResponseDTO> findByReferralCode(String code) {
         return affiliateRepository.findByReferralCode(code)
                 .map(a -> affiliateMapper.toPublicResponse(a, buildReferralLink(a.getReferralCode())));
     }
 
-    public Optional<AffiliateResponse> findById(Long id) {
+    public Optional<AffiliateResponseDTO> findById(Long id) {
         return affiliateRepository.findById(id)
                 .map(a -> affiliateMapper.toResponse(a, buildReferralLink(a.getReferralCode())));
     }
 
-    public Optional<AffiliateResponse> findByEmail(String email) {
+    public Optional<AffiliateResponseDTO> findByEmail(String email) {
         return affiliateRepository.findByEmail(email)
                 .map(a -> affiliateMapper.toResponse(a, buildReferralLink(a.getReferralCode())));
     }
 
     @Transactional
-    public AffiliateResponse updateProfile(String email, com.psoriasis.dto.AffiliateProfileUpdateRequest request) {
+    public AffiliateResponseDTO updateProfile(String email, com.psoriasis.dto.AffiliateProfileUpdateRequest request) {
         Affiliate affiliate = affiliateRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Affiliate profile not found"));
 
@@ -113,7 +113,7 @@ public class AffiliateService {
         return affiliateMapper.toResponse(saved, buildReferralLink(saved.getReferralCode()));
     }
 
-    public List<AffiliateResponse> findAllActive() {
+    public List<AffiliateResponseDTO> findAllActive() {
         return affiliateRepository.findAll().stream()
                 .filter(a -> "active".equals(a.getStatus()))
                 .map(a -> affiliateMapper.toResponse(a, buildReferralLink(a.getReferralCode())))
@@ -152,7 +152,7 @@ public class AffiliateService {
         affiliateRepository.save(affiliate);
     }
 
-    public AffiliateConversionsResponse getConversions(Long affiliateId) {
+    public AffiliateConversionsResponseDTO getConversions(Long affiliateId) {
         return affiliateMapper.toConversionsResponse(conversionRepository.findByAffiliateId(affiliateId));
     }
 

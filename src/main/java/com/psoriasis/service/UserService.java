@@ -1,6 +1,6 @@
 package com.psoriasis.service;
 
-import com.psoriasis.dto.response.UserResponse;
+import com.psoriasis.dto.response.UserResponseDTO;
 import com.psoriasis.mapper.UserMapper;
 import com.psoriasis.model.User;
 import com.psoriasis.repository.AffiliateRepository;
@@ -31,7 +31,7 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public UserResponse registerUser(User user) {
+    public UserResponseDTO registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
@@ -65,7 +65,7 @@ public class UserService {
         emailService.sendOtpEmail(email, otp, "Account Registration");
     }
 
-    public UserResponse verifyRegistration(String email, String otpCode, String password, String fullName, String username) {
+    public UserResponseDTO verifyRegistration(String email, String otpCode, String password, String fullName, String username) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new RuntimeException("User not found");
@@ -124,15 +124,15 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserResponse findByUsername(String username) {
+    public UserResponseDTO findByUsername(String username) {
         return userMapper.toResponse(userRepository.findByUsername(username));
     }
 
-    public UserResponse findByEmail(String email) {
+    public UserResponseDTO findByEmail(String email) {
         return userMapper.toResponse(userRepository.findByEmail(email));
     }
 
-    public UserResponse login(String email, String password) {
+    public UserResponseDTO login(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = userRepository.findByUsername(email);

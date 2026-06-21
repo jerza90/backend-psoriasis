@@ -1,16 +1,15 @@
 package com.psoriasis.controller;
 
 import com.psoriasis.dto.MockPurchaseRequest;
-import com.psoriasis.dto.response.ApiResponse;
-import com.psoriasis.dto.response.DebugPurchaseResponse;
-import com.psoriasis.dto.response.ErrorResponse;
+import com.psoriasis.dto.response.DebugPurchaseResponseDTO;
 import com.psoriasis.model.PaymentOrder;
 import com.psoriasis.repository.PaymentOrderRepository;
 import com.psoriasis.service.EbookDeliveryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,13 +34,13 @@ public class DebugPurchaseController {
     }
 
     @PostMapping("/mock")
-    public ResponseEntity<ApiResponse> mockPurchase(@Valid @RequestBody MockPurchaseRequest request,
-                                                    @RequestHeader(value = "X-Debug-Token", required = false) String token) {
+    public DebugPurchaseResponseDTO mockPurchase(@Valid @RequestBody MockPurchaseRequest request,
+                                              @RequestHeader(value = "X-Debug-Token", required = false) String token) {
         if (debugEmailToken == null || debugEmailToken.isBlank()) {
-            return ResponseEntity.status(503).body(new ErrorResponse("Debug email token is not configured"));
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Debug email token is not configured");
         }
         if (token == null || !debugEmailToken.equals(token)) {
-            return ResponseEntity.status(403).body(new ErrorResponse("Invalid debug token"));
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid debug token");
         }
 
         PaymentOrder order = new PaymentOrder();
@@ -74,11 +73,11 @@ public class DebugPurchaseController {
         orderRepository.save(order);
         deliveryService.generateAndSend(order);
 
-        return ResponseEntity.ok(new DebugPurchaseResponse(
+        return new DebugPurchaseResponseDTO(
                 "Mock purchase created and emails sent",
                 order.getOrderRef(),
                 order.getCustomerEmail(),
                 downloadBaseUrl + "/" + order.getDownloadToken()
-        ));
+        );
     }
 }

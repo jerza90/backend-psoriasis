@@ -5,14 +5,11 @@ import com.psoriasis.dto.LoginRequest;
 import com.psoriasis.dto.RegisterRequest;
 import com.psoriasis.dto.ResetPasswordRequest;
 import com.psoriasis.dto.VerifyRegistrationRequest;
-import com.psoriasis.dto.response.ApiResponse;
-import com.psoriasis.dto.response.AuthResponse;
-import com.psoriasis.dto.response.ErrorResponse;
-import com.psoriasis.dto.response.MessageResponse;
-import com.psoriasis.dto.response.RegistrationResponse;
+import com.psoriasis.dto.response.AuthResponseDTO;
+import com.psoriasis.dto.response.MessageResponseDTO;
+import com.psoriasis.dto.response.RegistrationResponseDTO;
 import com.psoriasis.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,64 +23,44 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
-        try {
-            var user = userService.login(request.getEmail(), request.getPassword());
-            return ResponseEntity.ok(new AuthResponse(
-                    user.getId(),
-                    user.getEmail(),
-                    user.getFullName() != null ? user.getFullName() : "",
-                    user.getUsername(),
-                    user.getRole()
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
-        }
+    public AuthResponseDTO login(@Valid @RequestBody LoginRequest request) {
+        var user = userService.login(request.getEmail(), request.getPassword());
+        return new AuthResponseDTO(
+                user.getId(),
+                user.getEmail(),
+                user.getFullName() != null ? user.getFullName() : "",
+                user.getUsername(),
+                user.getRole()
+        );
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@Valid @RequestBody RegisterRequest request) {
-        try {
-            userService.sendRegistrationOtp(request.getEmail());
-            return ResponseEntity.ok(new MessageResponse("OTP sent to your email"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
-        }
+    public MessageResponseDTO register(@Valid @RequestBody RegisterRequest request) {
+        userService.sendRegistrationOtp(request.getEmail());
+        return new MessageResponseDTO("OTP sent to your email");
     }
 
     @PostMapping("/verify-registration")
-    public ResponseEntity<ApiResponse> verifyRegistration(@Valid @RequestBody VerifyRegistrationRequest request) {
-        try {
-            var user = userService.verifyRegistration(
-                    request.getEmail(),
-                    request.getOtpCode(),
-                    request.getPassword(),
-                    request.getFullName(),
-                    request.getUsername()
-            );
-            return ResponseEntity.ok(new RegistrationResponse("Registration successful", user.getId(), user.getRole()));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
-        }
+    public RegistrationResponseDTO verifyRegistration(@Valid @RequestBody VerifyRegistrationRequest request) {
+        var user = userService.verifyRegistration(
+                request.getEmail(),
+                request.getOtpCode(),
+                request.getPassword(),
+                request.getFullName(),
+                request.getUsername()
+        );
+        return new RegistrationResponseDTO("Registration successful", user.getId(), user.getRole());
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<ApiResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
-        try {
-            userService.sendForgotPasswordOtp(request.getEmail());
-            return ResponseEntity.ok(new MessageResponse("OTP sent to your email"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
-        }
+    public MessageResponseDTO forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        userService.sendForgotPasswordOtp(request.getEmail());
+        return new MessageResponseDTO("OTP sent to your email");
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
-        try {
-            userService.resetPassword(request.getEmail(), request.getOtpCode(), request.getNewPassword());
-            return ResponseEntity.ok(new MessageResponse("Password reset successful"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
-        }
+    public MessageResponseDTO resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        userService.resetPassword(request.getEmail(), request.getOtpCode(), request.getNewPassword());
+        return new MessageResponseDTO("Password reset successful");
     }
 }
