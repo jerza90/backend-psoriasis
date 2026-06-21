@@ -1,5 +1,7 @@
 package com.psoriasis.service;
 
+import com.psoriasis.dto.response.UserResponse;
+import com.psoriasis.mapper.UserMapper;
 import com.psoriasis.model.User;
 import com.psoriasis.repository.AffiliateRepository;
 import com.psoriasis.repository.UserRepository;
@@ -16,18 +18,20 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final AffiliateRepository affiliateRepository;
+    private final UserMapper userMapper;
 
     private static final int OTP_EXPIRE_MINUTES = 10;
     private static final int OTP_LENGTH = 6;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, AffiliateRepository affiliateRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, AffiliateRepository affiliateRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.affiliateRepository = affiliateRepository;
+        this.userMapper = userMapper;
     }
 
-    public User registerUser(User user) {
+    public UserResponse registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
@@ -39,7 +43,7 @@ public class UserService {
         user.setPasswordHash(passwordHash);
         user.setRole(resolveRoleForEmail(user.getEmail()));
 
-        return userRepository.save(user);
+        return userMapper.toResponse(userRepository.save(user));
     }
 
     public void sendRegistrationOtp(String email) {
@@ -61,7 +65,7 @@ public class UserService {
         emailService.sendOtpEmail(email, otp, "Account Registration");
     }
 
-    public User verifyRegistration(String email, String otpCode, String password, String fullName, String username) {
+    public UserResponse verifyRegistration(String email, String otpCode, String password, String fullName, String username) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new RuntimeException("User not found");
@@ -85,7 +89,7 @@ public class UserService {
         user.setEnabled(true);
         user.setOtpCode(null);
         user.setOtpExpiry(null);
-        return userRepository.save(user);
+        return userMapper.toResponse(userRepository.save(user));
     }
 
     public void sendForgotPasswordOtp(String email) {
@@ -120,15 +124,15 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserResponse findByUsername(String username) {
+        return userMapper.toResponse(userRepository.findByUsername(username));
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserResponse findByEmail(String email) {
+        return userMapper.toResponse(userRepository.findByEmail(email));
     }
 
-    public User login(String email, String password) {
+    public UserResponse login(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = userRepository.findByUsername(email);
@@ -142,7 +146,7 @@ public class UserService {
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
             throw new RuntimeException("Invalid email or username or password");
         }
-        return user;
+        return userMapper.toResponse(user);
     }
 
     public boolean existsByUsername(String username) {

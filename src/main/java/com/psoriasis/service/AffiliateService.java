@@ -1,5 +1,9 @@
 package com.psoriasis.service;
 
+import com.psoriasis.dto.response.AffiliateConversionsResponse;
+import com.psoriasis.dto.response.AffiliatePublicResponse;
+import com.psoriasis.dto.response.AffiliateResponse;
+import com.psoriasis.mapper.AffiliateMapper;
 import com.psoriasis.model.Affiliate;
 import com.psoriasis.model.PaymentOrder;
 import com.psoriasis.model.ReferralConversion;
@@ -24,20 +28,23 @@ public class AffiliateService {
     private final ReferralConversionRepository conversionRepository;
     private final PaymentOrderRepository paymentOrderRepository;
     private final UserService userService;
+    private final AffiliateMapper affiliateMapper;
     @Value("${frontend.url}")
     private String frontendUrl;
 
     public AffiliateService(AffiliateRepository affiliateRepository,
                             ReferralConversionRepository conversionRepository,
                             PaymentOrderRepository paymentOrderRepository,
-                            UserService userService) {
+                            UserService userService,
+                            AffiliateMapper affiliateMapper) {
         this.affiliateRepository = affiliateRepository;
         this.conversionRepository = conversionRepository;
         this.paymentOrderRepository = paymentOrderRepository;
         this.userService = userService;
+        this.affiliateMapper = affiliateMapper;
     }
 
-    public Affiliate register(String name, String email, String bio, String socialLinks, String paymentInfo) {
+    public AffiliateResponse register(String name, String email, String bio, String socialLinks, String paymentInfo) {
         if (affiliateRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already registered as affiliate");
         }
@@ -58,23 +65,26 @@ public class AffiliateService {
 
         Affiliate saved = affiliateRepository.save(affiliate);
         userService.assignRoleByEmail(email, "affiliate");
-        return saved;
+        return affiliateMapper.toResponse(saved, buildReferralLink(saved.getReferralCode()));
     }
 
-    public Optional<Affiliate> findByReferralCode(String code) {
-        return affiliateRepository.findByReferralCode(code);
+    public Optional<AffiliatePublicResponse> findByReferralCode(String code) {
+        return affiliateRepository.findByReferralCode(code)
+                .map(a -> affiliateMapper.toPublicResponse(a, buildReferralLink(a.getReferralCode())));
     }
 
-    public Optional<Affiliate> findById(Long id) {
-        return affiliateRepository.findById(id);
+    public Optional<AffiliateResponse> findById(Long id) {
+        return affiliateRepository.findById(id)
+                .map(a -> affiliateMapper.toResponse(a, buildReferralLink(a.getReferralCode())));
     }
 
-    public Optional<Affiliate> findByEmail(String email) {
-        return affiliateRepository.findByEmail(email);
+    public Optional<AffiliateResponse> findByEmail(String email) {
+        return affiliateRepository.findByEmail(email)
+                .map(a -> affiliateMapper.toResponse(a, buildReferralLink(a.getReferralCode())));
     }
 
     @Transactional
-    public Affiliate updateProfile(String email, com.psoriasis.dto.AffiliateProfileUpdateRequest request) {
+    public AffiliateResponse updateProfile(String email, com.psoriasis.dto.AffiliateProfileUpdateRequest request) {
         Affiliate affiliate = affiliateRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Affiliate profile not found"));
 
@@ -99,12 +109,14 @@ public class AffiliateService {
         if (request.getProgressTitle() != null) affiliate.setProgressTitle(request.getProgressTitle());
         if (request.getProgressText() != null) affiliate.setProgressText(request.getProgressText());
         affiliate.setUpdatedAt(LocalDateTime.now());
-        return affiliateRepository.save(affiliate);
+        Affiliate saved = affiliateRepository.save(affiliate);
+        return affiliateMapper.toResponse(saved, buildReferralLink(saved.getReferralCode()));
     }
 
-    public List<Affiliate> findAllActive() {
+    public List<AffiliateResponse> findAllActive() {
         return affiliateRepository.findAll().stream()
                 .filter(a -> "active".equals(a.getStatus()))
+                .map(a -> affiliateMapper.toResponse(a, buildReferralLink(a.getReferralCode())))
                 .toList();
     }
 
@@ -140,8 +152,8 @@ public class AffiliateService {
         affiliateRepository.save(affiliate);
     }
 
-    public List<ReferralConversion> getConversions(Long affiliateId) {
-        return conversionRepository.findByAffiliateId(affiliateId);
+    public AffiliateConversionsResponse getConversions(Long affiliateId) {
+        return affiliateMapper.toConversionsResponse(conversionRepository.findByAffiliateId(affiliateId));
     }
 
     public long getConversionCount(Long affiliateId) {

@@ -1,6 +1,8 @@
 package com.psoriasis.controller;
 
-import com.psoriasis.model.User;
+import com.psoriasis.dto.UserCreateRequest;
+import com.psoriasis.dto.response.ApiResponse;
+import com.psoriasis.dto.response.UserResponse;
 import com.psoriasis.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +19,26 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        if (userService.existsByUsername(user.getUsername())) {
+    public ResponseEntity<ApiResponse> createUser(@RequestBody UserCreateRequest request) {
+        if (userService.existsByUsername(request.getUsername())) {
             return ResponseEntity.badRequest().build();
         }
-        if (userService.existsByEmail(user.getEmail())) {
+        if (userService.existsByEmail(request.getEmail())) {
             return ResponseEntity.badRequest().build();
         }
 
-        User createdUser = userService.registerUser(user);
+        var user = new com.psoriasis.model.User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPasswordHash(request.getPassword());
+        user.setFullName(request.getFullName());
+        UserResponse createdUser = userService.registerUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @GetMapping("/username/{username}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-        User user = userService.findByUsername(username);
+    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
+        UserResponse user = userService.findByUsername(username);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
@@ -39,8 +46,8 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-        User user = userService.findByEmail(email);
+    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
+        UserResponse user = userService.findByEmail(email);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }

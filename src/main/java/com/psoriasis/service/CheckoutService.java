@@ -8,11 +8,11 @@ import com.stripe.model.checkout.Session;
 import com.stripe.net.RequestOptions;
 import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.param.checkout.SessionRetrieveParams;
+import com.psoriasis.dto.response.PaymentStatusResponse;
 import com.psoriasis.model.PaymentOrder;
 import com.psoriasis.repository.PaymentOrderRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -157,15 +157,15 @@ public class CheckoutService {
         }
     }
 
-    public ResponseEntity<Map<String, Object>> getSessionStatus(String sessionId) {
+    public PaymentStatusResponse getSessionStatus(String sessionId) {
         PaymentOrder order = orderRepository.findByStripeSessionId(sessionId).orElse(null);
         if (order == null) {
-            return ResponseEntity.ok(Map.of("payment_status", "unknown"));
+            return new PaymentStatusResponse("unknown", false);
         }
-        return ResponseEntity.ok(Map.of(
-                "payment_status", "Paid".equals(order.getPaymentStatus()) ? "paid" : "unpaid",
-                "download_ready", order.getDownloadToken() != null
-        ));
+        return new PaymentStatusResponse(
+                "Paid".equals(order.getPaymentStatus()) ? "paid" : "unpaid",
+                order.getDownloadToken() != null
+        );
     }
 
     public String requestDownload(String sessionId) {

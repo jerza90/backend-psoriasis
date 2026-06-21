@@ -1,14 +1,17 @@
 package com.psoriasis.controller;
 
 import com.psoriasis.dto.CheckoutRequest;
+import com.psoriasis.dto.response.ApiResponse;
+import com.psoriasis.dto.response.CheckoutUrlResponse;
+import com.psoriasis.dto.response.DownloadUrlResponse;
+import com.psoriasis.dto.response.ErrorResponse;
+import com.psoriasis.dto.response.PaymentStatusResponse;
 import com.psoriasis.service.CheckoutService;
 import com.psoriasis.service.EbookDeliveryService;
 import com.psoriasis.service.ToyyibPayService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/checkout")
@@ -25,7 +28,7 @@ public class CheckoutController {
     }
 
     @PostMapping("/create-session")
-    public ResponseEntity<?> createSession(@Valid @RequestBody CheckoutRequest request) {
+    public ResponseEntity<ApiResponse> createSession(@Valid @RequestBody CheckoutRequest request) {
         try {
             if ("bm".equals(request.getProduct())) {
                 String url = toyyibPayService.createBill(
@@ -33,7 +36,7 @@ public class CheckoutController {
                         request.getEmail(),
                         request.getReferralCode()
                 );
-                return ResponseEntity.ok(Map.of("url", url));
+                return ResponseEntity.ok(new CheckoutUrlResponse(url));
             }
             String url = checkoutService.createCheckoutSession(
                     request.getFullName(),
@@ -41,28 +44,28 @@ public class CheckoutController {
                     request.getProduct(),
                     request.getReferralCode()
             );
-            return ResponseEntity.ok(Map.of("url", url));
+            return ResponseEntity.ok(new CheckoutUrlResponse(url));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 
     @GetMapping("/session/{sessionId}")
-    public ResponseEntity<?> getSession(@PathVariable String sessionId) {
+    public ResponseEntity<PaymentStatusResponse> getSession(@PathVariable String sessionId) {
         try {
-            return checkoutService.getSessionStatus(sessionId);
+            return ResponseEntity.ok(checkoutService.getSessionStatus(sessionId));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(new PaymentStatusResponse("unknown", false));
         }
     }
 
     @PostMapping("/session/{sessionId}/request-download")
-    public ResponseEntity<?> requestDownload(@PathVariable String sessionId) {
+    public ResponseEntity<ApiResponse> requestDownload(@PathVariable String sessionId) {
         try {
             String downloadUrl = checkoutService.requestDownload(sessionId);
-            return ResponseEntity.ok(Map.of("downloadUrl", downloadUrl));
+            return ResponseEntity.ok(new DownloadUrlResponse(downloadUrl));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 }

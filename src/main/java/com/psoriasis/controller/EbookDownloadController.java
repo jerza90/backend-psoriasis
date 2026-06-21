@@ -1,12 +1,11 @@
 package com.psoriasis.controller;
 
+import com.psoriasis.dto.response.ErrorResponse;
 import com.psoriasis.service.EbookDeliveryService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ebook")
@@ -24,12 +23,12 @@ public class EbookDownloadController {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleError(RuntimeException e) {
+    public ResponseEntity<ErrorResponse> handleError(RuntimeException e) {
         String msg = e.getMessage();
         HttpStatus status = msg.contains("expired") ? HttpStatus.GONE
                 : msg.contains("limit") ? HttpStatus.FORBIDDEN
                 : msg.contains("Invalid") ? HttpStatus.NOT_FOUND
                 : HttpStatus.INTERNAL_SERVER_ERROR;
-        return ResponseEntity.status(status).body(Map.of("error", msg));
+        return ResponseEntity.status(status).body(new ErrorResponse(msg));
     }
 }
