@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(scanBasePackages = {"com.psoriasis", "com.acachiaa.store"})
+@SpringBootApplication(scanBasePackages = {"com.psoriasis", "com.acachiaa.store.config"})
 @ConfigurationPropertiesScan
-@EnableJpaRepositories(basePackages = {"com.psoriasis.repository", "com.acachiaa.store.repository"})
-@EntityScan(basePackages = {"com.psoriasis.model", "com.acachiaa.store.model"})
+@EnableJpaRepositories(basePackages = "com.psoriasis.repository")
+@EntityScan(basePackages = "com.psoriasis.model")
 public class PsoriasisBackendApplication {
 
     public static void main(String[] args) {

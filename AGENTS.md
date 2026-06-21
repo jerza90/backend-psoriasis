@@ -19,6 +19,14 @@ Psoriasis ebook landing page + dual-product checkout (BM RM39 / EN $27 USD) with
   - BM: `price_1TkRRe9lkUEilcuQ8tzNzFuT`
   - EN: `price_1TkRSz9lkUEilcuQ8f12eX1X`
 
+## Supabase (Database — free tier)
+
+- Project: BebasPsoBackend
+- URL: `https://ioerfxoqvulbopterdsn.supabase.co`
+- Project ref: `ioerfxoqvulbopterdsn`
+- Connection: `postgresql://postgres:[PASSWORD]@db.ioerfxoqvulbopterdsn.supabase.co:5432/postgres`
+- Set env: `DATABASE_URL`, `DB_USERNAME=postgres`, `DB_PASSWORD`
+
 ## ToyyibPay (BM local payments)
 
 - BM (RM 39) → ToyyibPay (FPX / online banking)
@@ -63,17 +71,24 @@ Psoriasis ebook landing page + dual-product checkout (BM RM39 / EN $27 USD) with
 
 ### 4. Infrastructure
 
-- Enable HTTPS (Cloudflare / nginx / ELB)
+- Enable HTTPS (Fly.io / Cloudflare)
 - Set up Stripe webhook endpoint → `https://yourdomain.com/api/webhooks/stripe`
-- Switch database to production Postgres
-- Set up Redis (or disable if not used)
+- Set up ToyyibPay callback → `https://yourdomain.com/api/payment/toyyibpay-callback`
+- Database: **Supabase (free tier)** — set `DATABASE_URL`, `DB_USERNAME`, `DB_PASSWORD` env vars
 - Flyway will handle schema migrations on startup
+- Redis is not required (disabled if not configured)
 
 ### 5. Deployment
 
-Recommended: use `application-prod.properties` and run with:
+All secrets go in `.env` (DO NOT COMMIT — listed in `.gitignore`).
+Set them on Fly.io with:
 ```bash
-java -jar app.jar --spring.profiles.active=prod
+fly secrets import < .env
+```
+
+Or deploy with env vars:
+```bash
+fly deploy --env STRIPE_SECRET_KEY=... --env DATABASE_URL=...
 ```
 
 ## Order Tracking

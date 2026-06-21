@@ -39,8 +39,8 @@
   "landing": {
     "hero": {
       "badge": "Free From Psoriasis Since 2021",
-      "heading": "Step by step what I did to heal from painful psoriasis — no steroids, no fancy cream.",
-      "subheading": "This isn't a medical book. This is my personal account — 90 days of everything I did, felt, and pushed through when my psoriasis was at its absolute worst.",
+      "heading": "13-Year Psoriasis Healing Journey — And How I Finally Free",
+      "subheading": "Our body knows how to heal. I proved it myself — 90 days, 100% natural, and the results are real!",
       "ctaPrimary": "Get My E-Book",
       "ctaSecondary": "Learn More",
       "tags": [
@@ -73,8 +73,8 @@
       ]
     },
     "quote": {
-      "text": "Healing doesn't happen overnight. It's slow, messy, and some days you'll feel like giving up. But when you get the right support — the right diet, the right mindset, the right habits — your body will surprise you. Change is possible. I've lived it.",
-      "author": "Anonymous"
+      "text": "Healing doesn't happen overnight. There will be days you want to surrender. But when you fix your gut, calm your mind, and commit to the right nourishment, your skin will follow. Change is possible. My reflection is the proof.",
+      "author": "by Acachiaa"
     },
     "beforeAfter": {
       "heading": "Real transformations",
@@ -120,6 +120,21 @@
       "heading": "Already read the guide?",
       "desc": "Explore research-backed product recommendations for psoriasis support — each with clear explanations of why they help and how to use them safely.",
       "cta": "Browse Product Guide"
+    },
+    "ebookTeaser": {
+      "badge": "Peek inside",
+      "heading": "What you'll learn in this guide",
+      "toc": [
+        { "chapter": "Understanding the Healing Crisis", "page": "p. 4" },
+        { "chapter": "Daily Trigger Tracker", "page": "p. 8" },
+        { "chapter": "Food & Inflammation Guide", "page": "p. 12" },
+        { "chapter": "My Morning Routine", "page": "p. 18" },
+        { "chapter": "Supplement Education", "page": "p. 22" },
+        { "chapter": "Mindset Shift That Changed Everything", "page": "p. 24" },
+        { "chapter": "90-Day Timeline of Progress", "page": "p. 30" },
+        { "chapter": "Long-Term Skin Protection", "page": "p. 42" }
+      ],
+      "cta": "Get My Guide Now"
     },
     "checklistCta": {
       "heading": "Not ready to buy yet?",
@@ -254,7 +269,7 @@
       "items": [
         {
           "q": "Is this a cure?",
-          "a": "No. This ebook is for wellness education only. It does not diagnose, treat, or cure psoriasis."
+          "a": "Psoriasis is a complex condition with no single goly grail. But true, long-term management is absolutely possible. I don't provide medical diagnoses or prescriptions. Instead, this guide shares the exact holistic framework I used to achieve clear skin after years of struggling. Real recovery starts from within. Modern science shows a powerful link between gut health and skin inflammation—when we heal the gut microbiome and eliminate inflammatory triggers, we calm the immune system. This e-book is a lifestyle blueprint designed to help you repair your gut, shift your mindset, and give your body the exact tools it needs to naturally reverse flare-ups from the inside out"
         },
         {
           "q": "Should I stop my medication?",
@@ -290,7 +305,7 @@
     "payment": "Payment",
     "paymentPlaceholder": "Payment gateway will appear here",
     "completePayment": "Complete Payment",
-    "payNow": "Pay Now — RM 29.90",
+    "payNow": "Make Payment",
     "processing": "Processing...",
     "secureNotice": "Your information is secure and will not be shared.",
     "orderSummary": "Order summary",
@@ -300,7 +315,16 @@
     "surcharge": "Processing fee",
     "total": "Total",
     "digitalItem": "Digital item — no shipping",
-    "secureBadge": "Secure checkout — powered by Stripe"
+    "secureBadge": "Secure checkout — powered by Stripe",
+    "bmLabel": "Panduan BM",
+    "bmDesc": "Local — Bahasa Malaysia",
+    "bmSave": "Save 20%",
+    "enLabel": "English Guide",
+    "enDesc": "International — English",
+    "enSave": "Save 60%",
+    "fpxPayment": "FPX / Bank Transfer",
+    "creditCard": "Credit Card",
+    "payViaFpx": "Pay via FPX / online banking"
   },
   "faq": {
     "badge": "Got questions?",
@@ -312,7 +336,7 @@
         "items": [
           {
             "q": "Is this a cure?",
-            "a": "No. This ebook and all materials on this site are for wellness education only. They do not diagnose, treat, or cure psoriasis. Psoriasis is a complex condition that often requires professional medical care."
+            "a": "Psoriasis is a complex condition with no single Holy Grail. But true, long-term management is absolutely possible. I don't provide medical diagnoses or prescriptions. Instead, this guide shares the exact holistic framework I used to achieve clear skin after years of struggling. Real recovery starts from within. Modern science shows a powerful link between gut health and skin inflammation—when we heal the gut microbiome and eliminate inflammatory triggers, we calm the immune system. This e-book is a lifestyle blueprint designed to help you repair your gut, shift your mindset, and give your body the exact tools it needs to naturally reverse flare-ups from the inside out"
           },
           {
             "q": "Should I stop my medication?",

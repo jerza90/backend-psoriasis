@@ -14,7 +14,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class EbookDeliveryService {
@@ -31,8 +35,8 @@ public class EbookDeliveryService {
     @Value("${app.ebook.token-expire-hours}")
     private int tokenExpireHours;
 
-    @Value("${frontend.url}")
-    private String frontendUrl;
+    @Value("${app.ebook.download-base-url}")
+    private String downloadBaseUrl;
 
     public EbookDeliveryService(PaymentOrderRepository orderRepository, EmailService emailService) {
         this.orderRepository = orderRepository;
@@ -47,7 +51,7 @@ public class EbookDeliveryService {
         order.setTokenExpiresAt(LocalDateTime.now().plusHours(tokenExpireHours));
         orderRepository.save(order);
 
-        String downloadLink = frontendUrl + "/api/ebook/download/" + token;
+        String downloadLink = downloadBaseUrl + "/" + token;
         String productName = order.getProductName();
 
         try {
@@ -72,20 +76,39 @@ public class EbookDeliveryService {
         order.setDownloadCount(order.getDownloadCount() + 1);
         orderRepository.save(order);
 
-        Path filePath = Paths.get(localPath, ebookFilename);
-
-        if (!Files.exists(filePath)) {
-            throw new RuntimeException("Ebook file not found");
+        Path dir = Paths.get(localPath);
+        if (!Files.exists(dir)) {
+            throw new RuntimeException("Ebook directory not found");
         }
 
-        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + ebookFilename + "\"");
-
-        try (InputStream is = Files.newInputStream(filePath); var os = response.getOutputStream()) {
-            is.transferTo(os);
-            os.flush();
+        List<Path> pdfs;
+        try (Stream<Path> walk = Files.walk(dir, 1)) {
+            pdfs = walk.filter(p -> p.toString().endsWith(".pdf"))
+                       .sorted()
+                       .toList();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to stream PDF", e);
+            throw new RuntimeException("Failed to list ebook files", e);
+        }
+
+        if (pdfs.isEmpty()) {
+            throw new RuntimeException("No ebook files found");
+        }
+
+        String zipName = ebookFilename.replace(".pdf", ".zip");
+        response.setContentType("application/zip");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + zipName + "\"");
+
+        try (ZipOutputStream zos = new ZipOutputStream(response.getOutputStream())) {
+            for (Path pdf : pdfs) {
+                ZipEntry entry = new ZipEntry(pdf.getFileName().toString());
+                zos.putNextEntry(entry);
+                try (InputStream is = Files.newInputStream(pdf)) {
+                    is.transferTo(zos);
+                }
+                zos.closeEntry();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to stream ZIP", e);
         }
     }
 }

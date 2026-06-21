@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, Download, BookOpen, Loader } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import ScrollReveal from '../components/ScrollReveal';
+
+const API = import.meta.env.VITE_API_URL || '';
 
 export default function ThankYouPage() {
   const { t } = useTranslation();
@@ -14,13 +16,13 @@ export default function ThankYouPage() {
   const statusId = searchParams.get('status_id');
   const [verified, setVerified] = useState(false);
   const [checking, setChecking] = useState(!!sessionId || !!billCode);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [requesting, setRequesting] = useState(false);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (!sessionId) return;
     let cancelled = false;
-    fetch(`/api/checkout/session/${sessionId}`)
+    fetch(`${API}/api/checkout/session/${sessionId}`)
       .then(res => res.json())
       .then(session => {
         if (!cancelled && session.payment_status === 'paid') setVerified(true);
@@ -33,25 +35,57 @@ export default function ThankYouPage() {
   }, [sessionId]);
 
   useEffect(() => {
-    if (billCode && statusId === '1') {
+    if (!billCode || billCode.includes('{') || billCode.includes('}')) {
+      setChecking(false);
+      return;
+    }
+    if (statusId === '1') {
       setVerified(true);
       setChecking(false);
-    } else if (billCode) {
-      setChecking(false);
+      return;
     }
+
+    const poll = async () => {
+      try {
+        const res = await fetch(`${API}/api/payment/toyyipay-status?billCode=${billCode}`);
+        const data = await res.json();
+        if (data.payment_status === 'paid') {
+          setVerified(true);
+          setChecking(false);
+          return true;
+        }
+      } catch {}
+      return false;
+    };
+
+    poll();
+    const id = setInterval(async () => {
+      const done = await poll();
+      if (done) clearInterval(id);
+    }, 3000);
+    pollRef.current = id;
+
+    return () => {
+      clearInterval(pollRef.current ?? undefined);
+    };
   }, [billCode, statusId]);
 
   const handleDownload = async () => {
-    if (!sessionId || requesting) return;
+    if (requesting) return;
     setRequesting(true);
     try {
-      const res = await fetch(`/api/checkout/session/${sessionId}/request-download`, { method: 'POST' });
-      const data = await res.json();
-      if (data.downloadUrl) {
-        window.location.href = data.downloadUrl;
+      let url: string | null = null;
+      if (sessionId) {
+        const res = await fetch(`${API}/api/checkout/session/${sessionId}/request-download`, { method: 'POST' });
+        const data = await res.json();
+        url = data.downloadUrl;
+      } else if (billCode) {
+        const res = await fetch(`${API}/api/payment/toyyipay-download?billCode=${billCode}`, { method: 'POST' });
+        const data = await res.json();
+        url = `${API}/api/ebook/download/${data.downloadUrl}`;
       }
+      if (url) window.location.href = url;
     } catch {
-      // silent
     } finally {
       setRequesting(false);
     }
@@ -87,7 +121,7 @@ export default function ThankYouPage() {
                 <Loader size={18} className="animate-spin" />
                 {t('thankYou.verifying')}
               </div>
-            ) : verified && sessionId ? (
+            ) : verified ? (
               <button
                 onClick={handleDownload}
                 disabled={requesting}

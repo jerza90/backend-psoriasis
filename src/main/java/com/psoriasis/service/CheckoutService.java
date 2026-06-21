@@ -37,6 +37,9 @@ public class CheckoutService {
     @Value("${frontend.url}")
     private String frontendUrl;
 
+    @Value("${app.ebook.download-base-url}")
+    private String downloadBaseUrl;
+
     private final PaymentOrderRepository orderRepository;
     private final EbookDeliveryService deliveryService;
 
@@ -158,6 +161,6 @@ public class CheckoutService {
         if (order.getDownloadToken() == null) {
             deliveryService.generateAndSend(order);
         }
-        return frontendUrl + "/api/ebook/download/" + order.getDownloadToken();
+        return downloadBaseUrl + "/" + order.getDownloadToken();
     }
 }

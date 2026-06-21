@@ -17,7 +17,7 @@ const images: { src: string; alt: string }[] = [
   { src: 'e-book-reader-success-story-3.jpg', alt: 'Reader success story — part 3' },
   { src: 'e-book-reader-success-story-4.jpg', alt: 'Reader success story — part 4' },
   { src: 'e-book-reader-success-story-5.jpg', alt: 'Reader success story — part 5' },
-  { src: 'e-book-reader-success-story-6.jpg', alt: 'Reader success story — part 6' },
+  { src: 'e-book-reader-success-story-6.png', alt: 'Reader success story — part 6' },
   { src: 'E-book-udpate.jpg', alt: 'Ebook latest update announcement' },
   { src: 'rawat_pso1.jpg', alt: 'Psoriasis treatment support — tip 1' },
   { src: 'rawat_pso3.jpg', alt: 'Psoriasis treatment support — tip 3' },
