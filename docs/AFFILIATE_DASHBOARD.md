@@ -65,6 +65,8 @@ Example:
 
 ## Local Test Account
 
+This account needs a matching `users` row because login checks `/api/auth/login` against the `users` table.
+
 - Username: `aishaaffiliate`
 - Email: `aishaaffiliate@example.com`
 - Password: `AishaAffiliate123!`
