@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, Download, BookOpen, Loader } from 'lucide-react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import ScrollReveal from '../components/ScrollReveal';
 import { getApiBaseUrl } from '../config/apiBase';
+import { clearCheckoutDraft } from '../utils/checkoutDraft';
 
 const API = getApiBaseUrl();
 
 export default function ThankYouPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const billCode = searchParams.get('billcode');
@@ -26,7 +28,10 @@ export default function ThankYouPage() {
     fetch(`${API}/api/checkout/session/${sessionId}`)
       .then(res => res.text().then((text) => (text ? safeParseJson(text) : {})))
       .then(session => {
-        if (!cancelled && session.payment_status === 'paid') setVerified(true);
+        if (!cancelled && session.payment_status === 'paid') {
+          setVerified(true);
+          clearCheckoutDraft();
+        }
       })
       .catch(() => {})
       .finally(() => {
@@ -42,7 +47,12 @@ export default function ThankYouPage() {
     }
     if (statusId === '1') {
       setVerified(true);
+      clearCheckoutDraft();
       setChecking(false);
+      return;
+    }
+    if (statusId && statusId !== '1') {
+      navigate(`/payment-failed?${searchParams.toString()}`, { replace: true });
       return;
     }
 
@@ -52,6 +62,7 @@ export default function ThankYouPage() {
         const data = await res.json();
         if (data.payment_status === 'paid') {
           setVerified(true);
+          clearCheckoutDraft();
           setChecking(false);
           return true;
         }

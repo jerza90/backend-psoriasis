@@ -12,6 +12,7 @@ import ProductsPage from './pages/ProductsPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import ThankYouPage from './pages/ThankYouPage';
+import PaymentFailedPage from './pages/PaymentFailedPage';
 import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="/blog/:id" element={<BlogPostPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/thank-you" element={<ThankYouPage />} />
+          <Route path="/payment-failed" element={<PaymentFailedPage />} />
           <Route path="/affiliate/dashboard" element={<AffiliateDashboardPage />} />
           <Route path="/affiliate/:referralCode" element={<AffiliatePublicPage />} />
           <Route path="/admin/testimonials" element={<AdminTestimonialsPage />} />
