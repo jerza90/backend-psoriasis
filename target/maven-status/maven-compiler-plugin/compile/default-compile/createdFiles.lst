@@ -1,6 +1,0 @@
-com/psoriasis/service/UserService.class
-com/psoriasis/controller/UserController.class
-com/psoriasis/config/AppConfig.class
-com/psoriasis/model/User.class
-com/psoriasis/PsoriasisBackendApplication.class
-com/psoriasis/repository/UserRepository.class
