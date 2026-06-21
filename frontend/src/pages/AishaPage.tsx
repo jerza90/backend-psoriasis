@@ -51,9 +51,13 @@ export default function AishaPage() {
                     {aisha.conditionDuration}
                   </span>
                 </div>
-                <div className="inline-flex items-center gap-1.5 glass rounded-full px-3 py-1 text-xs font-semibold text-green">
-                  <Heart size={12} />
-                  {aisha.category}
+                <div className="flex flex-wrap gap-1.5">
+                  {aisha.categories.map((cat) => (
+                    <span key={cat} className="inline-flex items-center gap-1.5 glass rounded-full px-3 py-1 text-xs font-semibold text-green">
+                      <Heart size={12} />
+                      {cat}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>

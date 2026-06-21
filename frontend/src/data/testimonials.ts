@@ -15,7 +15,7 @@ export interface Testimonial {
   age: number;
   location: string;
   conditionDuration: string;
-  category: string;
+  categories: string[];
   summary: string;
   initialQuote: string;
   resultQuote: string;
@@ -26,11 +26,11 @@ export interface Testimonial {
 
 const enAisha: Testimonial = {
   id: "t1",
-  name: "Kak Acha",
+  name: "Acachiaa",
   age: 35,
   location: "Selangor",
   conditionDuration: "13 years",
-  category: "Psoriasis",
+  categories: ["Psoriasis", "Nail Psoriasis", "Guttate Psoriasis"],
   summary:
     "From 13 years of painful flare-ups to psoriasis-free skin — through the DND Diet Protocol, 100% natural, no steroids.",
   initialQuote:
@@ -159,7 +159,7 @@ const shared: Testimonial[] = [
     age: 47,
     location: "Penang",
     conditionDuration: "12 years",
-    category: "Plaque Psoriasis",
+    categories: ["Plaque Psoriasis"],
     summary:
       "Large plaques on elbows and knees reduced by 80% after focusing on gut health and omega-3 supplementation.",
     initialQuote:
@@ -231,7 +231,7 @@ const shared: Testimonial[] = [
     age: 29,
     location: "Johor Bahru",
     conditionDuration: "3 years",
-    category: "Guttate Psoriasis",
+    categories: ["Guttate Psoriasis"],
     summary:
       "Small drop-like lesions all over torso cleared within 3 months after identifying strep trigger and supporting immune recovery.",
     initialQuote:
@@ -289,7 +289,7 @@ const shared: Testimonial[] = [
     age: 52,
     location: "Ipoh",
     conditionDuration: "20+ years",
-    category: "Chronic Plaque",
+    categories: ["Chronic Plaque"],
     summary:
       "Long-term severe psoriasis on 40% of body. Found relief through consistent routine, stress reduction, and targeted supplements.",
     initialQuote:
@@ -361,7 +361,7 @@ const shared: Testimonial[] = [
     age: 31,
     location: "Shah Alam",
     conditionDuration: "2 years",
-    category: "Scalp & Face",
+    categories: ["Scalp & Face"],
     summary:
       "Psoriasis on scalp and face cleared by 85% after eliminating trigger foods and using a targeted skincare routine.",
     initialQuote:
@@ -430,11 +430,11 @@ const shared: Testimonial[] = [
 
 const msAisha: Testimonial = {
   id: "t1",
-  name: "Kak Acha",
+  name: "Acachiaa",
   age: 35,
   location: "Selangor",
   conditionDuration: "13 tahun",
-  category: "Psoriasis",
+  categories: ["Psoriasis", "Psoriasis Kuku", "Guttate Psoriasis"],
   summary:
     "Dari kesakitan flare-up selama 13 tahun kepada kulit bebas psoriasis — melalui DND Diet Protokol, 100% alami, tanpa steroid.",
   initialQuote:

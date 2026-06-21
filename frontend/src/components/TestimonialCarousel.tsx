@@ -36,9 +36,11 @@ function ProgressModal({
                 </div>
               </div>
               <div className="flex flex-wrap gap-1.5 mt-3">
-                <span className="glass rounded-full px-2.5 py-1 text-xs text-muted">
-                  {testimonial.category}
-                </span>
+                {testimonial.categories.map((cat) => (
+                  <span key={cat} className="glass rounded-full px-2.5 py-1 text-xs text-muted">
+                    {cat}
+                  </span>
+                ))}
                 <span className="glass rounded-full px-2.5 py-1 text-xs text-muted">
                   {testimonial.conditionDuration}
                 </span>
@@ -289,7 +291,9 @@ export default function TestimonialCarousel() {
               </div>
             </div>
             <div className="flex flex-wrap gap-1.5 mb-3">
-              <span className="glass rounded-full px-2 py-0.5 text-xs text-muted">{item.category}</span>
+              {item.categories.map((cat) => (
+                <span key={cat} className="glass rounded-full px-2 py-0.5 text-xs text-muted">{cat}</span>
+              ))}
             </div>
             <p className="text-sm text-muted leading-relaxed mb-3">"{item.resultQuote}"</p>
             <p className="text-xs text-muted/70 line-clamp-2 mb-3">{item.summary}</p>
