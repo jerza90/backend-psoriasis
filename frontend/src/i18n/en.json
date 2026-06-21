@@ -121,6 +121,21 @@
       "desc": "Explore research-backed product recommendations for psoriasis support — each with clear explanations of why they help and how to use them safely.",
       "cta": "Browse Product Guide"
     },
+    "ebookTeaser": {
+      "badge": "Peek inside",
+      "heading": "What you'll learn in this guide",
+      "toc": [
+        { "chapter": "Understanding the Healing Crisis", "page": "p. 4" },
+        { "chapter": "Daily Trigger Tracker", "page": "p. 8" },
+        { "chapter": "Food & Inflammation Guide", "page": "p. 12" },
+        { "chapter": "My Morning Routine", "page": "p. 18" },
+        { "chapter": "Supplement Education", "page": "p. 22" },
+        { "chapter": "Mindset Shift That Changed Everything", "page": "p. 24" },
+        { "chapter": "90-Day Timeline of Progress", "page": "p. 30" },
+        { "chapter": "Long-Term Skin Protection", "page": "p. 42" }
+      ],
+      "cta": "Get My Guide Now"
+    },
     "checklistCta": {
       "heading": "Not ready to buy yet?",
       "desc": "Get the free Psoriasis Flare-Up Support Checklist — 7 areas to review before choosing products.",

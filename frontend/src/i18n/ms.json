@@ -121,6 +121,21 @@
       "desc": "Terokai cadangan produk berasaskan penyelidikan untuk sokongan psoriasis — setiap satu dengan penjelasan jelas mengapa ia membantu dan cara menggunakannya dengan selamat.",
       "cta": "Lihat Panduan Produk"
     },
+    "ebookTeaser": {
+      "badge": "Intip di dalam",
+      "heading": "Apa yang anda akan pelajari dalam panduan ini",
+      "toc": [
+        { "chapter": "Memahami Krisis Penyembuhan", "page": "ms 4" },
+        { "chapter": "Penjejak Pencetus Harian", "page": "ms 8" },
+        { "chapter": "Panduan Makanan & Keradangan", "page": "ms 12" },
+        { "chapter": "Rutin Pagi Saya", "page": "ms 18" },
+        { "chapter": "Pendidikan Suplemen", "page": "ms 22" },
+        { "chapter": "Perubahan Minda Yang Mengubah Segalanya", "page": "ms 24" },
+        { "chapter": "Garis Masa 90 Hari Kemajuan", "page": "ms 30" },
+        { "chapter": "Perlindungan Kulit Jangka Panjang", "page": "ms 42" }
+      ],
+      "cta": "Dapatkan Panduan Saya Sekarang"
+    },
     "checklistCta": {
       "heading": "Belum bersedia untuk membeli?",
       "desc": "Dapatkan Senarai Semak Sokongan Suar Psoriasis percuma — 7 bidang untuk dikaji sebelum memilih produk.",
