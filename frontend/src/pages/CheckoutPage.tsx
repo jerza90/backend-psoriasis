@@ -4,6 +4,7 @@ import { Lock, ArrowLeft, Mail, Download, AlertTriangle, Globe, MapPin, Banknote
 import { Link, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
+import { getApiBaseUrl } from '../config/apiBase';
 
 type ProductType = 'bm' | 'en';
 
@@ -33,7 +34,7 @@ export default function CheckoutPage() {
     setError('');
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/checkout/create-session`, {
+      const res = await fetch(`${getApiBaseUrl()}/api/checkout/create-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullName: name, email, product, referralCode }),

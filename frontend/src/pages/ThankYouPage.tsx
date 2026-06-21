@@ -5,8 +5,9 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import ScrollReveal from '../components/ScrollReveal';
+import { getApiBaseUrl } from '../config/apiBase';
 
-const API = import.meta.env.VITE_API_URL || '';
+const API = getApiBaseUrl();
 
 export default function ThankYouPage() {
   const { t } = useTranslation();

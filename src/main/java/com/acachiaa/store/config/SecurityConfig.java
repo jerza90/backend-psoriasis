@@ -19,6 +19,7 @@ public class SecurityConfig {
                 .ignoringRequestMatchers(
                     "/api/webhook/stripe",
                     "/api/auth/**",
+                    "/api/debug/**",
                     "/api/affiliate/**",
                     "/api/testimonials/**",
                     "/api/admin/testimonials/**",
@@ -36,6 +37,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/checkout/**").permitAll()
                 .requestMatchers("/api/payment/**").permitAll()
+                .requestMatchers("/api/debug/**").permitAll()
                 .requestMatchers("/api/affiliate/**").permitAll()
                 .requestMatchers("/api/testimonials/**").permitAll()
                 .requestMatchers("/api/admin/testimonials/**").permitAll()

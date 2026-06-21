@@ -52,12 +52,11 @@ public class EbookDeliveryService {
         orderRepository.save(order);
 
         String downloadLink = downloadBaseUrl + "/" + token;
-        String productName = order.getProductName();
 
         try {
-            emailService.sendReceiptEmail(order.getCustomerEmail(), productName, downloadLink);
+            emailService.sendMockPurchaseBundle(order, downloadLink);
         } catch (Exception e) {
-            System.err.println("Failed to send email to " + order.getCustomerEmail() + ": " + e.getMessage());
+            System.err.println("Failed to send purchase emails for " + order.getCustomerEmail() + ": " + e.getMessage());
         }
     }
 
