@@ -22,13 +22,16 @@ public class AffiliateService {
     private final AffiliateRepository affiliateRepository;
     private final ReferralConversionRepository conversionRepository;
     private final PaymentOrderRepository paymentOrderRepository;
+    private final UserService userService;
 
     public AffiliateService(AffiliateRepository affiliateRepository,
                             ReferralConversionRepository conversionRepository,
-                            PaymentOrderRepository paymentOrderRepository) {
+                            PaymentOrderRepository paymentOrderRepository,
+                            UserService userService) {
         this.affiliateRepository = affiliateRepository;
         this.conversionRepository = conversionRepository;
         this.paymentOrderRepository = paymentOrderRepository;
+        this.userService = userService;
     }
 
     public Affiliate register(String name, String email, String bio, String socialLinks, String paymentInfo) {
@@ -50,7 +53,9 @@ public class AffiliateService {
         affiliate.setCreatedAt(LocalDateTime.now());
         affiliate.setUpdatedAt(LocalDateTime.now());
 
-        return affiliateRepository.save(affiliate);
+        Affiliate saved = affiliateRepository.save(affiliate);
+        userService.assignRoleByEmail(email, "affiliate");
+        return saved;
     }
 
     public Optional<Affiliate> findByReferralCode(String code) {

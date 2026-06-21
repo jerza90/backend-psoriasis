@@ -44,7 +44,13 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const result = await verifyRegistration(email, otpCode, password, fullName, username || undefined);
-      setUser({ id: result.userId, email, fullName, username: username || email.split('@')[0] });
+      setUser({
+        id: result.userId,
+        email,
+        fullName,
+        username: username || email.split('@')[0],
+        role: result.role,
+      });
       navigate('/');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong');

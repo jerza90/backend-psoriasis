@@ -40,8 +40,8 @@ export async function verifyRegistration(
   password: string,
   fullName: string,
   username?: string,
-): Promise<{ message: string; userId: number }> {
-  return request<{ message: string; userId: number }>('/auth/verify-registration', {
+): Promise<{ message: string; userId: number; role: string }> {
+  return request<{ message: string; userId: number; role: string }>('/auth/verify-registration', {
     method: 'POST',
     body: JSON.stringify({ email, otpCode, password, fullName, username }),
   });
