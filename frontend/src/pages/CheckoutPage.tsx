@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Lock, ArrowLeft, Mail, Download, AlertTriangle, Globe, MapPin, Banknote } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import { getApiBaseUrl } from '../config/apiBase';
+import { clearCheckoutDraft, readCheckoutDraft, saveCheckoutDraft } from '../utils/checkoutDraft';
 
 type ProductType = 'bm' | 'en';
 
@@ -16,13 +17,23 @@ const PRODUCTS: Record<ProductType, { price: string; original: string | null; to
 export default function CheckoutPage() {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
-  const [product, setProduct] = useState<ProductType>('bm');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const draft = readCheckoutDraft();
+  const [product, setProduct] = useState<ProductType>(draft?.product ?? 'bm');
+  const [email, setEmail] = useState(draft?.email ?? '');
+  const [name, setName] = useState(draft?.name ?? '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const resumeNotice = Boolean(searchParams.get('resume')) || Boolean(draft);
 
   const referralCode = searchParams.get('ref') || undefined;
+
+  useEffect(() => {
+    if (!name.trim() && !email.trim() && !referralCode) {
+      clearCheckoutDraft();
+      return;
+    }
+    saveCheckoutDraft({ name, email, product, referralCode });
+  }, [name, email, product, referralCode]);
 
   const selected = PRODUCTS[product];
 
@@ -49,6 +60,7 @@ export default function CheckoutPage() {
       if (!data?.url) {
         throw new Error('Checkout link was not returned');
       }
+      saveCheckoutDraft({ name, email, product, referralCode });
       window.location.href = data.url;
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
@@ -77,6 +89,14 @@ export default function CheckoutPage() {
           <div className="animate-fade-up">
             <h1 className="text-2xl md:text-3xl font-black mb-2">{t('checkout.heading')}</h1>
             <p className="text-muted text-sm mb-6">{t('checkout.subtitle')}</p>
+            {resumeNotice && (
+              <div className="glass-card rounded-xl p-4 mb-6 border border-green/20 bg-green/5">
+                <p className="text-sm font-semibold text-green mb-1">Kami sambung semula data anda</p>
+                <p className="text-xs text-muted/70 leading-relaxed">
+                  Maklumat pembelian sebelum ini telah diisi semula supaya anda boleh terus cuba lagi tanpa mula dari kosong.
+                </p>
+              </div>
+            )}
 
             {/* Product selector */}
             <div className="grid grid-cols-2 gap-3 mb-6">
