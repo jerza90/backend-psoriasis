@@ -1,0 +1,9 @@
+ALTER TABLE affiliates
+    ADD COLUMN IF NOT EXISTS page_title TEXT,
+    ADD COLUMN IF NOT EXISTS page_intro TEXT,
+    ADD COLUMN IF NOT EXISTS tips_title TEXT,
+    ADD COLUMN IF NOT EXISTS tips_text TEXT,
+    ADD COLUMN IF NOT EXISTS guide_title TEXT,
+    ADD COLUMN IF NOT EXISTS guide_text TEXT,
+    ADD COLUMN IF NOT EXISTS progress_title TEXT,
+    ADD COLUMN IF NOT EXISTS progress_text TEXT;

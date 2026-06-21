@@ -44,14 +44,15 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const result = await verifyRegistration(email, otpCode, password, fullName, username || undefined);
-      setUser({
+      const nextUser = {
         id: result.userId,
         email,
         fullName,
         username: username || email.split('@')[0],
         role: result.role,
-      });
-      navigate('/');
+      };
+      setUser(nextUser);
+      navigate(nextUser.role === 'affiliate' ? '/affiliate/dashboard' : '/');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {

@@ -88,6 +88,61 @@ export async function getUserByUsername(username: string): Promise<User> {
   return request<User>(`/users/username/${encodeURIComponent(username)}`);
 }
 
+export interface AffiliateProfile {
+  id: number;
+  name: string;
+  email: string;
+  referralCode: string;
+  bio?: string | null;
+  pageTitle?: string | null;
+  pageIntro?: string | null;
+  storyTitle?: string | null;
+  storySummary?: string | null;
+  storyBody?: string | null;
+  blogTitle?: string | null;
+  blogExcerpt?: string | null;
+  blogUrl?: string | null;
+  blogImageUrl?: string | null;
+  tipsTitle?: string | null;
+  tipsText?: string | null;
+  guideTitle?: string | null;
+  guideText?: string | null;
+  progressTitle?: string | null;
+  progressText?: string | null;
+  avatarUrl?: string | null;
+  socialLinks?: string | null;
+  paymentInfo?: string | null;
+  commissionRate: string;
+  totalEarned: string;
+  totalPaid: string;
+  status: string;
+  referralLink: string;
+  createdAt: string;
+}
+
+export interface AffiliateProfileUpdateInput {
+  name?: string;
+  avatarUrl?: string;
+  bio?: string;
+  pageTitle?: string;
+  pageIntro?: string;
+  storyTitle?: string;
+  storySummary?: string;
+  storyBody?: string;
+  socialLinks?: string;
+  paymentInfo?: string;
+  blogTitle?: string;
+  blogExcerpt?: string;
+  blogUrl?: string;
+  blogImageUrl?: string;
+  tipsTitle?: string;
+  tipsText?: string;
+  guideTitle?: string;
+  guideText?: string;
+  progressTitle?: string;
+  progressText?: string;
+}
+
 export interface AdminTestimonialProgressInput {
   dateLabel: string;
   title: string;
@@ -164,4 +219,22 @@ export async function deleteAdminTestimonial(id: number): Promise<{ message: str
   return request<{ message: string }>(`/admin/testimonials/${id}`, {
     method: 'DELETE',
   });
+}
+
+export async function getAffiliateProfile(email: string): Promise<AffiliateProfile> {
+  return request<AffiliateProfile>(`/affiliate/profile?email=${encodeURIComponent(email)}`);
+}
+
+export async function updateAffiliateProfile(
+  email: string,
+  data: AffiliateProfileUpdateInput,
+): Promise<AffiliateProfile> {
+  return request<AffiliateProfile>(`/affiliate/profile?email=${encodeURIComponent(email)}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getPublicAffiliateProfile(code: string): Promise<AffiliateProfile> {
+  return request<AffiliateProfile>(`/affiliate/public?code=${encodeURIComponent(code)}`);
 }

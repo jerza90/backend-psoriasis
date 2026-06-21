@@ -1,6 +1,7 @@
 package com.psoriasis.controller;
 
 import com.psoriasis.dto.AffiliateRegistrationRequest;
+import com.psoriasis.dto.AffiliateProfileUpdateRequest;
 import com.psoriasis.model.Affiliate;
 import com.psoriasis.model.ReferralConversion;
 import com.psoriasis.service.AffiliateService;
@@ -31,13 +32,7 @@ public class AffiliateController {
                     request.getSocialLinks(),
                     request.getPaymentInfo()
             );
-            return ResponseEntity.ok(Map.of(
-                    "id", affiliate.getId(),
-                    "name", affiliate.getName(),
-                    "referralCode", affiliate.getReferralCode(),
-                    "commissionRate", affiliate.getCommissionRate(),
-                    "referralLink", buildReferralLink(affiliate.getReferralCode())
-            ));
+            return ResponseEntity.ok(buildAffiliateResponse(affiliate));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -46,13 +41,15 @@ public class AffiliateController {
     @GetMapping("/lookup")
     public ResponseEntity<?> lookup(@RequestParam String code) {
         return affiliateService.findByReferralCode(code)
-                .map(a -> ResponseEntity.ok(Map.of(
-                        "id", a.getId(),
-                        "name", a.getName(),
-                        "bio", a.getBio() != null ? a.getBio() : "",
-                        "avatarUrl", a.getAvatarUrl() != null ? a.getAvatarUrl() : ""
-                )))
+                .map(a -> ResponseEntity.ok(buildPublicAffiliateResponse(a)))
                 .orElse(ResponseEntity.ok(Map.of()));
+    }
+
+    @GetMapping("/public")
+    public ResponseEntity<?> getPublicProfile(@RequestParam String code) {
+        return affiliateService.findByReferralCode(code)
+                .map(a -> ResponseEntity.ok(buildPublicAffiliateResponse(a)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/conversions")
@@ -73,26 +70,85 @@ public class AffiliateController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getAffiliate(@PathVariable Long id) {
         return affiliateService.findById(id)
-                .map(a -> {
-                    Map<String, Object> data = new java.util.HashMap<>();
-                    data.put("id", a.getId());
-                    data.put("name", a.getName());
-                    data.put("email", a.getEmail());
-                    data.put("referralCode", a.getReferralCode());
-                    data.put("bio", a.getBio());
-                    data.put("avatarUrl", a.getAvatarUrl());
-                    data.put("commissionRate", a.getCommissionRate());
-                    data.put("totalEarned", a.getTotalEarned());
-                    data.put("totalPaid", a.getTotalPaid());
-                    data.put("status", a.getStatus());
-                    data.put("referralLink", buildReferralLink(a.getReferralCode()));
-                    data.put("createdAt", a.getCreatedAt().toString());
-                    return ResponseEntity.ok(data);
-                })
+                .map(a -> ResponseEntity.ok(buildAffiliateResponse(a)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    private String buildReferralLink(String code) {
-        return "https://frontend-eta-seven-55.vercel.app/checkout?ref=" + code;
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfileByEmail(@RequestParam String email) {
+        return affiliateService.findByEmail(email)
+                .map(a -> ResponseEntity.ok(buildAffiliateResponse(a)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(@RequestParam String email, @RequestBody AffiliateProfileUpdateRequest request) {
+        try {
+            Affiliate affiliate = affiliateService.updateProfile(email, request);
+            return ResponseEntity.ok(buildAffiliateResponse(affiliate));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    private Map<String, Object> buildAffiliateResponse(Affiliate a) {
+        Map<String, Object> data = new java.util.HashMap<>();
+        data.put("id", a.getId());
+        data.put("name", a.getName());
+        data.put("email", a.getEmail());
+        data.put("referralCode", a.getReferralCode());
+        data.put("bio", a.getBio());
+        data.put("pageTitle", a.getPageTitle());
+        data.put("pageIntro", a.getPageIntro());
+        data.put("storyTitle", a.getStoryTitle());
+        data.put("storySummary", a.getStorySummary());
+        data.put("storyBody", a.getStoryBody());
+        data.put("blogTitle", a.getBlogTitle());
+        data.put("blogExcerpt", a.getBlogExcerpt());
+        data.put("blogUrl", a.getBlogUrl());
+        data.put("blogImageUrl", a.getBlogImageUrl());
+        data.put("tipsTitle", a.getTipsTitle());
+        data.put("tipsText", a.getTipsText());
+        data.put("guideTitle", a.getGuideTitle());
+        data.put("guideText", a.getGuideText());
+        data.put("progressTitle", a.getProgressTitle());
+        data.put("progressText", a.getProgressText());
+        data.put("avatarUrl", a.getAvatarUrl());
+        data.put("socialLinks", a.getSocialLinks());
+        data.put("paymentInfo", a.getPaymentInfo());
+        data.put("commissionRate", a.getCommissionRate());
+        data.put("totalEarned", a.getTotalEarned());
+        data.put("totalPaid", a.getTotalPaid());
+        data.put("status", a.getStatus());
+        data.put("referralLink", affiliateService.buildReferralLink(a.getReferralCode()));
+        data.put("createdAt", a.getCreatedAt().toString());
+        return data;
+    }
+
+    private Map<String, Object> buildPublicAffiliateResponse(Affiliate a) {
+        Map<String, Object> data = new java.util.HashMap<>();
+        data.put("id", a.getId());
+        data.put("name", a.getName());
+        data.put("bio", a.getBio());
+        data.put("pageTitle", a.getPageTitle());
+        data.put("pageIntro", a.getPageIntro());
+        data.put("storyTitle", a.getStoryTitle());
+        data.put("storySummary", a.getStorySummary());
+        data.put("storyBody", a.getStoryBody());
+        data.put("blogTitle", a.getBlogTitle());
+        data.put("blogExcerpt", a.getBlogExcerpt());
+        data.put("blogUrl", a.getBlogUrl());
+        data.put("blogImageUrl", a.getBlogImageUrl());
+        data.put("tipsTitle", a.getTipsTitle());
+        data.put("tipsText", a.getTipsText());
+        data.put("guideTitle", a.getGuideTitle());
+        data.put("guideText", a.getGuideText());
+        data.put("progressTitle", a.getProgressTitle());
+        data.put("progressText", a.getProgressText());
+        data.put("avatarUrl", a.getAvatarUrl());
+        data.put("socialLinks", a.getSocialLinks());
+        data.put("referralCode", a.getReferralCode());
+        data.put("referralLink", affiliateService.buildReferralLink(a.getReferralCode()));
+        return data;
     }
 }

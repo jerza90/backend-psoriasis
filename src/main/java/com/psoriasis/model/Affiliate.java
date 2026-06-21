@@ -24,6 +24,51 @@ public class Affiliate {
     @Column(columnDefinition = "TEXT")
     private String bio;
 
+    @Column(name = "page_title", columnDefinition = "TEXT")
+    private String pageTitle;
+
+    @Column(name = "page_intro", columnDefinition = "TEXT")
+    private String pageIntro;
+
+    @Column(name = "story_title", columnDefinition = "TEXT")
+    private String storyTitle;
+
+    @Column(name = "story_summary", columnDefinition = "TEXT")
+    private String storySummary;
+
+    @Column(name = "story_body", columnDefinition = "TEXT")
+    private String storyBody;
+
+    @Column(name = "blog_title", columnDefinition = "TEXT")
+    private String blogTitle;
+
+    @Column(name = "blog_excerpt", columnDefinition = "TEXT")
+    private String blogExcerpt;
+
+    @Column(name = "blog_url", length = 500)
+    private String blogUrl;
+
+    @Column(name = "blog_image_url", length = 500)
+    private String blogImageUrl;
+
+    @Column(name = "tips_title", columnDefinition = "TEXT")
+    private String tipsTitle;
+
+    @Column(name = "tips_text", columnDefinition = "TEXT")
+    private String tipsText;
+
+    @Column(name = "guide_title", columnDefinition = "TEXT")
+    private String guideTitle;
+
+    @Column(name = "guide_text", columnDefinition = "TEXT")
+    private String guideText;
+
+    @Column(name = "progress_title", columnDefinition = "TEXT")
+    private String progressTitle;
+
+    @Column(name = "progress_text", columnDefinition = "TEXT")
+    private String progressText;
+
     @Column(name = "avatar_url", length = 500)
     private String avatarUrl;
 
@@ -61,6 +106,36 @@ public class Affiliate {
     public void setReferralCode(String referralCode) { this.referralCode = referralCode; }
     public String getBio() { return bio; }
     public void setBio(String bio) { this.bio = bio; }
+    public String getPageTitle() { return pageTitle; }
+    public void setPageTitle(String pageTitle) { this.pageTitle = pageTitle; }
+    public String getPageIntro() { return pageIntro; }
+    public void setPageIntro(String pageIntro) { this.pageIntro = pageIntro; }
+    public String getStoryTitle() { return storyTitle; }
+    public void setStoryTitle(String storyTitle) { this.storyTitle = storyTitle; }
+    public String getStorySummary() { return storySummary; }
+    public void setStorySummary(String storySummary) { this.storySummary = storySummary; }
+    public String getStoryBody() { return storyBody; }
+    public void setStoryBody(String storyBody) { this.storyBody = storyBody; }
+    public String getBlogTitle() { return blogTitle; }
+    public void setBlogTitle(String blogTitle) { this.blogTitle = blogTitle; }
+    public String getBlogExcerpt() { return blogExcerpt; }
+    public void setBlogExcerpt(String blogExcerpt) { this.blogExcerpt = blogExcerpt; }
+    public String getBlogUrl() { return blogUrl; }
+    public void setBlogUrl(String blogUrl) { this.blogUrl = blogUrl; }
+    public String getBlogImageUrl() { return blogImageUrl; }
+    public void setBlogImageUrl(String blogImageUrl) { this.blogImageUrl = blogImageUrl; }
+    public String getTipsTitle() { return tipsTitle; }
+    public void setTipsTitle(String tipsTitle) { this.tipsTitle = tipsTitle; }
+    public String getTipsText() { return tipsText; }
+    public void setTipsText(String tipsText) { this.tipsText = tipsText; }
+    public String getGuideTitle() { return guideTitle; }
+    public void setGuideTitle(String guideTitle) { this.guideTitle = guideTitle; }
+    public String getGuideText() { return guideText; }
+    public void setGuideText(String guideText) { this.guideText = guideText; }
+    public String getProgressTitle() { return progressTitle; }
+    public void setProgressTitle(String progressTitle) { this.progressTitle = progressTitle; }
+    public String getProgressText() { return progressText; }
+    public void setProgressText(String progressText) { this.progressText = progressText; }
     public String getAvatarUrl() { return avatarUrl; }
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
     public String getSocialLinks() { return socialLinks; }

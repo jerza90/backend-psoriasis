@@ -4,7 +4,7 @@ import { login as apiLogin } from '../api/client';
 
 interface AuthContextType {
   user: AuthUser | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<AuthUser>;
   logout: () => void;
   setUser: (user: AuthUser) => void;
   isLoading: boolean;
@@ -27,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const u = await apiLogin(email, password);
       setUser(u);
       localStorage.setItem('auth_user', JSON.stringify(u));
+      return u;
     } finally {
       setIsLoading(false);
     }

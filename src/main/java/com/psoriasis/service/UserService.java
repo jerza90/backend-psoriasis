@@ -131,13 +131,16 @@ public class UserService {
     public User login(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new RuntimeException("Invalid email or password");
+            user = userRepository.findByUsername(email);
+        }
+        if (user == null) {
+            throw new RuntimeException("Invalid email or username or password");
         }
         if (!user.isEnabled()) {
             throw new RuntimeException("Account not activated. Please verify your email.");
         }
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new RuntimeException("Invalid email or username or password");
         }
         return user;
     }

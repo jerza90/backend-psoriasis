@@ -1,0 +1,8 @@
+ALTER TABLE affiliates
+    ADD COLUMN IF NOT EXISTS story_title TEXT,
+    ADD COLUMN IF NOT EXISTS story_summary TEXT,
+    ADD COLUMN IF NOT EXISTS story_body TEXT,
+    ADD COLUMN IF NOT EXISTS blog_title TEXT,
+    ADD COLUMN IF NOT EXISTS blog_excerpt TEXT,
+    ADD COLUMN IF NOT EXISTS blog_url VARCHAR(500),
+    ADD COLUMN IF NOT EXISTS blog_image_url VARCHAR(500);

@@ -8,6 +8,7 @@ import com.psoriasis.repository.PaymentOrderRepository;
 import com.psoriasis.repository.ReferralConversionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,6 +24,8 @@ public class AffiliateService {
     private final ReferralConversionRepository conversionRepository;
     private final PaymentOrderRepository paymentOrderRepository;
     private final UserService userService;
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     public AffiliateService(AffiliateRepository affiliateRepository,
                             ReferralConversionRepository conversionRepository,
@@ -64,6 +67,39 @@ public class AffiliateService {
 
     public Optional<Affiliate> findById(Long id) {
         return affiliateRepository.findById(id);
+    }
+
+    public Optional<Affiliate> findByEmail(String email) {
+        return affiliateRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public Affiliate updateProfile(String email, com.psoriasis.dto.AffiliateProfileUpdateRequest request) {
+        Affiliate affiliate = affiliateRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Affiliate profile not found"));
+
+        if (request.getName() != null) affiliate.setName(request.getName());
+        if (request.getAvatarUrl() != null) affiliate.setAvatarUrl(request.getAvatarUrl());
+        if (request.getBio() != null) affiliate.setBio(request.getBio());
+        if (request.getPageTitle() != null) affiliate.setPageTitle(request.getPageTitle());
+        if (request.getPageIntro() != null) affiliate.setPageIntro(request.getPageIntro());
+        if (request.getStoryTitle() != null) affiliate.setStoryTitle(request.getStoryTitle());
+        if (request.getStorySummary() != null) affiliate.setStorySummary(request.getStorySummary());
+        if (request.getStoryBody() != null) affiliate.setStoryBody(request.getStoryBody());
+        if (request.getSocialLinks() != null) affiliate.setSocialLinks(request.getSocialLinks());
+        if (request.getPaymentInfo() != null) affiliate.setPaymentInfo(request.getPaymentInfo());
+        if (request.getBlogTitle() != null) affiliate.setBlogTitle(request.getBlogTitle());
+        if (request.getBlogExcerpt() != null) affiliate.setBlogExcerpt(request.getBlogExcerpt());
+        if (request.getBlogUrl() != null) affiliate.setBlogUrl(request.getBlogUrl());
+        if (request.getBlogImageUrl() != null) affiliate.setBlogImageUrl(request.getBlogImageUrl());
+        if (request.getTipsTitle() != null) affiliate.setTipsTitle(request.getTipsTitle());
+        if (request.getTipsText() != null) affiliate.setTipsText(request.getTipsText());
+        if (request.getGuideTitle() != null) affiliate.setGuideTitle(request.getGuideTitle());
+        if (request.getGuideText() != null) affiliate.setGuideText(request.getGuideText());
+        if (request.getProgressTitle() != null) affiliate.setProgressTitle(request.getProgressTitle());
+        if (request.getProgressText() != null) affiliate.setProgressText(request.getProgressText());
+        affiliate.setUpdatedAt(LocalDateTime.now());
+        return affiliateRepository.save(affiliate);
     }
 
     public List<Affiliate> findAllActive() {
@@ -122,5 +158,9 @@ public class AffiliateService {
             code = prefix + suffix;
         }
         return code;
+    }
+
+    public String buildReferralLink(String code) {
+        return frontendUrl + "/checkout?ref=" + code;
     }
 }

@@ -20,8 +20,14 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      await login(email, password);
-      navigate('/');
+      const user = await login(email, password);
+      if (user.role === 'admin') {
+        navigate('/admin/testimonials');
+      } else if (user.role === 'affiliate') {
+        navigate('/affiliate/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
@@ -49,12 +55,12 @@ export default function LoginPage() {
       {error && <AuthBanner tone="error">{error}</AuthBanner>}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <AuthField label={t('auth.email')} icon={Mail}>
+        <AuthField label="Email or username" icon={Mail}>
           <input
-            type="email"
+            type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder={t('auth.emailPlaceholder')}
+            placeholder="aishaaffiliate or aishaaffiliate@example.com"
             required
             className="w-full pl-10 pr-4 py-3 rounded-xl glass-input text-sm outline-none transition-all"
           />
@@ -80,6 +86,9 @@ export default function LoginPage() {
           {loading ? t('auth.loggingIn') : t('auth.login')}
         </button>
       </form>
+      <p className="mt-4 text-xs text-muted">
+        Affiliate users can log in with either their username or email.
+      </p>
     </AuthCard>
   );
 }

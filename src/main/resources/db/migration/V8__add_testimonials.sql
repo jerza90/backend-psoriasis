@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS testimonials (
     name            VARCHAR(255)    NOT NULL,
     location        VARCHAR(255),
     condition_duration VARCHAR(100),
+    categories      TEXT,
     summary         TEXT,
     initial_quote   TEXT,
     result_quote    TEXT,

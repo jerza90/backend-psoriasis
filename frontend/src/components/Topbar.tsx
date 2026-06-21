@@ -19,6 +19,8 @@ export default function Topbar() {
     { label: t('topbar.nav.faq'), href: '/faq' },
   ];
 
+  const dashboardHref = user?.role === 'admin' ? '/admin/testimonials' : user?.role === 'affiliate' ? '/affiliate/dashboard' : null;
+
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === 'ms' ? 'en' : 'ms');
   };
@@ -91,6 +93,18 @@ export default function Topbar() {
                     <div className="px-3 py-2 text-sm text-muted border-b border-line mb-1">
                       {user.email}
                     </div>
+                    {dashboardHref && (
+                      <Link
+                        to={dashboardHref}
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg hover:bg-white/50 transition-all mb-1 no-underline"
+                      >
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-white/50">
+                          {user.role === 'admin' ? 'Admin' : 'Aff'}
+                        </span>
+                        Dashboard
+                      </Link>
+                    )}
                     <button
                       onClick={() => { toggleLanguage(); setUserMenuOpen(false); }}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg hover:bg-white/50 transition-all mb-1"
@@ -191,6 +205,15 @@ export default function Topbar() {
                   <LogOut size={16} />
                   {t('auth.logout')}
                 </button>
+              )}
+              {dashboardHref && (
+                <Link
+                  to={dashboardHref}
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-3 rounded-lg hover:bg-white/50 transition-colors no-underline"
+                >
+                  Dashboard
+                </Link>
               )}
               <Link
                 to="/checklist"
