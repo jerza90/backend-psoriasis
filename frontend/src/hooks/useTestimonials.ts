@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getApiBaseUrl } from '../config/apiBase';
 
 export interface ProgressEntry {
   id: number;
@@ -52,7 +53,7 @@ interface ApiTestimonial {
   progressHistory: ApiProgressEntry[];
 }
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = getApiBaseUrl();
 
 function normalizeLang(lang: string) {
   return (lang || 'ms').toLowerCase().slice(0, 2) || 'ms';

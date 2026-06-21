@@ -4,6 +4,7 @@ import { Lock, ArrowLeft, Mail, Download, AlertTriangle, Globe, MapPin, Banknote
 import { Link, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
+import { getApiBaseUrl } from '../config/apiBase';
 
 type ProductType = 'bm' | 'en';
 
@@ -33,18 +34,21 @@ export default function CheckoutPage() {
     setError('');
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/checkout/create-session`, {
+      const res = await fetch(`${getApiBaseUrl()}/api/checkout/create-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullName: name, email, product, referralCode }),
       });
 
       if (!res.ok) {
-        const err = await res.json();
+        const err = await parseJsonSafe(res);
         throw new Error(err.error || 'Checkout failed');
       }
 
-      const data = await res.json();
+      const data = await parseJsonSafe(res);
+      if (!data?.url) {
+        throw new Error('Checkout link was not returned');
+      }
       window.location.href = data.url;
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
@@ -269,4 +273,14 @@ export default function CheckoutPage() {
       <Footer />
     </div>
   );
+}
+
+async function parseJsonSafe(response: Response): Promise<any> {
+  const text = await response.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {};
+  }
 }

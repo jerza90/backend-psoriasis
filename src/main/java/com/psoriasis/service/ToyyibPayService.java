@@ -60,12 +60,13 @@ public class ToyyibPayService {
     public String createBill(String fullName, String email, String referralCode) throws Exception {
         String billRef = "BM-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String returnUrl = frontendUrl + "/thank-you?billcode={billcode}&status_id={status_id}";
+        String billAmount = "3900";
 
         String body = "userSecretKey=" + encode(userSecretKey)
                 + "&categoryCode=" + encode(categoryCode)
                 + "&billName=" + encode("Panduan Sokongan Psoriasis")
                 + "&billDescription=" + encode("PDF ebook — akses segera")
-                + "&billAmount=" + encode("3900")
+                + "&billAmount=" + encode(billAmount)
                 + "&billPayorInfo=" + encode("1")
                 + "&billReturnUrl=" + encode(returnUrl)
                 + "&billCallbackUrl=" + encode(callbackUrl)
