@@ -569,7 +569,7 @@
       "title": "Ebook Gallery",
       "subtitle": "Explore all preview images of the Psoriasis Flare-Up Support Guide",
       "cta": "Get My Guide Now",
-      "backToTips": "← Back to Tips & Tricks"
+      "backToTips": "Back to Tips & Tricks"
     },
     "moreResources": "More free resources",
     "extraTips": [
@@ -646,7 +646,7 @@
     "rememberPassword": "Remember your password?"
   },
   "aisha": {
-    "back": "← Back to home",
+    "back": "Back to home",
     "badge": "Real story",
     "yearsOld": "years old",
     "beforeQuote": "Before",
