@@ -5,6 +5,7 @@ import com.psoriasis.dto.LoginRequest;
 import com.psoriasis.dto.RegisterRequest;
 import com.psoriasis.dto.ResetPasswordRequest;
 import com.psoriasis.dto.VerifyRegistrationRequest;
+import com.psoriasis.dto.response.ApiResponse;
 import com.psoriasis.dto.response.AuthResponse;
 import com.psoriasis.dto.response.ErrorResponse;
 import com.psoriasis.dto.response.MessageResponse;
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
         try {
             var user = userService.login(request.getEmail(), request.getPassword());
             return ResponseEntity.ok(new AuthResponse(
@@ -41,7 +42,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<ApiResponse> register(@Valid @RequestBody RegisterRequest request) {
         try {
             userService.sendRegistrationOtp(request.getEmail());
             return ResponseEntity.ok(new MessageResponse("OTP sent to your email"));
@@ -51,7 +52,7 @@ public class AuthController {
     }
 
     @PostMapping("/verify-registration")
-    public ResponseEntity<?> verifyRegistration(@Valid @RequestBody VerifyRegistrationRequest request) {
+    public ResponseEntity<ApiResponse> verifyRegistration(@Valid @RequestBody VerifyRegistrationRequest request) {
         try {
             var user = userService.verifyRegistration(
                     request.getEmail(),
@@ -67,7 +68,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+    public ResponseEntity<ApiResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         try {
             userService.sendForgotPasswordOtp(request.getEmail());
             return ResponseEntity.ok(new MessageResponse("OTP sent to your email"));
@@ -77,7 +78,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         try {
             userService.resetPassword(request.getEmail(), request.getOtpCode(), request.getNewPassword());
             return ResponseEntity.ok(new MessageResponse("Password reset successful"));

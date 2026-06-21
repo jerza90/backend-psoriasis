@@ -2,7 +2,7 @@ package com.psoriasis.dto.response;
 
 import java.util.List;
 
-public class AffiliateConversionsResponse {
+public class AffiliateConversionsResponse implements ApiResponse {
     private int count;
     private List<AffiliateConversionResponse> conversions;
 

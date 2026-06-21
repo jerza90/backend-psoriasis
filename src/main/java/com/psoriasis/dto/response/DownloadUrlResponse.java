@@ -1,6 +1,6 @@
 package com.psoriasis.dto.response;
 
-public class DownloadUrlResponse {
+public class DownloadUrlResponse implements ApiResponse {
     private String downloadUrl;
 
     public DownloadUrlResponse() {}

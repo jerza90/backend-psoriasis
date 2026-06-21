@@ -3,6 +3,7 @@ package com.psoriasis.controller;
 import com.psoriasis.dto.response.DownloadUrlResponse;
 import com.psoriasis.dto.response.ErrorResponse;
 import com.psoriasis.dto.response.PaymentStatusResponse;
+import com.psoriasis.dto.response.ApiResponse;
 import com.psoriasis.model.PaymentOrder;
 import com.psoriasis.repository.PaymentOrderRepository;
 import com.psoriasis.service.EbookDeliveryService;
@@ -51,7 +52,7 @@ public class PaymentController {
     }
 
     @PostMapping("/toyyipay-download")
-    public ResponseEntity<?> requestDownload(@RequestParam String billCode) {
+    public ResponseEntity<ApiResponse> requestDownload(@RequestParam String billCode) {
         PaymentOrder order = orderRepository.findByBillCode(billCode)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         if (!"Paid".equals(order.getPaymentStatus())) {

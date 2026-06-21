@@ -1,6 +1,6 @@
 package com.psoriasis.dto.response;
 
-public class CheckoutUrlResponse {
+public class CheckoutUrlResponse implements ApiResponse {
     private String url;
 
     public CheckoutUrlResponse() {}

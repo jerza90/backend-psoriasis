@@ -1,6 +1,6 @@
 package com.psoriasis.dto.response;
 
-public class RegistrationResponse {
+public class RegistrationResponse implements ApiResponse {
     private String message;
     private Long userId;
     private String role;

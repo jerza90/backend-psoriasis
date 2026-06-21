@@ -2,7 +2,7 @@ package com.psoriasis.dto.response;
 
 import java.time.LocalDateTime;
 
-public class UserResponse {
+public class UserResponse implements ApiResponse {
     private Long id;
     private String username;
     private String email;

@@ -1,6 +1,6 @@
 package com.psoriasis.dto.response;
 
-public class AuthResponse {
+public class AuthResponse implements ApiResponse {
     private Long id;
     private String email;
     private String fullName;

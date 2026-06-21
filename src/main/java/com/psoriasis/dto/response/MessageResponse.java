@@ -1,6 +1,6 @@
 package com.psoriasis.dto.response;
 
-public class MessageResponse {
+public class MessageResponse implements ApiResponse {
     private String message;
 
     public MessageResponse() {}

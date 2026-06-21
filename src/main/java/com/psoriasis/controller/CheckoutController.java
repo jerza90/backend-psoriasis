@@ -1,6 +1,7 @@
 package com.psoriasis.controller;
 
 import com.psoriasis.dto.CheckoutRequest;
+import com.psoriasis.dto.response.ApiResponse;
 import com.psoriasis.dto.response.CheckoutUrlResponse;
 import com.psoriasis.dto.response.DownloadUrlResponse;
 import com.psoriasis.dto.response.ErrorResponse;
@@ -27,7 +28,7 @@ public class CheckoutController {
     }
 
     @PostMapping("/create-session")
-    public ResponseEntity<?> createSession(@Valid @RequestBody CheckoutRequest request) {
+    public ResponseEntity<ApiResponse> createSession(@Valid @RequestBody CheckoutRequest request) {
         try {
             if ("bm".equals(request.getProduct())) {
                 String url = toyyibPayService.createBill(
@@ -59,7 +60,7 @@ public class CheckoutController {
     }
 
     @PostMapping("/session/{sessionId}/request-download")
-    public ResponseEntity<?> requestDownload(@PathVariable String sessionId) {
+    public ResponseEntity<ApiResponse> requestDownload(@PathVariable String sessionId) {
         try {
             String downloadUrl = checkoutService.requestDownload(sessionId);
             return ResponseEntity.ok(new DownloadUrlResponse(downloadUrl));

@@ -2,7 +2,7 @@ package com.psoriasis.dto.response;
 
 import java.math.BigDecimal;
 
-public class AffiliateConversionResponse {
+public class AffiliateConversionResponse implements ApiResponse {
     private Long id;
     private BigDecimal orderAmount;
     private BigDecimal commissionAmount;

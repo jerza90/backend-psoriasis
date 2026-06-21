@@ -1,7 +1,8 @@
 package com.psoriasis.controller;
 
-import com.psoriasis.dto.response.UserResponse;
 import com.psoriasis.dto.UserCreateRequest;
+import com.psoriasis.dto.response.ApiResponse;
+import com.psoriasis.dto.response.UserResponse;
 import com.psoriasis.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserCreateRequest request) {
+    public ResponseEntity<ApiResponse> createUser(@RequestBody UserCreateRequest request) {
         if (userService.existsByUsername(request.getUsername())) {
             return ResponseEntity.badRequest().build();
         }

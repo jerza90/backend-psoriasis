@@ -1,6 +1,7 @@
 package com.psoriasis.controller;
 
 import com.psoriasis.dto.MockPurchaseRequest;
+import com.psoriasis.dto.response.ApiResponse;
 import com.psoriasis.dto.response.DebugPurchaseResponse;
 import com.psoriasis.dto.response.ErrorResponse;
 import com.psoriasis.model.PaymentOrder;
@@ -34,8 +35,8 @@ public class DebugPurchaseController {
     }
 
     @PostMapping("/mock")
-    public ResponseEntity<?> mockPurchase(@Valid @RequestBody MockPurchaseRequest request,
-                                          @RequestHeader(value = "X-Debug-Token", required = false) String token) {
+    public ResponseEntity<ApiResponse> mockPurchase(@Valid @RequestBody MockPurchaseRequest request,
+                                                    @RequestHeader(value = "X-Debug-Token", required = false) String token) {
         if (debugEmailToken == null || debugEmailToken.isBlank()) {
             return ResponseEntity.status(503).body(new ErrorResponse("Debug email token is not configured"));
         }

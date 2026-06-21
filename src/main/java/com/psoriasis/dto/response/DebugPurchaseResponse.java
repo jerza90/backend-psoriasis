@@ -1,6 +1,6 @@
 package com.psoriasis.dto.response;
 
-public class DebugPurchaseResponse {
+public class DebugPurchaseResponse implements ApiResponse {
     private String message;
     private String orderRef;
     private String customerEmail;

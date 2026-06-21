@@ -2,6 +2,7 @@ package com.psoriasis.controller;
 
 import com.psoriasis.dto.AffiliateRegistrationRequest;
 import com.psoriasis.dto.AffiliateProfileUpdateRequest;
+import com.psoriasis.dto.response.ApiResponse;
 import com.psoriasis.dto.response.AffiliateConversionsResponse;
 import com.psoriasis.dto.response.AffiliatePublicResponse;
 import com.psoriasis.dto.response.AffiliateResponse;
@@ -22,7 +23,7 @@ public class AffiliateController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody AffiliateRegistrationRequest request) {
+    public ResponseEntity<ApiResponse> register(@Valid @RequestBody AffiliateRegistrationRequest request) {
         try {
             return ResponseEntity.ok(affiliateService.register(
                     request.getName(),
@@ -39,15 +40,15 @@ public class AffiliateController {
     @GetMapping("/lookup")
     public ResponseEntity<AffiliatePublicResponse> lookup(@RequestParam String code) {
         return affiliateService.findByReferralCode(code)
-                .map(ResponseEntity::ok)
+                .map(profile -> ResponseEntity.ok(profile))
                 .orElse(ResponseEntity.ok(new AffiliatePublicResponse()));
     }
 
     @GetMapping("/public")
-    public ResponseEntity<?> getPublicProfile(@RequestParam String code) {
+    public ResponseEntity<ApiResponse> getPublicProfile(@RequestParam String code) {
         return affiliateService.findByReferralCode(code)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .<ResponseEntity<ApiResponse>>map(profile -> ResponseEntity.ok((ApiResponse) profile))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/conversions")
@@ -56,21 +57,21 @@ public class AffiliateController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAffiliate(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> getAffiliate(@PathVariable Long id) {
         return affiliateService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .<ResponseEntity<ApiResponse>>map(profile -> ResponseEntity.ok((ApiResponse) profile))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<?> getProfileByEmail(@RequestParam String email) {
+    public ResponseEntity<ApiResponse> getProfileByEmail(@RequestParam String email) {
         return affiliateService.findByEmail(email)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .<ResponseEntity<ApiResponse>>map(profile -> ResponseEntity.ok((ApiResponse) profile))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<?> updateProfile(@RequestParam String email, @RequestBody AffiliateProfileUpdateRequest request) {
+    public ResponseEntity<ApiResponse> updateProfile(@RequestParam String email, @RequestBody AffiliateProfileUpdateRequest request) {
         try {
             return ResponseEntity.ok(affiliateService.updateProfile(email, request));
         } catch (Exception e) {

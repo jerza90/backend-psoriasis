@@ -1,6 +1,6 @@
 package com.psoriasis.dto.response;
 
-public class AffiliatePublicResponse {
+public class AffiliatePublicResponse implements ApiResponse {
     private Long id;
     private String name;
     private String bio;

@@ -1,6 +1,6 @@
 package com.psoriasis.dto.response;
 
-public class ErrorResponse {
+public class ErrorResponse implements ApiResponse {
     private String error;
 
     public ErrorResponse() {}
