@@ -1,16 +1,16 @@
 package com.psoriasis.mapper;
 
-import com.psoriasis.dto.response.UserResponse;
+import com.psoriasis.dto.response.UserResponseDTO;
 import com.psoriasis.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    public UserResponse toResponse(User user) {
+    public UserResponseDTO toResponse(User user) {
         if (user == null) {
             return null;
         }
-        UserResponse response = new UserResponse();
+        UserResponseDTO response = new UserResponseDTO();
         response.setId(user.getId());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());

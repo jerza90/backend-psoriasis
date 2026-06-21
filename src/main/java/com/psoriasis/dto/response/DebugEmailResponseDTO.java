@@ -1,13 +1,13 @@
 package com.psoriasis.dto.response;
 
-public class DebugEmailResponse implements ApiResponse {
+public class DebugEmailResponseDTO {
     private String message;
     private String to;
     private String type;
 
-    public DebugEmailResponse() {}
+    public DebugEmailResponseDTO() {}
 
-    public DebugEmailResponse(String message, String to, String type) {
+    public DebugEmailResponseDTO(String message, String to, String type) {
         this.message = message;
         this.to = to;
         this.type = type;

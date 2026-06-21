@@ -1,12 +1,11 @@
 package com.psoriasis.controller;
 
 import com.psoriasis.dto.UserCreateRequest;
-import com.psoriasis.dto.response.ApiResponse;
-import com.psoriasis.dto.response.UserResponse;
+import com.psoriasis.dto.response.UserResponseDTO;
 import com.psoriasis.service.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -19,12 +18,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createUser(@RequestBody UserCreateRequest request) {
+    public UserResponseDTO createUser(@RequestBody UserCreateRequest request) {
         if (userService.existsByUsername(request.getUsername())) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
         }
         if (userService.existsByEmail(request.getEmail())) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
         }
 
         var user = new com.psoriasis.model.User();
@@ -32,35 +31,34 @@ public class UserController {
         user.setEmail(request.getEmail());
         user.setPasswordHash(request.getPassword());
         user.setFullName(request.getFullName());
-        UserResponse createdUser = userService.registerUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        return userService.registerUser(user);
     }
 
     @GetMapping("/username/{username}")
-    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
-        UserResponse user = userService.findByUsername(username);
+    public UserResponseDTO getUserByUsername(@PathVariable String username) {
+        UserResponseDTO user = userService.findByUsername(username);
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        return ResponseEntity.ok(user);
+        return user;
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
-        UserResponse user = userService.findByEmail(email);
+    public UserResponseDTO getUserByEmail(@PathVariable String email) {
+        UserResponseDTO user = userService.findByEmail(email);
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        return ResponseEntity.ok(user);
+        return user;
     }
 
     @GetMapping("/exists/username/{username}")
-    public ResponseEntity<Boolean> existsByUsername(@PathVariable String username) {
-        return ResponseEntity.ok(userService.existsByUsername(username));
+    public Boolean existsByUsername(@PathVariable String username) {
+        return userService.existsByUsername(username);
     }
 
     @GetMapping("/exists/email/{email}")
-    public ResponseEntity<Boolean> existsByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(userService.existsByEmail(email));
+    public Boolean existsByEmail(@PathVariable String email) {
+        return userService.existsByEmail(email);
     }
 }

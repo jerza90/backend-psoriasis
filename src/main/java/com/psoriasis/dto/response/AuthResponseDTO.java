@@ -1,15 +1,15 @@
 package com.psoriasis.dto.response;
 
-public class AuthResponse implements ApiResponse {
+public class AuthResponseDTO {
     private Long id;
     private String email;
     private String fullName;
     private String username;
     private String role;
 
-    public AuthResponse() {}
+    public AuthResponseDTO() {}
 
-    public AuthResponse(Long id, String email, String fullName, String username, String role) {
+    public AuthResponseDTO(Long id, String email, String fullName, String username, String role) {
         this.id = id;
         this.email = email;
         this.fullName = fullName;
