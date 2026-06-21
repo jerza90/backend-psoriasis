@@ -100,7 +100,7 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
             <summary className="flex items-center gap-1.5 text-sm text-muted font-semibold cursor-pointer hover:text-green transition-colors list-none">
               <Info size={14} />
               {t('products.modal.howWorks')}
-              <span className="ml-auto text-muted transition-transform group-open:rotate-180">▾</span>
+              <span className="ml-auto text-muted transition-transform group-open:rotate-180 text-lg font-bold">▾</span>
             </summary>
             <p className="text-sm text-muted/80 mt-2 leading-relaxed glass rounded-xl p-4">
               {product.howItWorks}
