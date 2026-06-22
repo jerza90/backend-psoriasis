@@ -34,13 +34,13 @@ public class AffiliateController {
     }
 
     @GetMapping("/lookup")
-    public AffiliatePublicResponseDTO lookup(@RequestParam String code) {
+    public AffiliatePublicResponseDTO lookup(@RequestParam("code") String code) {
         return affiliateService.findByReferralCode(code)
                 .orElse(new AffiliatePublicResponseDTO());
     }
 
     @GetMapping("/public")
-    public AffiliatePublicResponseDTO getPublicProfile(@RequestParam String code) {
+    public AffiliatePublicResponseDTO getPublicProfile(@RequestParam("code") String code) {
         return affiliateService.findByReferralCode(code)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Affiliate profile not found"));
     }
@@ -57,13 +57,13 @@ public class AffiliateController {
     }
 
     @GetMapping("/profile")
-    public AffiliateResponseDTO getProfileByEmail(@RequestParam String email) {
+    public AffiliateResponseDTO getProfileByEmail(@RequestParam("email") String email) {
         return affiliateService.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Affiliate profile not found"));
     }
 
     @PutMapping("/profile")
-    public AffiliateResponseDTO updateProfile(@RequestParam String email, @RequestBody AffiliateProfileUpdateRequest request) {
+    public AffiliateResponseDTO updateProfile(@RequestParam("email") String email, @RequestBody AffiliateProfileUpdateRequest request) {
         return affiliateService.updateProfile(email, request);
     }
 }

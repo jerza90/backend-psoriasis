@@ -68,7 +68,9 @@ Example:
 
 ## Local Test Account
 
-This account needs a matching `users` row because login checks `/api/auth/login` against the `users` table.
+This account needs matching `users` and `affiliates` rows:
+- `users` is required for `/api/auth/login`
+- `affiliates` is required for `/affiliate/profile?email=...`
 
 - Username: `aishaaffiliate`
 - Email: `aishaaffiliate@example.com`
