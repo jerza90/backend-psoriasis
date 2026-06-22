@@ -16,38 +16,23 @@ Use `fix/local-dev-cors` only for local development. Keep it out of production d
    - `mvn -q -DskipTests compile`
    - `cd frontend && npm run build`
 
-## 2. Deploy backend
+## 2. One-command release
 
 From the repo root:
 
 ```bash
-fly deploy
+./scripts/release.sh
 ```
 
-If secrets changed:
+That script will:
 
-```bash
-fly secrets import < .env
-```
+1. Import Fly secrets from the untracked `.env`
+2. Deploy the backend with `fly deploy`
+3. Build the frontend
+4. Deploy the frontend with `vercel --prod`
+5. Run the smoke test
 
-## 3. Deploy frontend
-
-From the `frontend/` folder:
-
-```bash
-npm run build
-vercel --prod
-```
-
-## 4. Smoke test
-
-Run the release smoke script after both deploys:
-
-```bash
-./scripts/check-release.sh
-```
-
-Optional environment variables:
+Optional environment variables for the smoke test portion:
 
 ```bash
 LOGIN_EMAIL=aishaaffiliate \
@@ -55,7 +40,7 @@ LOGIN_PASSWORD='your-password' \
 CHECKOUT_NAME='Smoke Test User' \
 CHECKOUT_EMAIL='smoke@example.com' \
 AFFILIATE_EMAIL=aishaaffiliate@example.com \
-./scripts/check-release.sh
+./scripts/release.sh
 ```
 
 What it checks:
@@ -66,9 +51,9 @@ What it checks:
 - Login works if you provide credentials
 - Affiliate profile works if you provide an email
 
-The script will read untracked secrets from the repo-root `.env` file if it exists.
+The scripts read untracked secrets from the repo-root `.env` file.
 
-## 5. How to read failures
+## 3. How to read failures
 
 - `Invalid API Key provided` means Stripe keys are wrong for that environment.
 - `KEY-DID-NOT-EXIST-OR-USER-IS-NOT-ACTIVE` means ToyyibPay keys are wrong or inactive.
