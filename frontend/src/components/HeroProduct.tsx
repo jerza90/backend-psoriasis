@@ -23,18 +23,22 @@ function EvidenceBadge({ level }: { level: Product['evidenceLevel'] }) {
 export default function HeroProduct() {
   const { t } = useTranslation();
   const products = useProducts();
-  const p = products.find((x) => x.isHero) ?? products[0];
+  const heroProducts = products.filter((x) => x.isHero);
+  const [selectedHeroId, setSelectedHeroId] = useState(heroProducts[0]?.id ?? products[0]?.id ?? '');
+  const p = heroProducts.find((x) => x.id === selectedHeroId) ?? heroProducts[0] ?? products[0];
   const [selectedOptionId, setSelectedOptionId] = useState(p.purchaseOptions?.[0]?.id ?? '');
 
   useEffect(() => {
+    setSelectedHeroId(heroProducts.find((x) => x.id === selectedHeroId)?.id ?? heroProducts[0]?.id ?? products[0]?.id ?? '');
     setSelectedOptionId(p.purchaseOptions?.[0]?.id ?? '');
-  }, [p.id, p.purchaseOptions]);
+  }, [heroProducts, p.id, p.purchaseOptions, products, selectedHeroId]);
 
   const selectedOption = p.purchaseOptions?.find((option) => option.id === selectedOptionId) ?? p.purchaseOptions?.[0];
   const heroImage = selectedOption?.imageUrl ?? p.imageUrl;
   const heroDosage = selectedOption?.dosage ?? p.dosage;
   const heroBestTime = p.bestTime;
   const heroAffiliateUrl = selectedOption?.affiliateUrl ?? p.affiliateUrl;
+  const hasMultipleHeroes = heroProducts.length > 1;
 
   return (
     <section className="relative overflow-hidden rounded-2xl mb-8">
@@ -43,6 +47,28 @@ export default function HeroProduct() {
       <div className="absolute bottom-[-15%] left-[-10%] w-[35%] h-[35%] rounded-full bg-leaf/10 blur-3xl" />
 
       <div className="relative glass-strong rounded-2xl p-7 md:p-9">
+        {hasMultipleHeroes && (
+          <div className="flex flex-wrap gap-2 mb-5">
+            {heroProducts.map((hero) => {
+              const active = hero.id === p.id;
+              return (
+                <button
+                  key={hero.id}
+                  type="button"
+                  onClick={() => setSelectedHeroId(hero.id)}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-all ${
+                    active
+                      ? 'gradient-green text-white shadow-lg shadow-green/20'
+                      : 'glass hover:bg-white/40 text-muted'
+                  }`}
+                >
+                  {hero.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-8 items-start">
           {/* Main content */}
           <div>

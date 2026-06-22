@@ -155,7 +155,7 @@ export const productsMs: Product[] = [
     evidenceLevel: 'Strong',
     evidenceNote: 'Kesihatan usus berkait rapat dengan keradangan dan penghadaman. Produk ini diposisikan sebagai produk sokongan usus harian yang amat penting untuk sembelit, keselesaan gastrik, dan keseimbangan microbiome, dengan sokongan probiotik dan antioksida tambahan.',
     affiliateUrl: 'https://s.shopee.com.my/18DAgiByO',
-    isHero: false,
+    isHero: true,
     rating: 4,
     imageUrl: '/products/DND_BioSerat_Probiotic.JPG',
     images: [

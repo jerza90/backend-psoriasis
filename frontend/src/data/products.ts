@@ -192,7 +192,7 @@ export const products: Product[] = [
     evidenceLevel: 'Strong',
     evidenceNote: 'Gut health is closely linked with inflammation and digestion. This product is positioned as an important daily gut-support product for constipation, gastritis comfort, and microbiome balance, with additional probiotic and antioxidant support.',
     affiliateUrl: 'https://s.shopee.com.my/18DAgiByO',
-    isHero: false,
+    isHero: true,
     rating: 4,
     imageUrl: '/products/DND_BioSerat_Probiotic.JPG',
     images: [
