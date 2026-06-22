@@ -2,44 +2,28 @@
 
 ## 1. Project Overview
 
-A two-brand wellness education platform for people with psoriasis:
+Two-brand wellness education platform for people with psoriasis:
 
-- **FreeFromPsoriasis** (English / global) — education-first, affiliate product recommendations, lead magnets
-- **BebasPsoriasis** (Bahasa Malaysia / local) — BM e-book sales & product support
+- **FreeFromPsoriasis** (English / global) — education-first, affiliate product recommendations
+- **BebasPsoriasis** (Bahasa Malaysia / local) — BM e-book sales & affiliate system
 
-Users land via content (TikTok, Instagram), opt into a free checklist, then get routed to e-book purchase or product support pages.
-
----
-
-## 2. Brand Identity
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `--ink` | `#17211c` | Body text, headings |
-| `--muted` | `#607069` | Secondary text, metadata |
-| `--line` | `#d9e2db` | Borders, dividers |
-| `--paper` | `#fbfaf6` | Page background |
-| `--soft` | `#eef5ef` | Card / panel background |
-| `--green` | `#2f6b4f` | Primary brand color, buttons, links |
-| `--leaf` | `#8ab17d` | Secondary green accent |
-| `--rose` | `#c76d64` | Alert / accent |
-| `--gold` | `#d6a84f` | Highlight / price |
+Users land via content (TikTok, Instagram), opt into a free checklist, purchase e-book, or visit affiliate public pages.
 
 ---
 
-## 3. Tech Stack
+## 2. Tech Stack
 
 ### Frontend
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
 | React | 19 | UI framework |
-| TypeScript | 6 | Type safety |
-| Vite | 8 | Build tool / dev server |
-| react-router-dom | 7 | Routing |
-| i18next | 26 | Internationalization (EN + MS) |
-| lucide-react | 1 | Icons |
-| Tailwind CSS | 4 | Styling |
+| TypeScript | ~6 | Type safety |
+| Vite | ~8 | Build tool / dev server |
+| react-router-dom | ~7 | Routing |
+| i18next | ~26 | Internationalization (EN + MS) |
+| lucide-react | ~1 | Icons |
+| Tailwind CSS | ~4 | Styling |
 
 ### Backend
 
@@ -48,27 +32,18 @@ Users land via content (TikTok, Instagram), opt into a free checklist, then get 
 | Java | 17 | Language |
 | Spring Boot | 3.2.0 | REST API framework |
 | Spring Data JPA | 3.2.0 | ORM / database |
-| Spring Security | 3.2.0 | Auth / JWT |
+| Spring Security | 3.2.0 | Security / CSRF |
 | PostgreSQL | 16 | Database |
-| Redis | - | Caching |
-| Lombok | 1.18.30 | Boilerplate reduction |
-| MapStruct | 1.5.5 | Object mapping |
-
-### Infrastructure
-
-- **Frontend**: Vercel
-- **Backend**: Fly.io
-- **Database**: PostgreSQL 16 (Docker local / Fly.io cloud)
-- **Email**: SendGrid
+| Flyway | - | Schema migrations |
 
 ---
 
-## 4. Frontend Routes
+## 3. Frontend Routes
 
 | Path | Page | Description |
 |------|------|-------------|
 | `/` | LandingPage | Main hero with e-book promotion |
-| `/checkout` | CheckoutPage | Digital product checkout (payment gateway placeholder) |
+| `/checkout` | CheckoutPage | Dual-product checkout (BM ToyyibPay / EN Stripe) |
 | `/thank-you` | ThankYouPage | Post-purchase download page |
 | `/tips` | TipsPage | Tips & education articles |
 | `/tips/ebook` | EbookGalleryPage | E-book gallery/detail |
@@ -77,519 +52,313 @@ Users land via content (TikTok, Instagram), opt into a free checklist, then get 
 | `/faq` | FaqPage | Frequently asked questions |
 | `/blog` | BlogPage | Education blog listing |
 | `/blog/:id` | BlogPostPage | Individual blog post |
-
-### Key Components
-
-| Component | Usage |
-|-----------|-------|
-| `Topbar` | Navigation bar (all pages) |
-| `Footer` | Site footer (all pages) |
-| `HeroProduct` | Featured supplement product (ProductsPage) |
-| `ProductImage` | Product image with gradient fallback |
-| `TestimonialCarousel` | User success story carousel (LandingPage) |
+| `/login` | LoginPage | User/affiliate login |
+| `/register` | RegisterPage | User registration |
+| `/forgot-password` | ForgotPasswordPage | Password reset |
+| `/affiliate/dashboard` | AffiliateDashboardPage | Affiliate profile editor |
+| `/affiliate/:referralCode` | AffiliatePublicPage | Public affiliate story page |
+| `/admin/testimonials` | AdminTestimonialsPage | Testimonial CRUD |
 
 ---
 
-## 5. E-Book Product
+## 4. REST API
 
-### Details
-- **Title**: Free From Psoriasis Since 2021
-- **Language**: Bahasa Malaysia (BM)
-- **Pages**: 62
-- **Format**: Instant digital download (PDF)
-- **Price**: RM 27 (launch), original RM 47
+Base URL: `http://localhost:8080/api` (dev) / `https://psoriasis-backend.fly.dev/api` (prod)
 
-### Three Phases
-1. **Phase 1 — The Healing Crisis**: Navigating the Herxheimer reaction when diet/supplements change
-2. **Phase 2 — Progressive Skin Improvement**: Diet, routine, and lifestyle shifts that work
-3. **Phase 3 — Stabilize & Stay Free**: Long-term skin protection without steroid dependence
+### 4.1 Authentication (`/api/auth`)
 
-### Target Audience
-- People with psoriasis or recurring skin flare-ups
-- Those confused about triggers and routines
-- BM-speaking audience wanting education before purchasing products
+| Method | Path | Body | Response | Description |
+|--------|------|------|----------|-------------|
+| `POST` | `/api/auth/login` | `LoginRequest` (email, password) | `AuthResponseDTO` (id, email, fullName, username, role) | Login with email/username + password |
+| `POST` | `/api/auth/register` | `RegisterRequest` (email) | `MessageResponseDTO` (message) | Send 6-digit OTP to email |
+| `POST` | `/api/auth/verify-registration` | `VerifyRegistrationRequest` (email, otpCode, password, fullName, username) | `RegistrationResponseDTO` (message, userId, role) | Verify OTP + create account |
+| `POST` | `/api/auth/forgot-password` | `ForgotPasswordRequest` (email) | `MessageResponseDTO` (message) | Send OTP for password reset |
+| `POST` | `/api/auth/reset-password` | `ResetPasswordRequest` (email, otpCode, newPassword) | `MessageResponseDTO` (message) | Verify OTP + reset password |
 
----
+### 4.2 Users (`/api/users`)
 
-## 6. Supplement Products
+| Method | Path | Body / Param | Response | Description |
+|--------|------|-------------|----------|-------------|
+| `POST` | `/api/users` | `UserCreateRequest` (username, email, password, fullName) | `UserResponseDTO` | Create new user |
+| `GET` | `/api/users/username/{username}` | Path: username | `UserResponseDTO` (200/404) | Get user by username |
+| `GET` | `/api/users/email/{email}` | Path: email | `UserResponseDTO` (200/404) | Get user by email |
+| `GET` | `/api/users/exists/username/{username}` | Path: username | `boolean` | Check username availability |
+| `GET` | `/api/users/exists/email/{email}` | Path: email | `boolean` | Check email availability |
 
-Nine products across 7 categories:
+### 4.3 Checkout (`/api/checkout`)
 
-| Product | Category | Price |
-|---------|----------|-------|
-| Dnd SunTerra D3K2 + Omega 3,6,7,9 | Essential Nutrients | - |
-| Vitamin D3 + K2 | Skin Barrier & Immune | iHerb |
-| Omega-3 (Fish Oil) | Inflammatory Response | iHerb |
-| Zinc Picolinate | Skin Healing & Immune | iHerb |
-| Quercetin | Mast Cell & Histamine | iHerb |
-| Probiotic (Multi-Strain) | Gut-Skin Axis | iHerb |
-| Magnesium Glycinate | Stress & Sleep | iHerb |
-| Ashwagandha (KSM-66) | Stress & Cortisol | iHerb |
-| Curcumin (BioPerine) | Inflammatory Response | iHerb |
+| Method | Path | Body / Param | Response | Description |
+|--------|------|-------------|----------|-------------|
+| `POST` | `/api/checkout/create-session` | `CheckoutRequest` (fullName, email, product, referralCode?) | `CheckoutUrlResponseDTO` (url) | Create payment session — ToyyibPay for "bm", Stripe for "en" |
+| `GET` | `/api/checkout/session/{sessionId}` | Path: sessionId | `PaymentStatusResponseDTO` (paymentStatus, downloadReady) | Check session payment status |
+| `POST` | `/api/checkout/session/{sessionId}/request-download` | Path: sessionId | `DownloadUrlResponseDTO` (downloadUrl) | Get temporary download link |
 
-All physical products are affiliate-linked to iHerb / Shopee (no on-site checkout for physical goods).
+### 4.4 Payment (`/api/payment`)
 
----
+| Method | Path | Param | Response | Description |
+|--------|------|-------|----------|-------------|
+| `POST` | `/api/payment/toyyipay-callback` | `@RequestParam` billcode | `200 OK` | ToyyibPay payment callback |
+| `GET` | `/api/payment/toyyipay-status` | `@RequestParam` billCode | `PaymentStatusResponseDTO` | Check ToyyibPay status |
+| `POST` | `/api/payment/toyyipay-download` | `@RequestParam` billCode | `DownloadUrlResponseDTO` | Download after ToyyibPay payment |
 
-## 7. Backend API
+### 4.5 Webhooks (`/api/webhooks`)
 
-### Base URL: `/api`
+| Method | Path | Headers | Response | Description |
+|--------|------|---------|----------|-------------|
+| `POST` | `/api/webhooks/stripe` | `Stripe-Signature` | `200 "received"` / `400 "Invalid signature"` | Stripe webhook — handles checkout.session.completed, charge.refunded, payment_intent.payment_failed |
 
-### 7.1 Existing Endpoints
+### 4.6 E-Book Download (`/api/ebook`)
 
-#### Authentication (Email + OTP)
+| Method | Path | Param | Response | Description |
+|--------|------|-------|----------|-------------|
+| `GET` | `/api/ebook/download/{token}` | Path: token | Streams PDF file | Download ebook with valid token |
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/auth/register` | Send 6-digit OTP to email for registration |
-| `POST` | `/api/auth/verify-registration` | Verify OTP + create account (password, fullName) |
-| `POST` | `/api/auth/forgot-password` | Send OTP to email for password reset |
-| `POST` | `/api/auth/reset-password` | Verify OTP + reset password |
+Error codes: 410 (expired), 403 (limit reached), 404 (invalid token), 500 (error)
 
-#### Users
+### 4.7 Testimonials (`/api/testimonials`)
 
-| Method | Path | Description | Request | Response |
-|--------|------|-------------|---------|----------|
-| `POST` | `/api/users` | Register new user | `User` JSON | `User` (201) |
-| `GET` | `/api/users/username/{username}` | Get user by username | - | `User` (200/404) |
-| `GET` | `/api/users/email/{email}` | Get user by email | - | `User` (200/404) |
-| `GET` | `/api/users/exists/username/{username}` | Check username availability | - | `boolean` |
-| `GET` | `/api/users/exists/email/{email}` | Check email availability | - | `boolean` |
+| Method | Path | Param | Response | Description |
+|--------|------|-------|----------|-------------|
+| `GET` | `/api/testimonials` | `?lang=ms` (default ms) | `List<TestimonialResponse>` | List published testimonials by language |
+| `GET` | `/api/testimonials/featured` | `?lang=ms` (default ms) | `List<TestimonialResponse>` | List featured testimonials by language |
+| `GET` | `/api/testimonials/{id}` | Path: id | `TestimonialResponse` (200/404) | Get single testimonial |
 
-### 7.2 Planned / Future Endpoints
+### 4.8 Admin Testimonials (`/api/admin/testimonials`)
 
-#### Authentication
+| Method | Path | Body / Param | Response | Description |
+|--------|------|-------------|----------|-------------|
+| `GET` | `/api/admin/testimonials` | — | `List<TestimonialResponse>` | List all (including unpublished) |
+| `POST` | `/api/admin/testimonials` | `TestimonialAdminRequest` (full testimonial data + progressHistory) | `TestimonialResponse` | Create testimonial |
+| `PUT` | `/api/admin/testimonials/{id}` | Path: id + `TestimonialAdminRequest` | `TestimonialResponse` | Update testimonial |
+| `DELETE` | `/api/admin/testimonials/{id}` | Path: id | `MessageResponseDTO` | Delete testimonial |
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/auth/login` | Login, returns JWT |
-| `POST` | `/api/auth/refresh` | Refresh access token |
-| `POST` | `/api/auth/logout` | Invalidate token |
+### 4.9 Affiliate (`/api/affiliate`)
 
-#### Checkout / Payments
+| Method | Path | Body / Param | Response | Description |
+|--------|------|-------------|----------|-------------|
+| `POST` | `/api/affiliate/register` | `AffiliateRegistrationRequest` (name, email, bio, socialLinks, paymentInfo) | `AffiliateResponseDTO` (full profile) | Register new affiliate, generates referral code |
+| `GET` | `/api/affiliate/lookup` | `?code=` | `AffiliatePublicResponseDTO` (empty if not found) | Lookup by referral code |
+| `GET` | `/api/affiliate/public` | `?code=` | `AffiliatePublicResponseDTO` (200/404) | Get public affiliate profile |
+| `GET` | `/api/affiliate/{id}/conversions` | Path: id | `AffiliateConversionsResponseDTO` | Get conversion stats |
+| `GET` | `/api/affiliate/{id}` | Path: id | `AffiliateResponseDTO` (200/404) | Get full profile by ID |
+| `GET` | `/api/affiliate/profile` | `?email=` | `AffiliateResponseDTO` (200/404) | Get profile by email |
+| `PUT` | `/api/affiliate/profile` | `?email=` + `AffiliateProfileUpdateRequest` (all profile fields including progressImages) | `AffiliateResponseDTO` | Update profile |
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/checkout/create` | Create payment session |
-| `GET` | `/api/checkout/status/{id}` | Check payment status |
-| `POST` | `/api/webhooks/payment` | Payment gateway webhook |
-| `GET` | `/api/orders` | List user orders |
-| `GET` | `/api/orders/{id}` | Get order details |
+### 4.10 Upload (`/api/upload`)
 
-#### E-Book
+| Method | Path | Body | Response | Description |
+|--------|------|------|----------|-------------|
+| `POST` | `/api/upload` | `multipart/form-data` file | `{"url": "/uploads/uuid.ext"}` | Upload image (max 10MB), stored in `local-ebooks/affiliate-uploads/` |
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/ebook` | Get e-book metadata |
-| `GET` | `/api/ebook/download/{orderId}` | Download e-book PDF (after purchase) |
+### 4.11 Debug (`/api/debug`)
 
-#### Products
+| Method | Path | Headers | Body | Response | Description |
+|--------|------|---------|------|----------|-------------|
+| `POST` | `/api/debug/email/test` | `X-Debug-Token` | `DebugEmailRequest` (to, type, subject?, message?, ctaLabel?, ctaUrl?) | `DebugEmailResponseDTO` | Send test email (receipt/otp/generic) |
+| `POST` | `/api/debug/purchase/mock` | `X-Debug-Token` | `MockPurchaseRequest` (customerName, customerEmail, amount?, referralCode?, etc.) | `DebugPurchaseResponseDTO` (orderRef, downloadUrl) | Create mock paid order + send receipt |
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/products` | List all products (i18n support) |
-| `GET` | `/api/products/{id}` | Get single product |
-| `GET` | `/api/products/category/{category}` | Filter products by category |
+### 4.12 Static Resources
 
-#### Blog
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/blog` | List blog posts (paginated) |
-| `GET` | `/api/blog/{id}` | Get single blog post |
-
-#### Newsletter / Email
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/newsletter/subscribe` | Subscribe email |
-| `POST` | `/api/contact` | Contact form submission |
-
-#### Testimonials
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/testimonials` | List success stories |
-| `POST` | `/api/testimonials` | Submit testimonial (moderated) |
-
-#### Admin
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/admin/orders` | List all orders |
-| `GET` | `/api/admin/users` | List all users |
-| `GET` | `/api/admin/analytics` | Sales & visitor stats |
+| Path | Source | Description |
+|------|--------|-------------|
+| `/uploads/**` | `file:local-ebooks/affiliate-uploads/` | Serves uploaded affiliate images |
+| `/actuator/health` | Spring Boot Actuator | Health check |
+| `/actuator/info` | Spring Boot Actuator | App info |
+| `/actuator/metrics` | Spring Boot Actuator | Metrics |
 
 ---
 
-## 8. Database Schema
+## 5. Database Schema (Flyway Migrations)
 
-### Current: `users` table
+### 5.1 Migration History
 
-```sql
-CREATE TABLE users (
-    id            BIGSERIAL PRIMARY KEY,
-    username      VARCHAR(255) UNIQUE,
-    email         VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    full_name     VARCHAR(255),
-    enabled       BOOLEAN DEFAULT FALSE,
-    otp_code      VARCHAR(6),
-    otp_expiry    TIMESTAMP,
-    created_at    TIMESTAMP,
-    updated_at    TIMESTAMP
-);
-```
+| Migration | Description |
+|-----------|-------------|
+| `V1__initial_schema.sql` | Base product/pages tables |
+| `V2__add_users.sql` | Users table |
+| `V3__add_toyyipay_orders.sql` | ToyyibPay order columns |
+| `V4__add_payment_orders.sql` | Payment orders table |
+| `V5__add_payment_order_fields.sql` | Extended payment fields |
+| `V6__add_download_fields.sql` | Download token columns |
+| `V7__add_affiliate_system.sql` | Affiliates, conversions, referral columns |
+| `V8__add_testimonials.sql` | Testimonials + progress tables |
+| `V9__seed_testimonials.sql` | Demo testimonial data |
+| `V10__add_user_roles.sql` | Role column + backfill |
+| `V11__extend_affiliate_profile.sql` | Story/blog fields |
+| `V12__extend_affiliate_public_page.sql` | Page/tips/guide/progress fields |
+| `V13__seed_affiliates.sql` | 10 demo affiliate profiles |
+| `V14__seed_affiliate_login_user.sql` | Aisha affiliate login user |
+| `V15__seed_testimonials_ms_shared.sql` | BM shared testimonials |
+| `V16__add_affiliate_progress_images.sql` | Progress images column |
 
-### Planned Tables
+### 5.2 Core Tables
 
-#### `orders`
-```sql
-CREATE TABLE orders (
-    id              BIGSERIAL PRIMARY KEY,
-    user_id         BIGINT REFERENCES users(id),
-    product_type    VARCHAR(50) NOT NULL,  -- 'ebook'
-    product_id      VARCHAR(100) NOT NULL,
-    amount          DECIMAL(10,2) NOT NULL,
-    currency        VARCHAR(3) DEFAULT 'MYR',
-    status          VARCHAR(50) NOT NULL,  -- 'pending', 'completed', 'failed', 'refunded'
-    payment_gateway VARCHAR(50),           -- 'payhip', 'stripe', 'toyyibpay'
-    payment_id      VARCHAR(255),
-    email           VARCHAR(255) NOT NULL,
-    created_at      TIMESTAMP,
-    updated_at      TIMESTAMP
-);
-```
+**users**
+- `id` BIGSERIAL PK
+- `username` VARCHAR(255) UNIQUE
+- `email` VARCHAR(255) NOT NULL UNIQUE
+- `password_hash` VARCHAR(255) NOT NULL
+- `full_name` VARCHAR(255)
+- `role` VARCHAR(20) default 'user' — values: 'user', 'affiliate', 'admin'
+- `enabled` BOOLEAN default false
+- `otp_code` VARCHAR(6)
+- `otp_expiry` TIMESTAMP
+- `created_at`, `updated_at` TIMESTAMP
 
-#### `order_items`
-```sql
-CREATE TABLE order_items (
-    id          BIGSERIAL PRIMARY KEY,
-    order_id    BIGINT REFERENCES orders(id),
-    item_type   VARCHAR(50) NOT NULL,
-    item_id     VARCHAR(100) NOT NULL,
-    item_name   VARCHAR(255),
-    quantity    INT DEFAULT 1,
-    unit_price  DECIMAL(10,2),
-    total_price DECIMAL(10,2)
-);
-```
+**payment_orders**
+- `id` BIGSERIAL PK
+- `order_ref` VARCHAR(255) UNIQUE
+- `payment_method` VARCHAR(50)
+- `customer_name`, `customer_email`, `customer_phone`
+- `product_name`, `amount` DECIMAL(10,2), `currency`
+- `payment_status`, `status`
+- `bill_code` (ToyyibPay), `stripe_session_id`, `stripe_payment_intent_id`
+- `ref_no`, `payment_channel`, `transaction_charge`, `nett_received`, `decline_reason`
+- `payment_date`, `refunded_date`, `created_date`
+- `download_token`, `download_count`, `max_downloads`, `token_expires_at`
+- `referral_code`, `affiliate_id`, `commission_rate`, `commission_amount`
 
-#### `products`
-```sql
-CREATE TABLE products (
-    id              VARCHAR(100) PRIMARY KEY,
-    name_en         VARCHAR(255),
-    name_ms         VARCHAR(255),
-    brand           VARCHAR(255),
-    category_en     VARCHAR(100),
-    category_ms     VARCHAR(100),
-    short_desc_en   TEXT,
-    short_desc_ms   TEXT,
-    why_it_helps_en TEXT,
-    why_it_helps_ms TEXT,
-    how_it_works_en TEXT,
-    how_it_works_ms TEXT,
-    dosage          VARCHAR(255),
-    best_time       VARCHAR(255),
-    evidence_level  VARCHAR(50),
-    evidence_note_en TEXT,
-    evidence_note_ms TEXT,
-    affiliate_url   VARCHAR(500),
-    is_hero         BOOLEAN DEFAULT FALSE,
-    rating          INT DEFAULT 0,
-    image_url       VARCHAR(500),
-    created_at      TIMESTAMP,
-    updated_at      TIMESTAMP
-);
-```
+**affiliates**
+- `id` BIGSERIAL PK
+- `name` NOT NULL, `email` NOT NULL UNIQUE, `referral_code` NOT NULL UNIQUE
+- `bio`, `avatar_url`, `social_links`, `payment_info`
+- `page_title`, `page_intro`
+- `story_title`, `story_summary`, `story_body`
+- `blog_title`, `blog_excerpt`, `blog_url`, `blog_image_url`
+- `tips_title`, `tips_text`
+- `guide_title`, `guide_text`
+- `progress_title`, `progress_text`, `progress_images` TEXT (JSON array of URLs)
+- `commission_rate` DECIMAL(5,4) default 0.5000
+- `total_earned` DECIMAL(10,2) default 0
+- `total_paid` DECIMAL(10,2) default 0
+- `status` VARCHAR(20) default 'active'
+- `created_at`, `updated_at` TIMESTAMP
 
-#### `blog_posts`
-```sql
-CREATE TABLE blog_posts (
-    id            VARCHAR(100) PRIMARY KEY,
-    title_en      VARCHAR(255),
-    title_ms      VARCHAR(255),
-    excerpt_en    TEXT,
-    excerpt_ms    TEXT,
-    content_en    TEXT,
-    content_ms    TEXT,
-    category      VARCHAR(100),
-    image_url     VARCHAR(500),
-    published     BOOLEAN DEFAULT FALSE,
-    published_at  TIMESTAMP,
-    created_at    TIMESTAMP,
-    updated_at    TIMESTAMP
-);
-```
+**referral_conversions**
+- `affiliate_id` FK, `payment_order_id` FK
+- `order_amount`, `commission_rate`, `commission_amount`
+- `status` VARCHAR(20) default 'pending'
+- `created_at`, `paid_at` TIMESTAMP
 
-#### `testimonials`
-```sql
-CREATE TABLE testimonials (
-    id              BIGSERIAL PRIMARY KEY,
-    name            VARCHAR(255),
-    text_en         TEXT,
-    text_ms         TEXT,
-    image_url       VARCHAR(500),
-    progress_images TEXT[],      -- array of image URLs
-    condition_stage VARCHAR(100),
-    duration_label  VARCHAR(100),
-    tips_en         TEXT[],
-    tips_ms         TEXT[],
-    is_published    BOOLEAN DEFAULT FALSE,
-    sort_order      INT DEFAULT 0,
-    created_at      TIMESTAMP
-);
-```
+**testimonials**
+- `id` BIGSERIAL PK
+- `affiliate_id` (nullable FK)
+- `name`, `location`, `condition_duration`, `categories` TEXT[]
+- `summary`, `initial_quote`, `result_quote`
+- `featured` BOOLEAN, `avatar_url`, `lang`, `sort_order`, `status`
+- `created_at`, `updated_at`
 
-#### `newsletter_subscribers`
-```sql
-CREATE TABLE newsletter_subscribers (
-    id          BIGSERIAL PRIMARY KEY,
-    email       VARCHAR(255) NOT NULL UNIQUE,
-    name        VARCHAR(255),
-    source      VARCHAR(100),  -- 'checklist', 'checkout', 'landing'
-    is_active   BOOLEAN DEFAULT TRUE,
-    created_at  TIMESTAMP
-);
-```
+**testimonial_progress**
+- `id` BIGSERIAL PK
+- `testimonial_id` FK
+- `date_label`, `title`, `description`, `notes`, `tips` TEXT[], `images` TEXT[], `product_tags` JSONB, `details` JSONB
+- `sort_order`, `created_at`
 
 ---
 
-## 9. Payment Integration
+## 6. Payment Integration
 
-### Digital Products (E-Book) — Stripe Checkout
+### E-Book Checkout
 
-**Status:** Implemented (backend + frontend)
+**BM (RM 39.00)** → ToyyibPay (FPX / online banking)
+**EN ($27.00 USD)** → Stripe (credit card)
 
-- **Gateway**: Stripe Checkout (hosted payment page)
-- **Flow**:
-  1. User fills name + email on CheckoutPage
-  2. Form submit calls `POST /api/checkout/create-session`
-  3. Backend creates Stripe Checkout Session with surcharge (3% + RM 2.00)
-  4. User redirected to Stripe hosted payment page
-  5. On success → `/thank-you?session_id={CHECKOUT_SESSION_ID}`
-  6. On cancel → `/checkout?canceled=true`
-  7. ThankYouPage verifies session via `GET /api/checkout/session/{sessionId}`
-  8. Download button calls `GET /api/checkout/session/{sessionId}/download` → serves PDF
-  9. Stripe webhook `checkout.session.completed` → `POST /api/webhooks/stripe`
+### ToyyibPay Flow
+1. POST `/api/checkout/create-session` with `product: "bm"` → returns ToyyibPay bill URL
+2. User pays on ToyyibPay
+3. Callback → `POST /api/payment/toyyibpay-callback` with billcode → marks paid
+4. User clicks download → `POST /api/payment/toyyibpay-download`
 
-- **Surcharge formula:** `total = baseAmount + (baseAmount * rate) + fixedFee`
-  - RM 27.00 + (RM 27.00 * 0.03) + RM 2.00 = RM 29.81 approx. RM 29.90
-  - config: `app.stripe.surcharge-rate=0.03`, `app.stripe.surcharge-fixed=2.00`
+### Stripe Flow
+1. POST `/api/checkout/create-session` with `product: "en"` → returns Stripe Checkout URL
+2. User pays on Stripe
+3. Webhook → `POST /api/webhooks/stripe` (checkout.session.completed) → marks paid
+4. Stripe surcharge: 3% + RM 2.00 added to base price
+5. User clicks download → `POST /api/checkout/session/{id}/request-download`
 
-- **Download flow:** Server-side verification of Stripe Session `payment_status=paid` before serving PDF from `src/main/resources/static/ebook/`
-
-- **Backend endpoints (all under `/api/checkout`):**
-  - `POST /create-session` — creates Stripe Checkout session
-  - `GET /session/{sessionId}` — retrieves session status
-  - `GET /session/{sessionId}/download` — serves PDF if paid
-
-### Physical Products (Supplements)
-- Affiliate links to iHerb
-- No on-site checkout or payment processing
-
-### Configuration Properties
-```
-app.stripe.secret-key=sk_test_...
-app.stripe.publishable-key=pk_test_...
-app.stripe.webhook-secret=whsec_...
-app.stripe.surcharge-rate=0.03
-app.stripe.surcharge-fixed=2.00
-app.stripe.currency=myr
-app.stripe.success-url=http://localhost:5173/thank-you?session_id={CHECKOUT_SESSION_ID}
-app.stripe.cancel-url=http://localhost:5173/checkout?canceled=true
-```
+### Affiliate Conversion Tracking
+- Checkout includes `referralCode` in request body
+- On payment success, `AffiliateService.trackConversion()` records commission (default 50%)
+- Creates `ReferralConversion` record with status "pending"
+- Updates affiliate `total_earned`
+- Double-tracking prevented by `affiliate_id` null check
 
 ---
 
-## 10. Frontend-Backend Integration
+## 7. Security
 
-### Current
-- Frontend runs on `localhost:5173` (dev) / Vercel (prod)
-- Backend runs on `localhost:8080` (dev) / Fly.io (prod)
-- Vite proxy forwards `/api/*` from frontend to backend
-- Existing API client at `frontend/src/api/client.ts`
-- Checkout API at `/api/checkout/create-session` (POST), `/api/checkout/session/{id}` (GET), `/api/checkout/session/{id}/download` (GET)
-- Stripe webhook at `/api/webhooks/stripe` (POST)
-
-### Proxy Config (vite.config.ts)
-```ts
-server: {
-  proxy: {
-    '/api': {
-      target: 'http://localhost:8080',
-      changeOrigin: true,
-    }
-  }
-}
-```
+- All public API paths are `permitAll()` in SecurityConfig
+- CSRF disabled for all API paths (stateless session)
+- Passwords hashed with BCrypt
+- CORS restricted to `frontend.url` (configurable via `frontend.allowed-origins`)
+- Stripe webhook signature verified
+- Debug endpoints protected by `X-Debug-Token` header
+- E-book download tokens expire after 24 hours (configurable), max downloads enforced
 
 ---
 
-## 11. Deployment
+## 8. Local Development
+
+```bash
+# Prerequisites
+git checkout fix/local-dev-cors
+# If master is ahead: git rebase master
+
+# Start database (Docker)
+docker compose up -d postgres
+
+# Start backend
+./scripts/start-local.sh
+# Backend: http://localhost:8080
+
+# Start frontend (separate terminal)
+cd frontend && npm run dev
+# Frontend: http://localhost:5173
+```
+
+### Affiliate Test Login
+- Username: `aishaaffiliate` or email: `aishaaffiliate@example.com`
+- Password: `AishaAffiliate123!`
+- Role: affiliate
+- Test cards: Stripe `4242 4242 4242 4242`, ToyyibPay sandbox
+
+---
+
+## 9. Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DATABASE_URL` | `jdbc:postgresql://localhost:5432/psoriasis_db` | JDBC connection string |
+| `DB_USERNAME` | `postgres` | DB user |
+| `DB_PASSWORD` | `password` | DB password |
+| `FRONTEND_URL` | `http://localhost:5173` | Frontend URL (for CORS + links) |
+| `FRONTEND_ALLOWED_ORIGINS` | defaults to FRONTEND_URL | Comma-separated CORS origins |
+| `STRIPE_SECRET_KEY` | `sk_test_...` | Stripe API key |
+| `STRIPE_WEBHOOK_SECRET` | `whsec_...` | Stripe webhook signing secret |
+| `STRIPE_PRICE_BM` | `price_...` | Stripe price ID for BM product |
+| `STRIPE_PRICE_EN` | `price_...` | Stripe price ID for EN product |
+| `JWT_SECRET` | — | JWT signing key |
+| `MAIL_USERNAME` | — | SMTP username |
+| `MAIL_PASSWORD` | — | SMTP password |
+| `TOYYIPAY_USER_SECRET_KEY` | — | ToyyibPay API key |
+| `TOYYIPAY_CATEGORY_CODE` | — | ToyyibPay category |
+| `TOYYIPAY_BASE_URL` | `https://dev.toyyibpay.com` | ToyyibPay API base |
+| `TOYYIPAY_CALLBACK_URL` | `http://localhost:8080/api/payment/toyyipay-callback` | Callback URL |
+| `EBOOK_DOWNLOAD_BASE_URL` | `http://localhost:8080/api/ebook/download` | Base for download links |
+| `DEBUG_EMAIL_TOKEN` | — | Token for debug endpoints |
+| `TELEGRAM_SUPPORT_URL` | — | Telegram group invite link |
+
+---
+
+## 10. Deployment
 
 ### Frontend (Vercel)
 ```bash
-cd frontend
-npm run build   # outputs to dist/
-vercel --prod
+cd frontend && npm run build && vercel --prod
 ```
 
 ### Backend (Fly.io)
 ```bash
-./scripts/deploy.sh   # builds with Maven, deploys to Fly.io
+fly secrets import < .env
+fly deploy
 ```
-
-### Local Development
-```bash
-# Start database
-docker compose up -d
-
-# Start backend
-./scripts/start.sh
-
-# Start frontend
-./scripts/start-frontend.sh
-```
-
----
-
-## 12. Data Flow
-
-```
-User → LandingPage → /checkout → Stripe Checkout → /thank-you?session_id=...
-  ↓                                                      ↓
-ChecklistPage                              Backend verifies session → Download PDF
-  ↓
-Email capture → Newsletter
-```
-
-```
-User → ProductsPage → iHerb/Shopee (affiliate)
-                        ↓
-                   No on-site payment
-```
-
----
-
-## 13. Future Roadmap
-
-### Phase 1 (Current)
-- [x] Landing page with e-book hero
-- [x] E-book detail page
-- [x] Product recommendation pages (EN + BM)
-- [x] Free checklist download
-- [x] FAQ page
-- [x] Blog (EN + BM)
-- [x] User registration API (backend)
-- [x] Testimonials carousel
-- [x] Checkout page UI (Stripe integration)
-- [x] Thank-you page (session verification + download)
-- [x] i18n (English + Bahasa Malaysia)
-
-### Phase 2 (Backend Completion)
-- [ ] JWT authentication (login/register)
-- [x] Payment gateway integration (Stripe Checkout)
-- [x] Order management API
-- [x] E-book download API (access control via Stripe session)
-- [x] Webhook handler for payment callbacks
-- [ ] SendGrid email integration (receipt + download link)
-- [ ] Admin API (orders, users, analytics)
-- [ ] Database migrations (Flyway or Liquibase)
-
-### Phase 3 (Enhancements)
-- [ ] Blog CMS (admin panel)
-- [ ] Product CMS (manage from backend)
-- [ ] Testimonial submission & moderation
-- [ ] Newsletter subscription API
-- [ ] Analytics dashboard
-- [ ] Affiliate link click tracking
-- [ ] SEO optimization
-- [ ] PWA support
-
----
-
-## 14. Environment Configuration
-
-### Backend (`application.properties`)
-
-| Property | Description |
-|----------|-------------|
-| `server.port` | Backend port (8080) |
-| `spring.datasource.url` | PostgreSQL connection |
-| `app.jwt.secret` | JWT signing secret |
-| `app.jwt.access-token-expire-minutes` | Token expiry (30 min) |
-| `spring.mail.host` | SMTP host (smtp.sendgrid.net) |
-| `spring.mail.port` | SMTP port (587) |
-| `spring.mail.username` | SMTP username (apikey for SendGrid) |
-| `spring.mail.password` | SMTP password / SendGrid API key |
-| `app.email.from-email` | Sender email address |
-| `app.iherb.affiliate-id` | iHerb affiliate ID |
-| `app.stripe.secret-key` | Stripe API secret key |
-| `app.stripe.publishable-key` | Stripe publishable key |
-| `app.stripe.webhook-secret` | Stripe webhook signing secret |
-| `app.stripe.surcharge-rate` | Stripe fee rate (0.03 = 3%) |
-| `app.stripe.surcharge-fixed` | Stripe fixed fee in MYR (2.00) |
-| `app.stripe.currency` | Currency code (myr) |
-| `app.stripe.success-url` | Redirect URL after successful payment |
-| `app.stripe.cancel-url` | Redirect URL after cancelled payment |
-| `app.cors.origins` | Allowed CORS origins |
-
-### Frontend (`.env`)
-
-| Variable | Description |
-|----------|-------------|
-| `VITE_API_URL` | Backend API URL |
-
----
-
-## 15. Project Structure
-
-```
-psoriasis-backend/
-├── frontend/                  # React app
-│   ├── src/
-│   │   ├── api/              # API client
-│   │   ├── components/       # Shared components
-│   │   ├── data/             # Static data (products, testimonials)
-│   │   ├── i18n/             # Translation files (en, ms)
-│   │   ├── pages/            # Route pages
-│   │   └── types/            # TypeScript interfaces
-│   └── public/
-│       └── e-book-landing-pages/  # Images & assets
-├── src/                       # Spring Boot backend
-│   └── main/java/com/psoriasis/
-│       ├── config/            # App config, security
-│       ├── controller/        # REST controllers
-│       ├── dto/               # Request/response DTOs
-│       ├── model/             # JPA entities
-│       ├── repository/        # Data repositories
-│       └── service/           # Business logic
-├── scripts/                   # Deploy & start scripts
-├── docs/                      # Documentation
-├── docker-compose.yml         # PostgreSQL
-├── Dockerfile                 # Spring Boot build
-└── pom.xml                    # Maven config
-```
-
----
-
-## 16. Security Notes
-
-- Passwords hashed with BCrypt
-- JWT tokens for API authentication (HS256, 30 min expiry)
-- CORS restricted to frontend origins
-- SQL injection protection via JPA parameterized queries
-- Payment processing handled by third-party gateways (no raw card storage)
-- Admin endpoints require authentication
-- Rate limiting recommended for auth & checkout endpoints
-
----
-
-## 17. Monitoring & Logging
-
-- Spring Boot Actuator endpoints: `/actuator/health`, `/actuator/info`, `/actuator/metrics`
-- JSON logging format
-- Prometheus metrics endpoint available (add `micrometer-registry-prometheus` dependency)
-- Sentry or similar recommended for error tracking in production
