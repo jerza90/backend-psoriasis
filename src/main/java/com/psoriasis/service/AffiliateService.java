@@ -108,6 +108,7 @@ public class AffiliateService {
         if (request.getGuideText() != null) affiliate.setGuideText(request.getGuideText());
         if (request.getProgressTitle() != null) affiliate.setProgressTitle(request.getProgressTitle());
         if (request.getProgressText() != null) affiliate.setProgressText(request.getProgressText());
+        if (request.getProgressImages() != null) affiliate.setProgressImages(request.getProgressImages());
         affiliate.setUpdatedAt(LocalDateTime.now());
         Affiliate saved = affiliateRepository.save(affiliate);
         return affiliateMapper.toResponse(saved, buildReferralLink(saved.getReferralCode()));

@@ -44,6 +44,7 @@ export default function AffiliatePublicPage() {
   const tips = splitLines(profile.tipsText);
   const guide = splitLines(profile.guideText);
   const progress = splitLines(profile.progressText);
+  const progressImages: string[] = JSON.parse(profile.progressImages || '[]');
 
   return (
     <div className="min-h-screen">
@@ -108,6 +109,7 @@ export default function AffiliatePublicPage() {
             title={profile.progressTitle || 'Progress'}
             body={profile.progressText || 'Add progress updates here so people can see the journey over time.'}
             bullets={progress}
+            images={progressImages}
           />
           <SectionCard
             title={profile.blogTitle || 'Blog'}
@@ -148,12 +150,14 @@ function SectionCard({
   title,
   body,
   bullets,
+  images,
   link,
   linkLabel,
 }: {
   title: string;
   body: string;
   bullets?: string[];
+  images?: string[];
   link?: string | null;
   linkLabel?: string;
 }) {
@@ -165,13 +169,23 @@ function SectionCard({
       </div>
       <p className="text-muted leading-relaxed whitespace-pre-line">{body}</p>
       {bullets && bullets.length > 0 && (
-        <div className="mt-4 space-y-2">
-          {bullets.map((bullet) => (
-            <div key={bullet} className="flex items-start gap-2 text-sm text-muted">
-              <span className="w-5 h-5 rounded-full bg-green/15 flex items-center justify-center shrink-0 mt-0.5">
-                <Lightbulb size={12} className="text-green" />
-              </span>
-              <span>{bullet}</span>
+        <div className="mt-4 space-y-4">
+          {bullets.map((bullet, idx) => (
+            <div key={bullet} className="space-y-2">
+              <div className="flex items-start gap-2 text-sm text-muted">
+                <span className="w-5 h-5 rounded-full bg-green/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <Lightbulb size={12} className="text-green" />
+                </span>
+                <span>{bullet}</span>
+              </div>
+              {images && images[idx] && (
+                <img
+                  src={images[idx]}
+                  alt=""
+                  className="ml-7 rounded-xl border border-white/10 max-h-60 w-auto object-cover"
+                  loading="lazy"
+                />
+              )}
             </div>
           ))}
         </div>
