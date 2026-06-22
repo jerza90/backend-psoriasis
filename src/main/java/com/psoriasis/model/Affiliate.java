@@ -30,6 +30,9 @@ public class Affiliate {
     @Column(name = "page_intro", columnDefinition = "TEXT")
     private String pageIntro;
 
+    @Column(name = "condition_label", columnDefinition = "TEXT")
+    private String conditionLabel;
+
     @Column(name = "story_title", columnDefinition = "TEXT")
     private String storyTitle;
 
@@ -113,6 +116,8 @@ public class Affiliate {
     public void setPageTitle(String pageTitle) { this.pageTitle = pageTitle; }
     public String getPageIntro() { return pageIntro; }
     public void setPageIntro(String pageIntro) { this.pageIntro = pageIntro; }
+    public String getConditionLabel() { return conditionLabel; }
+    public void setConditionLabel(String conditionLabel) { this.conditionLabel = conditionLabel; }
     public String getStoryTitle() { return storyTitle; }
     public void setStoryTitle(String storyTitle) { this.storyTitle = storyTitle; }
     public String getStorySummary() { return storySummary; }

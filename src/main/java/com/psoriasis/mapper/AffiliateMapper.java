@@ -22,6 +22,7 @@ public class AffiliateMapper {
         response.setBio(affiliate.getBio());
         response.setPageTitle(affiliate.getPageTitle());
         response.setPageIntro(affiliate.getPageIntro());
+        response.setConditionLabel(affiliate.getConditionLabel());
         response.setStoryTitle(affiliate.getStoryTitle());
         response.setStorySummary(affiliate.getStorySummary());
         response.setStoryBody(affiliate.getStoryBody());
@@ -55,6 +56,7 @@ public class AffiliateMapper {
         response.setBio(affiliate.getBio());
         response.setPageTitle(affiliate.getPageTitle());
         response.setPageIntro(affiliate.getPageIntro());
+        response.setConditionLabel(affiliate.getConditionLabel());
         response.setStoryTitle(affiliate.getStoryTitle());
         response.setStorySummary(affiliate.getStorySummary());
         response.setStoryBody(affiliate.getStoryBody());

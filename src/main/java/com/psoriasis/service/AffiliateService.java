@@ -44,7 +44,7 @@ public class AffiliateService {
         this.affiliateMapper = affiliateMapper;
     }
 
-    public AffiliateResponseDTO register(String name, String email, String bio, String socialLinks, String paymentInfo) {
+    public AffiliateResponseDTO register(String name, String email, String bio, String conditionLabel, String socialLinks, String paymentInfo) {
         if (affiliateRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already registered as affiliate");
         }
@@ -56,6 +56,7 @@ public class AffiliateService {
         affiliate.setEmail(email);
         affiliate.setReferralCode(referralCode);
         affiliate.setBio(bio);
+        affiliate.setConditionLabel((conditionLabel == null || conditionLabel.isBlank()) ? "Psoriasis fighter" : conditionLabel);
         affiliate.setSocialLinks(socialLinks);
         affiliate.setPaymentInfo(paymentInfo);
         affiliate.setCommissionRate(new BigDecimal("0.5000"));
@@ -93,6 +94,7 @@ public class AffiliateService {
         if (request.getBio() != null) affiliate.setBio(request.getBio());
         if (request.getPageTitle() != null) affiliate.setPageTitle(request.getPageTitle());
         if (request.getPageIntro() != null) affiliate.setPageIntro(request.getPageIntro());
+        if (request.getConditionLabel() != null) affiliate.setConditionLabel(request.getConditionLabel());
         if (request.getStoryTitle() != null) affiliate.setStoryTitle(request.getStoryTitle());
         if (request.getStorySummary() != null) affiliate.setStorySummary(request.getStorySummary());
         if (request.getStoryBody() != null) affiliate.setStoryBody(request.getStoryBody());

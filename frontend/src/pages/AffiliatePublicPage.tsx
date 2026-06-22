@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { ArrowLeft, BookOpen, ExternalLink, Heart, Lightbulb, Sparkles, Tag, Clock } from 'lucide-react';
+import { ArrowLeft, BookOpen, ExternalLink, Heart, Lightbulb, Sparkles, Tag, Clock, CalendarDays, Package, TrendingUp } from 'lucide-react';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import Eyebrow from '../components/Eyebrow';
 import { getPublicAffiliateProfile, type AffiliateProfile } from '../api/client';
+
+interface ProgressUpdate {
+  startDate: string;
+  endDate: string;
+  description: string;
+  images: string[];
+  products: string[];
+  tips: string;
+}
 
 export default function AffiliatePublicPage() {
   const { referralCode } = useParams();
@@ -43,8 +52,13 @@ export default function AffiliatePublicPage() {
 
   const tips = splitLines(profile.tipsText);
   const guide = splitLines(profile.guideText);
-  const progress = splitLines(profile.progressText);
-  const progressImages: string[] = JSON.parse(profile.progressImages || '[]');
+  let progressPosts: ProgressUpdate[] = [];
+  try {
+    const parsed = JSON.parse(profile.progressText || '[]');
+    progressPosts = Array.isArray(parsed) ? parsed : [];
+  } catch {
+    progressPosts = [];
+  }
 
   return (
     <div className="min-h-screen">
@@ -79,7 +93,7 @@ export default function AffiliatePublicPage() {
                 <div className="flex flex-wrap gap-2 mt-4">
                   <span className="inline-flex items-center gap-1.5 glass rounded-full px-3 py-1 text-xs font-semibold text-green">
                     <Heart size={12} />
-                    Affiliate story
+                    {profile.conditionLabel || 'Psoriasis fighter'}
                   </span>
                   <span className="inline-flex items-center gap-1.5 glass rounded-full px-3 py-1 text-xs font-semibold text-green">
                     <Tag size={12} />
@@ -94,7 +108,7 @@ export default function AffiliatePublicPage() {
 
       <section className="pb-12">
         <div className="container-main max-w-[980px] grid gap-6">
-          <SectionCard title={profile.storyTitle || 'My story'} body={profile.storyBody || profile.storySummary || profile.bio || ''} />
+          <SectionCard title={profile.storyTitle || 'My journey'} body={profile.storyBody || profile.storySummary || profile.bio || ''} />
           <SectionCard
             title={profile.guideTitle || 'Guide'}
             body={profile.guideText || 'Add your step-by-step guide here so readers can follow your method.'}
@@ -105,12 +119,7 @@ export default function AffiliatePublicPage() {
             body={profile.tipsText || 'Add quick tips here for your audience.'}
             bullets={tips}
           />
-          <SectionCard
-            title={profile.progressTitle || 'Progress'}
-            body={profile.progressText || 'Add progress updates here so people can see the journey over time.'}
-            bullets={progress}
-            images={progressImages}
-          />
+          <ProgressSection title={profile.progressTitle || 'Progress'} posts={progressPosts} />
           <SectionCard
             title={profile.blogTitle || 'Blog'}
             body={profile.blogExcerpt || 'Your blog teaser can live here and point to the full article or external page.'}
@@ -196,6 +205,76 @@ function SectionCard({
           {linkLabel || 'Open link'}
         </a>
       ) : null}
+    </div>
+  );
+}
+
+function ProgressSection({ title, posts }: { title: string; posts: ProgressUpdate[] }) {
+  const fmt = (d: string) => {
+    if (!d) return '';
+    if (d.length === 7) {
+      const [y, m] = d.split('-');
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${months[parseInt(m) - 1] || ''} ${y}`;
+    }
+    const [y, m, day] = d.split('-');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${day} ${months[parseInt(m) - 1] || ''} ${y}`;
+  };
+
+  return (
+    <div className="glass-card rounded-2xl p-6">
+      <div className="flex items-center gap-2 mb-4 text-xs uppercase tracking-widest text-muted">
+        <TrendingUp size={14} />
+        {title}
+      </div>
+      {posts.length === 0 ? (
+        <p className="text-muted leading-relaxed">No progress updates yet.</p>
+      ) : (
+        <div className="space-y-4">
+          {posts.map((post, idx) => {
+            const range = post.startDate
+              ? post.endDate
+                ? `${fmt(post.startDate)} → ${fmt(post.endDate)}`
+                : `${fmt(post.startDate)}`
+              : '';
+            return (
+              <div key={idx} className="rounded-xl bg-white/80 border border-gray-100 p-4 space-y-3">
+                {range && (
+                  <div className="flex items-center gap-2 text-xs text-muted">
+                    <CalendarDays size={14} className="shrink-0" />
+                    <span className="font-semibold">{range}</span>
+                  </div>
+                )}
+                <p className="text-sm text-muted leading-relaxed whitespace-pre-line">{post.description}</p>
+                {post.products.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {post.products.map((p, i) => (
+                      <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-medium text-green">
+                        <Package size={11} />
+                        {p}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {post.images.length > 0 && (
+                  <div className={`grid gap-2 ${post.images.length === 1 ? 'grid-cols-1' : post.images.length <= 3 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                    {post.images.map((url, i) => (
+                      <img key={i} src={url} alt="" className="rounded-xl border border-gray-200 w-full h-40 object-cover" loading="lazy" />
+                    ))}
+                  </div>
+                )}
+                {post.tips && (
+                  <div className="rounded-xl bg-amber-50 border border-amber-200 px-3.5 py-2.5 flex items-start gap-2">
+                    <Lightbulb size={14} className="text-amber shrink-0 mt-0.5" />
+                    <p className="text-xs text-muted leading-relaxed">{post.tips}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

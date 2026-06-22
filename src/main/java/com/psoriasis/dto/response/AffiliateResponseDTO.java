@@ -10,6 +10,7 @@ public class AffiliateResponseDTO {
     private String bio;
     private String pageTitle;
     private String pageIntro;
+    private String conditionLabel;
     private String storyTitle;
     private String storySummary;
     private String storyBody;
@@ -48,6 +49,8 @@ public class AffiliateResponseDTO {
     public void setPageTitle(String pageTitle) { this.pageTitle = pageTitle; }
     public String getPageIntro() { return pageIntro; }
     public void setPageIntro(String pageIntro) { this.pageIntro = pageIntro; }
+    public String getConditionLabel() { return conditionLabel; }
+    public void setConditionLabel(String conditionLabel) { this.conditionLabel = conditionLabel; }
     public String getStoryTitle() { return storyTitle; }
     public void setStoryTitle(String storyTitle) { this.storyTitle = storyTitle; }
     public String getStorySummary() { return storySummary; }

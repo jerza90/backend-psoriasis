@@ -4,7 +4,8 @@ This project now gives each affiliate:
 
 - A unique ebook referral link
 - Editable public profile details
-- Editable story details
+- A selectable journey label for the public badge
+- Editable journey/story details
 - Editable blog teaser/details
 - A public affiliate page with profile, tips, guide, and progress sections
 - Image upload for each progress update (via dashboard → progress section) — images displayed on public page
@@ -24,7 +25,7 @@ The backend still tracks the checkout referral internally, but the dashboard now
 Example in local dev:
 
 ```text
-http://localhost:5173/affiliate/AISHAAFF
+http://localhost:5173/affiliate/AISYAH01
 ```
 
 ## Editable Fields
@@ -34,6 +35,7 @@ The affiliate dashboard can update:
 - `name`
 - `avatarUrl`
 - `bio`
+- `conditionLabel`
 - `socialLinks`
 - `paymentInfo`
 - `storyTitle`
@@ -61,7 +63,7 @@ Each affiliate gets a page at:
 Example:
 
 ```text
-/affiliate/AISHAAFF
+/affiliate/AISYAH01
 ```
 
 ## Local Test Account
@@ -72,4 +74,13 @@ This account needs a matching `users` row because login checks `/api/auth/login`
 - Email: `aishaaffiliate@example.com`
 - Password: `AishaAffiliate123!`
 - Role: `affiliate`
-- Referral code: `AISHAAFF`
+- Referral code: `AISYAH01`
+- Journey label: `Psoriasis fighter`
+
+### Suggested journey labels
+
+- `Psoriasis fighter`
+- `Mom with eczema child`
+- `Eczema child`
+- `Nail psoriasis`
+- `Guttate psoriasis`
