@@ -97,7 +97,6 @@ export interface AffiliateProfile {
   bio?: string | null;
   pageTitle?: string | null;
   pageIntro?: string | null;
-  conditionLabel?: string | null;
   storyTitle?: string | null;
   storySummary?: string | null;
   storyBody?: string | null;
@@ -129,7 +128,6 @@ export interface AffiliateProfileUpdateInput {
   bio?: string;
   pageTitle?: string;
   pageIntro?: string;
-  conditionLabel?: string;
   storyTitle?: string;
   storySummary?: string;
   storyBody?: string;
@@ -259,6 +257,13 @@ export interface AffiliateConversionsResponse {
 
 export async function getAffiliateConversions(affiliateId: number): Promise<AffiliateConversionsResponse> {
   return request<AffiliateConversionsResponse>(`/affiliate/${affiliateId}/conversions`);
+}
+
+export async function registerAffiliate(name: string, email: string): Promise<AffiliateProfile> {
+  return request<AffiliateProfile>('/affiliate/register', {
+    method: 'POST',
+    body: JSON.stringify({ name, email }),
+  });
 }
 
 export async function uploadImage(file: File): Promise<string> {
