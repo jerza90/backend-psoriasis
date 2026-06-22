@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Mail, Key, User, Lock, Check, Send } from 'lucide-react';
-import { sendRegistrationOtp, verifyRegistration } from '../api/client';
+import { sendRegistrationOtp, verifyRegistration, registerAffiliate } from '../api/client';
 import { useAuth } from '../hooks/useAuth';
 import { AuthCard, AuthBanner, AuthField, OtpInput } from '../components/AuthCard';
 
@@ -19,6 +19,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
+  const [wantsAffiliate, setWantsAffiliate] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -44,15 +45,24 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const result = await verifyRegistration(email, otpCode, password, fullName, username || undefined);
+      let role = result.role;
+      if (wantsAffiliate) {
+        try {
+          await registerAffiliate(fullName, email);
+          role = 'affiliate';
+        } catch {
+          // affiliate registration failed silently — user can try again from dashboard
+        }
+      }
       const nextUser = {
         id: result.userId,
         email,
         fullName,
         username: username || email.split('@')[0],
-        role: result.role,
+        role,
       };
       setUser(nextUser);
-      navigate(nextUser.role === 'affiliate' ? '/affiliate/dashboard' : '/');
+      navigate(role === 'affiliate' ? '/affiliate/dashboard' : '/');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
@@ -108,6 +118,14 @@ export default function RegisterPage() {
               className="w-full pl-10 pr-4 py-3 rounded-xl glass-input text-sm outline-none transition-all"
             />
           </AuthField>
+
+          <label className="flex items-start gap-3 mt-2 cursor-pointer group">
+            <input type="checkbox" checked={wantsAffiliate} onChange={(e) => setWantsAffiliate(e.target.checked)}
+              className="mt-0.5 w-4 h-4 rounded border-white/20 bg-white/10 accent-green" />
+            <span className="text-sm text-muted group-hover:text-ink transition-colors">
+              Join the <strong className="text-green font-semibold">affiliate program</strong> — earn commissions by referring the ebook to others
+            </span>
+          </label>
 
           <button
             type="submit"
