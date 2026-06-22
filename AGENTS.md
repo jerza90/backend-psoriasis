@@ -4,8 +4,7 @@ Psoriasis ebook landing page + dual-product checkout (BM RM39 / EN $27 USD) with
 
 ## Branch Workflow
 
-- **Local dev / run requests**: `git checkout fix/local-dev-cors` (has CORS fix for `127.0.0.1`).
-  - If `master` has new commits ahead: `git rebase master` first.
+- **Local dev**: `fix/local-dev-cors` branch (has CORS fix for 127.0.0.1)
 - **Feature branches**: create from `master`
 - **PR to master**: only feature commits — no local-dev/CORS commits
 
