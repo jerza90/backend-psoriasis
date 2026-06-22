@@ -77,7 +77,7 @@ export const products: Product[] = [
     affiliateUrl: 'https://s.shopee.com.my/5q6059Ul9O',
     isHero: true,
     rating: 5,
-    imageUrl: '/products/Suntera_D3K2Plus_softgel.JPG',
+    imageUrl: '/products/Suntera_D3K2Plus_softgel.png',
     purchaseOptions: [
       {
         id: 'sachet',
@@ -87,7 +87,7 @@ export const products: Product[] = [
         packInfo: '30 sachets per box, about 2 boxes for a 30-day supply',
         supplyBadge: '30-day supply',
         note: 'Best for anyone who prefers a sachet format. Two sachets daily makes one box last about 15 days.',
-        imageUrl: '/products/Suntera_D3K2Plus_softgel.JPG',
+        imageUrl: '/products/Suntera_D3K2Plus_softgel.png',
         affiliateUrl: 'https://s.shopee.com.my/5q6059Ul9O',
       },
       {
@@ -98,13 +98,13 @@ export const products: Product[] = [
         packInfo: '60 softgels per bottle, about 2 bottles for a 30-day supply',
         supplyBadge: '30-day supply',
         note: 'Best for anyone who prefers a softgel format. Four softgels daily makes one bottle last about 15 days.',
-        imageUrl: '/products/Suntera_D3K2Plus_softgel.png',
+        imageUrl: '/products/Suntera_D3K2Plus_softgel.JPG',
         affiliateUrl: 'https://s.shopee.com.my/5fmZtDJ0f8',
       },
     ],
     images: [
-      '/products/Suntera_D3K2Plus_softgel.JPG',
       '/products/Suntera_D3K2Plus_softgel.png',
+      '/products/Suntera_D3K2Plus_softgel.JPG',
     ],
     testimonialImage: '/e-book-landing-pages/placeholder-testimonial.svg',
     testimonialText: 'After adding D3K2 with Omega to my daily routine, my flare-ups reduced significantly within weeks. My skin feels healthier and I no longer rely on topical creams as much.',

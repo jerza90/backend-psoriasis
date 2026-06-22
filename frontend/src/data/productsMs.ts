@@ -40,7 +40,7 @@ export const productsMs: Product[] = [
     affiliateUrl: 'https://s.shopee.com.my/5q6059Ul9O',
     isHero: true,
     rating: 5,
-    imageUrl: '/products/Suntera_D3K2Plus_softgel.JPG',
+    imageUrl: '/products/Suntera_D3K2Plus_softgel.png',
     purchaseOptions: [
       {
         id: 'sachet',
@@ -50,7 +50,7 @@ export const productsMs: Product[] = [
         packInfo: '30 sachet setiap kotak, kira-kira 2 kotak untuk bekalan 30 hari',
         supplyBadge: 'Bekalan 30 hari',
         note: 'Sesuai untuk yang suka format sachet. Dua sachet sehari menjadikan satu kotak tahan kira-kira 15 hari.',
-        imageUrl: '/products/Suntera_D3K2Plus_softgel.JPG',
+        imageUrl: '/products/Suntera_D3K2Plus_softgel.png',
         affiliateUrl: 'https://s.shopee.com.my/5q6059Ul9O',
       },
       {
@@ -61,13 +61,13 @@ export const productsMs: Product[] = [
         packInfo: '60 softgel setiap botol, kira-kira 2 botol untuk bekalan 30 hari',
         supplyBadge: 'Bekalan 30 hari',
         note: 'Sesuai untuk yang suka format softgel. Empat softgel sehari menjadikan satu botol tahan kira-kira 15 hari.',
-        imageUrl: '/products/Suntera_D3K2Plus_softgel.png',
+        imageUrl: '/products/Suntera_D3K2Plus_softgel.JPG',
         affiliateUrl: 'https://s.shopee.com.my/5fmZtDJ0f8',
       },
     ],
     images: [
-      '/products/Suntera_D3K2Plus_softgel.JPG',
       '/products/Suntera_D3K2Plus_softgel.png',
+      '/products/Suntera_D3K2Plus_softgel.JPG',
     ],
     testimonialImage: '/e-book-landing-pages/placeholder-testimonial.svg',
     testimonialText: 'Selepas menambah D3K2 dengan Omega dalam rutin harian saya, suar saya berkurang dengan ketara dalam beberapa minggu. Kulit saya berasa lebih sihat dan saya tidak lagi bergantung pada krim topikal seperti dahulu.',
