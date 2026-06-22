@@ -2,6 +2,19 @@
 
 Psoriasis ebook landing page + dual-product checkout (BM RM39 / EN $27 USD) with Stripe.
 
+## Branch Workflow
+
+- **Local dev**: `fix/local-dev-cors` branch (has CORS fix for 127.0.0.1)
+- **Feature branches**: create from `master`
+- **PR to master**: only feature commits — no local-dev/CORS commits
+
+### Removing local-dev commits from a PR
+If a branch accidentally includes local-dev commits (CORS fix, AGENTS.md, etc.):
+1. `git checkout master && git pull`
+2. `git checkout -b clean/<branch-name>` (fresh from master)
+3. `git cherry-pick <sha>` each feature commit (skip local-dev commits)
+4. Push clean branch, create new PR, close old one
+
 ## Java
 
 - Project requires **Java 17** (Spring Boot 3.2.0)

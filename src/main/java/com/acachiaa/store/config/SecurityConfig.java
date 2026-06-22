@@ -17,7 +17,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers(
-                    "/api/webhook/stripe",
+                    "/api/webhooks/stripe",
                     "/api/auth/**",
                     "/api/debug/**",
                     "/api/affiliate/**",
@@ -28,7 +28,8 @@ public class SecurityConfig {
                     "/api/payment/**",
                     "/api/ebook/**",
                     "/api/download",
-                    "/api/download/**"
+                    "/api/download/**",
+                    "/api/upload/**"
                 )
             )
             .sessionManagement(session -> session
@@ -41,11 +42,13 @@ public class SecurityConfig {
                 .requestMatchers("/api/affiliate/**").permitAll()
                 .requestMatchers("/api/testimonials/**").permitAll()
                 .requestMatchers("/api/admin/testimonials/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/webhook/stripe").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/webhooks/stripe").permitAll()
                 .requestMatchers("/api/ebook/**").permitAll()
                 .requestMatchers("/api/download").permitAll()
                 .requestMatchers("/api/download/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/upload/**").permitAll()
+                .requestMatchers("/uploads/**").permitAll()
                 .anyRequest().authenticated()
             );
 

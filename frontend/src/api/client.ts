@@ -110,6 +110,7 @@ export interface AffiliateProfile {
   guideText?: string | null;
   progressTitle?: string | null;
   progressText?: string | null;
+  progressImages?: string | null;
   avatarUrl?: string | null;
   socialLinks?: string | null;
   paymentInfo?: string | null;
@@ -142,6 +143,7 @@ export interface AffiliateProfileUpdateInput {
   guideText?: string;
   progressTitle?: string;
   progressText?: string;
+  progressImages?: string;
 }
 
 export interface AdminTestimonialProgressInput {
@@ -238,4 +240,18 @@ export async function updateAffiliateProfile(
 
 export async function getPublicAffiliateProfile(code: string): Promise<AffiliateProfile> {
   return request<AffiliateProfile>(`/affiliate/public?code=${encodeURIComponent(code)}`);
+}
+
+export async function uploadImage(file: File): Promise<string> {
+  const form = new FormData();
+  form.append('file', file);
+  const res = await fetch(`${API_BASE}/api/upload`, {
+    method: 'POST',
+    body: form,
+  });
+  if (!res.ok) {
+    throw new Error('Upload failed');
+  }
+  const data = await res.json();
+  return data.url;
 }

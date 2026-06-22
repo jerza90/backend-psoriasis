@@ -19,6 +19,7 @@ public class AffiliatePublicResponseDTO {
     private String guideText;
     private String progressTitle;
     private String progressText;
+    private String progressImages;
     private String avatarUrl;
     private String socialLinks;
     private String referralCode;
@@ -60,6 +61,8 @@ public class AffiliatePublicResponseDTO {
     public void setProgressTitle(String progressTitle) { this.progressTitle = progressTitle; }
     public String getProgressText() { return progressText; }
     public void setProgressText(String progressText) { this.progressText = progressText; }
+    public String getProgressImages() { return progressImages; }
+    public void setProgressImages(String progressImages) { this.progressImages = progressImages; }
     public String getAvatarUrl() { return avatarUrl; }
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
     public String getSocialLinks() { return socialLinks; }

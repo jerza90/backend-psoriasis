@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { ChangeEvent, FormEvent, ComponentType } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { Copy, ExternalLink, PencilLine, ShieldCheck, Sparkles, Users, Coins, Save } from 'lucide-react';
+import { Copy, ExternalLink, PencilLine, ShieldCheck, Sparkles, Users, Coins, Save, Plus, Trash2, Upload } from 'lucide-react';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import Eyebrow from '../components/Eyebrow';
@@ -9,6 +9,7 @@ import { useAuth } from '../hooks/useAuth';
 import {
   getAffiliateProfile,
   updateAffiliateProfile,
+  uploadImage,
   type AffiliateProfile,
   type AffiliateProfileUpdateInput,
 } from '../api/client';
@@ -34,6 +35,7 @@ const EMPTY_DRAFT: AffiliateProfileUpdateInput = {
   guideText: '',
   progressTitle: '',
   progressText: '',
+  progressImages: '[]',
 };
 
 export default function AffiliateDashboardPage() {
@@ -45,6 +47,7 @@ export default function AffiliateDashboardPage() {
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [progressItems, setProgressItems] = useState<{ text: string; imageUrl: string }[]>([]);
 
   useEffect(() => {
     if (!user?.email || user.role !== 'affiliate') {
@@ -76,7 +79,11 @@ export default function AffiliateDashboardPage() {
           guideText: data.guideText || '',
           progressTitle: data.progressTitle || '',
           progressText: data.progressText || '',
+          progressImages: data.progressImages || '[]',
         });
+        const lines = (data.progressText || '').split('\n').map(l => l.trim()).filter(Boolean);
+        const images: string[] = JSON.parse(data.progressImages || '[]');
+        setProgressItems(lines.map((text, i) => ({ text, imageUrl: images[i] || '' })));
       })
       .catch(() => setProfile(null))
       .finally(() => setLoading(false));
@@ -106,12 +113,22 @@ export default function AffiliateDashboardPage() {
     event.preventDefault();
     if (!user.email) return;
 
+    const textLines = progressItems.map(p => p.text);
+    const imageUrls = progressItems.map(p => p.imageUrl);
+
     setSaving(true);
     setError(null);
     setMessage(null);
     try {
-      const updated = await updateAffiliateProfile(user.email, draft);
+      const updated = await updateAffiliateProfile(user.email, {
+        ...draft,
+        progressText: textLines.join('\n'),
+        progressImages: JSON.stringify(imageUrls),
+      });
       setProfile(updated);
+      const lines = (updated.progressText || '').split('\n').map(l => l.trim()).filter(Boolean);
+      const images: string[] = JSON.parse(updated.progressImages || '[]');
+      setProgressItems(lines.map((text, i) => ({ text, imageUrl: images[i] || '' })));
       setMessage('Profile saved successfully.');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save profile.');
@@ -186,7 +203,42 @@ export default function AffiliateDashboardPage() {
                   <TextArea label="Guide text" value={draft.guideText || ''} onChange={handleChange('guideText')} rows={6} />
 
                   <Field label="Progress title" value={draft.progressTitle || ''} onChange={handleChange('progressTitle')} />
-                  <TextArea label="Progress updates, one line per update" value={draft.progressText || ''} onChange={handleChange('progressText')} rows={5} />
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-widest text-muted">Progress updates</span>
+                      <button
+                        type="button"
+                        onClick={() => setProgressItems(p => [...p, { text: '', imageUrl: '' }])}
+                        className="text-xs text-green font-semibold flex items-center gap-1 hover:underline"
+                      >
+                        <Plus size={14} />
+                        Add update
+                      </button>
+                    </div>
+                    {progressItems.map((item, idx) => (
+                      <ProgressItem
+                        key={idx}
+                        text={item.text}
+                        imageUrl={item.imageUrl}
+                        onTextChange={(val) => {
+                          setProgressItems(p => p.map((pi, i) => i === idx ? { ...pi, text: val } : pi))
+                        }}
+                        onImageUpload={async (file) => {
+                          try {
+                            const url = await uploadImage(file);
+                            setProgressItems(p => p.map((pi, i) => i === idx ? { ...pi, imageUrl: url } : pi))
+                          } catch {
+                            setError('Image upload failed.');
+                          }
+                        }}
+                        onRemove={() => setProgressItems(p => p.filter((_, i) => i !== idx))}
+                        onImageRemove={() => setProgressItems(p => p.map((pi, i) => i === idx ? { ...pi, imageUrl: '' } : pi))}
+                      />
+                    ))}
+                    {progressItems.length === 0 && (
+                      <p className="text-xs text-muted">No progress updates yet. Click "Add update" to add one.</p>
+                    )}
+                  </div>
 
                   <TextArea label="Blog excerpt" value={draft.blogExcerpt || ''} onChange={handleChange('blogExcerpt')} rows={4} />
                   <Field label="Blog URL" value={draft.blogUrl || ''} onChange={handleChange('blogUrl')} placeholder="https://..." />
@@ -336,6 +388,78 @@ function PreviewBlock({ title, body }: { title: string; body: string }) {
 function getShareLink(referralCode?: string | null) {
   if (!referralCode || typeof window === 'undefined') return '';
   return `${window.location.origin}/affiliate/${referralCode}`;
+}
+
+function ProgressItem({
+  text,
+  imageUrl,
+  onTextChange,
+  onImageUpload,
+  onImageRemove,
+  onRemove,
+}: {
+  text: string;
+  imageUrl: string;
+  onTextChange: (val: string) => void;
+  onImageUpload: (file: File) => Promise<void>;
+  onImageRemove: () => void;
+  onRemove: () => void;
+}) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
+  return (
+    <div className="rounded-xl bg-white/50 border border-white/10 p-4 space-y-3">
+      <div className="flex items-start gap-2">
+        <input
+          value={text}
+          onChange={(e) => onTextChange(e.target.value)}
+          placeholder="Update description..."
+          className="flex-1 rounded-lg border border-white/10 bg-white/60 px-3 py-2 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40"
+        />
+        <button type="button" onClick={onRemove} className="shrink-0 p-2 text-red-400 hover:text-red-600">
+          <Trash2 size={16} />
+        </button>
+      </div>
+      <div className="flex items-center gap-3">
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            setUploading(true);
+            await onImageUpload(file);
+            setUploading(false);
+            if (fileRef.current) fileRef.current.value = '';
+          }}
+        />
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
+          disabled={uploading}
+          className="text-xs flex items-center gap-1 text-green font-semibold hover:underline"
+        >
+          <Upload size={14} />
+          {uploading ? 'Uploading...' : imageUrl ? 'Change image' : 'Add image'}
+        </button>
+        {imageUrl && (
+          <>
+            <img src={imageUrl} alt="" className="w-14 h-14 rounded-lg object-cover border border-white/20" />
+            <button
+              type="button"
+              onClick={onImageRemove}
+              className="text-xs text-red-400 hover:text-red-600"
+            >
+              Remove
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
 }
 
 function InfoCard({
