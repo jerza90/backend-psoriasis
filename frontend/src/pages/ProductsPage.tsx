@@ -147,12 +147,13 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
                 ))}
               </ul>
             </div>
-            <div className="glass rounded-xl p-4">
-              <div className="flex items-center gap-1.5 font-bold text-xs text-rose uppercase tracking-widest mb-2">
+            <details className="group glass rounded-xl p-4">
+              <summary className="flex items-center gap-1.5 font-bold text-xs text-rose uppercase tracking-widest cursor-pointer list-none">
                 <AlertTriangle size={14} />
                 {t('products.modal.avoidIf')}
-              </div>
-              <ul className="space-y-1.5">
+                <span className="ml-auto text-muted transition-transform group-open:rotate-180">▾</span>
+              </summary>
+              <ul className="space-y-1.5 mt-3">
                 {product.notSuitableFor.map((n) => (
                   <li key={n} className="flex items-start gap-1.5 text-xs text-muted">
                     <span className="w-1 h-1 rounded-full bg-rose mt-1.5 shrink-0" />
@@ -160,13 +161,14 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="glass rounded-xl p-4">
-              <div className="flex items-center gap-1.5 font-bold text-xs text-gold uppercase tracking-widest mb-2">
+            </details>
+            <details className="group glass rounded-xl p-4">
+              <summary className="flex items-center gap-1.5 font-bold text-xs text-gold uppercase tracking-widest cursor-pointer list-none">
                 <AlertTriangle size={14} />
                 {t('products.modal.safety')}
-              </div>
-              <ul className="space-y-1.5">
+                <span className="ml-auto text-muted transition-transform group-open:rotate-180">▾</span>
+              </summary>
+              <ul className="space-y-1.5 mt-3">
                 {product.safety.map((s) => (
                   <li key={s} className="flex items-start gap-1.5 text-xs text-muted">
                     <span className="w-1 h-1 rounded-full bg-gold mt-1.5 shrink-0" />
@@ -174,7 +176,7 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
                   </li>
                 ))}
               </ul>
-            </div>
+            </details>
           </div>
 
           <a
@@ -191,9 +193,128 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
   );
 }
 
+function BioSeratSpotlight({ product }: { product: Product }) {
+  const { t } = useTranslation();
+
+  return (
+    <div className="relative overflow-hidden rounded-2xl mb-12">
+      <div className="absolute inset-0 gradient-green opacity-10" />
+      <div className="absolute top-[-20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-white/5 blur-3xl" />
+      <div className="absolute bottom-[-15%] left-[-10%] w-[35%] h-[35%] rounded-full bg-leaf/10 blur-3xl" />
+
+      <div className="relative glass-strong rounded-2xl p-7 md:p-9">
+        <div className="flex flex-wrap items-center gap-2 mb-1">
+          <span className="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-bold uppercase tracking-widest">
+            {t('products.secondaryProduct')}
+          </span>
+          <span className="px-3 py-1 rounded-full gradient-green text-xs font-bold text-white">
+            {t('products.featured')}
+          </span>
+          <EvidenceBadge level={product.evidenceLevel} />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-8 items-start">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-black leading-[1.05] mt-3 mb-1">{product.name}</h2>
+            <p className="text-muted text-sm mb-1">{product.brand}</p>
+
+            <div className="flex items-center gap-1 mb-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  size={14}
+                  className={i < product.rating ? 'text-gold fill-gold' : 'text-muted/30'}
+                />
+              ))}
+            </div>
+
+            <p className="text-sm text-muted leading-relaxed mb-4">{product.shortDesc}</p>
+
+            <div className="glass rounded-xl p-5 mb-4">
+              <h3 className="font-bold text-sm text-green mb-2 flex items-center gap-1.5">
+                <Shield size={16} />
+                {t('products.bioSerat.whyHelps')}
+              </h3>
+              <p className="text-sm text-muted leading-relaxed">
+                {product.whyItHelps}
+              </p>
+            </div>
+
+            <div className="glass rounded-xl p-5 mb-4">
+              <h3 className="font-bold text-sm text-green mb-2 flex items-center gap-1.5">
+                <Info size={16} />
+                {t('products.bioSerat.howWorks')}
+              </h3>
+              <p className="text-sm text-muted leading-relaxed">
+                {product.howItWorks}
+              </p>
+            </div>
+
+            <div className="glass rounded-xl p-4 mb-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="font-bold text-xs text-muted uppercase tracking-widest">
+                  {t('products.modal.dosage')}
+                </span>
+              </div>
+              <p className="text-sm text-muted">{product.dosage}</p>
+            </div>
+
+            <div className="glass rounded-xl p-4 mb-4">
+              <span className="font-bold text-xs text-muted uppercase tracking-widest block mb-2">{t('products.modal.keyIngredients')}</span>
+              <ul className="space-y-1">
+                {product.keyIngredients.map((ing) => (
+                  <li key={ing} className="flex items-start gap-2 text-sm text-muted">
+                    <span className="w-1 h-1 rounded-full bg-green mt-2 shrink-0" />
+                    {ing}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <a
+              href={product.affiliateUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="button-base button-primary gap-2 shadow-lg shadow-green/20"
+            >
+              <ShoppingCart size={18} />
+              {t('products.bioSerat.cta')}
+              <ExternalLink size={16} />
+            </a>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex justify-center">
+              <ProductImage name={product.name} category={product.category} imageUrl={product.imageUrl} size="xxl" />
+            </div>
+
+            <div className="glass rounded-xl p-5">
+              <div className="flex items-center gap-1.5 font-bold text-xs text-green uppercase tracking-widest mb-3">
+                <Shield size={14} />
+                {t('products.modal.suitable')}
+              </div>
+              <ul className="space-y-2">
+                {product.suitableFor.map((s) => (
+                  <li key={s} className="flex items-start gap-2 text-sm text-muted">
+                    <span className="w-5 h-5 rounded-full bg-green/20 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green" />
+                    </span>
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ProductsPage() {
   const { t } = useTranslation();
   const products = useProducts();
+  const bioSerat = products.find((p) => p.id === 'probiotic');
   const categories = [...new Set(products.map((p) => p.category))];
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -226,10 +347,12 @@ export default function ProductsPage() {
           <div className="mb-12 animate-fade-up">
             <h2 className="font-bold text-xs text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
               <Star size={14} />
-              {t('products.featured')}
+              {t('products.primaryProduct')}
             </h2>
             <HeroProduct />
           </div>
+
+          {bioSerat && <BioSeratSpotlight product={bioSerat} />}
 
           {/* Category filter */}
           <div className="flex flex-wrap gap-2 mb-6 justify-center animate-fade-up">

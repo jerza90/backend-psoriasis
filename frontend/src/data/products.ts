@@ -22,6 +22,19 @@ export interface Product {
   testimonialImage?: string;
   testimonialText?: string;
   testimonialAuthor?: string;
+  purchaseOptions?: PurchaseOption[];
+}
+
+export interface PurchaseOption {
+  id: string;
+  label: string;
+  subtitle: string;
+  dosage: string;
+  packInfo: string;
+  supplyBadge?: string;
+  note: string;
+  imageUrl?: string;
+  affiliateUrl?: string;
 }
 
 export const products: Product[] = [
@@ -41,7 +54,7 @@ export const products: Product[] = [
     notSuitableFor: ['Those with sarcoidosis', 'Diagnosed hypercalcemia', 'Without checking levels if on high dose'],
     evidenceLevel: 'Strong',
     evidenceNote: 'Multiple clinical trials show oral vitamin D supplementation improves psoriasis severity scores (PASI). Topical vitamin D analogues are first-line prescription treatment.',
-    affiliateUrl: '#',
+    affiliateUrl: 'https://shopee.com.my/search?keyword=Dnd%20SunTerra%20D3K2%20Omega%203%2C6%2C7%2C9',
     isHero: false,
     rating: 5,
   },
@@ -50,25 +63,48 @@ export const products: Product[] = [
     name: 'Dnd SunTerra D3K2 + Omega 3,6,7,9',
     brand: 'Dnd SunTerra',
     category: 'Essential Nutrients',
-    shortDesc: 'The ultimate all-in-one essential nutrient formula — combining vitamin D3+K2 with full-spectrum Omega 3,6,7,9 for comprehensive psoriasis and skin health support.',
-    whyItHelps: 'This is a complete foundational nutrient complex. Vitamin D3+K2 regulates skin cell turnover and immune response, while Omega 3,6,7,9 provide broad-spectrum anti-inflammatory support, skin barrier reinforcement, and cardiovascular protection. Together they address both the immune dysregulation and systemic inflammation driving psoriasis.',
-    howItWorks: 'D3 binds to vitamin D receptors on immune and skin cells, reducing inflammatory cytokines and normalising keratinocyte production. K2 directs calcium away from soft tissues. EPA and DHA (Omega-3) integrate into cell membranes and produce resolvins that actively resolve inflammation. Omega-7 (palmitoleic acid) supports skin moisture and mucous membrane health. Omega-9 (oleic acid) enhances absorption of fat-soluble vitamins.',
+    shortDesc: 'A flexible D3K2 + Omega 3,6,7,9 formula available in sachet and softgel formats so users can choose the version they prefer for daily skin and immune support.',
+    whyItHelps: 'This oil-based formula combines vitamin D3, K2, and omega support in one daily routine. D3 and K2 help support skin cell turnover and immune balance, while the omega blend helps support skin barrier function and inflammation control. The sachet and softgel options deliver the same core benefits in different formats.',
+    howItWorks: 'D3 binds to vitamin D receptors on immune and skin cells, supporting normal keratinocyte production and immune regulation. K2 helps direct calcium away from soft tissues. The omega blend supports cell membranes, skin comfort, and overall recovery support. Both package styles are designed to be taken after meals for better tolerance and absorption.',
     keyIngredients: ['Vitamin D3 (cholecalciferol) 2000 IU', 'Vitamin K2 (menaquinone-7) 100 mcg', 'Omega-3 (EPA 500mg / DHA 250mg)', 'Omega-7 (palmitoleic acid) 100 mg', 'Omega-9 (oleic acid) 200 mg'],
-    dosage: '2 softgels daily with a meal containing fat',
-    bestTime: 'With lunch or dinner (fat improves absorption of D3 and omegas)',
-    safety: ['Do not exceed 4000 IU vitamin D daily without blood testing', 'K2 contraindicated if on blood thinners like warfarin', 'Omegas have mild blood-thinning effect — consult doctor if on anticoagulants', 'Store in cool, dry place'],
-    suitableFor: ['Anyone seeking comprehensive psoriasis nutrition support', 'Those wanting to simplify their supplement routine', 'People with both vitamin D deficiency and low omega-3 intake', 'Those with dry or compromised skin barriers'],
-    notSuitableFor: ['Those with sarcoidosis or hypercalcemia', 'Without checking vitamin D levels if on high-dose D', 'Those with fish/shellfish allergy (consider plant-based alternatives)'],
+    dosage: 'Choose a format below: sachet or softgel',
+    bestTime: 'After meals, ideally lunch or dinner',
+    safety: ['Do not exceed the recommended daily amount on the package', 'Use caution if you are on blood thinners or have a bleeding disorder', 'Store in a cool, dry place away from direct heat', 'Check the ingredient list if you have known sensitivities'],
+    suitableFor: ['Anyone seeking comprehensive psoriasis nutrition support', 'Those who prefer either sachet or softgel format', 'People who want one daily oil-based routine after meals', 'Those with dry or compromised skin barriers'],
+    notSuitableFor: ['Those with known sensitivity to any listed ingredients', 'Anyone who cannot take supplement oils after meals', 'Without clinician advice if you are on blood thinners'],
     evidenceLevel: 'Strong',
-    evidenceNote: 'Vitamin D supplementation for psoriasis is supported by multiple clinical trials showing PASI improvement. Omega-3 meta-analyses demonstrate reduced inflammation and severity scores. The combination provides synergistic benefits not achievable with either alone.',
-    affiliateUrl: '#',
+    evidenceNote: 'Vitamin D supplementation for psoriasis is supported by multiple clinical trials showing PASI improvement. Omega-3 meta-analyses demonstrate reduced inflammation and severity scores. The combination provides synergistic benefits not achievable with either alone, and both package formats deliver the same nutrient base.',
+    affiliateUrl: 'https://s.shopee.com.my/5q6059Ul9O',
     isHero: true,
     rating: 5,
-    imageUrl: '/e-book-landing-pages/Dnd SunTerra Sachet.png',
+    imageUrl: '/products/Suntera_D3K2Plus_softgel.png',
+    purchaseOptions: [
+      {
+        id: 'sachet',
+        label: 'Sachet Version',
+        subtitle: 'Liquid oil in olive oil base',
+        dosage: 'Take 2 sachets daily after meals',
+        packInfo: '30 sachets per box, about 2 boxes for a 30-day supply',
+        supplyBadge: '30-day supply',
+        note: 'Best for anyone who prefers a sachet format. Two sachets daily makes one box last about 15 days.',
+        imageUrl: '/products/Suntera_D3K2Plus_softgel.png',
+        affiliateUrl: 'https://s.shopee.com.my/5q6059Ul9O',
+      },
+      {
+        id: 'softgel',
+        label: 'Softgel Version',
+        subtitle: 'Oil-based softgel capsules',
+        dosage: 'Take 4 softgels daily after meals',
+        packInfo: '60 softgels per bottle, about 2 bottles for a 30-day supply',
+        supplyBadge: '30-day supply',
+        note: 'Best for anyone who prefers a softgel format. Four softgels daily makes one bottle last about 15 days.',
+        imageUrl: '/products/Suntera_D3K2Plus_softgel.JPG',
+        affiliateUrl: 'https://s.shopee.com.my/5fmZtDJ0f8',
+      },
+    ],
     images: [
-      '/e-book-landing-pages/Dnd SunTerra Sachet.png',
-      '/e-book-landing-pages/placeholder-product-2.svg',
-      '/e-book-landing-pages/placeholder-product-3.svg',
+      '/products/Suntera_D3K2Plus_softgel.png',
+      '/products/Suntera_D3K2Plus_softgel.JPG',
     ],
     testimonialImage: '/e-book-landing-pages/placeholder-testimonial.svg',
     testimonialText: 'After adding D3K2 with Omega to my daily routine, my flare-ups reduced significantly within weeks. My skin feels healthier and I no longer rely on topical creams as much.',
@@ -136,28 +172,34 @@ export const products: Product[] = [
   },
   {
     id: 'probiotic',
-    name: 'Probiotic (Multi-Strain)',
-    brand: 'Jarrow Formulas',
+    name: 'DND BioSerat Probiotics & Prebiotics, Detox',
+    brand: 'DND',
     category: 'Gut-Skin Axis',
-    shortDesc: 'The gut-skin connection is real. Balanced gut microbiome reduces systemic inflammation.',
-    whyItHelps: 'The gut-skin axis is well-established. Psoriasis is linked with gut dysbiosis (imbalanced gut bacteria), leaky gut, and intestinal inflammation. A diverse probiotic helps restore healthy gut flora, reduces intestinal permeability, and lowers the inflammatory load reaching the skin.',
-    howItWorks: 'Probiotics support the gut barrier, reducing LPS (lipopolysaccharide) translocation that triggers systemic inflammation. Specific strains like Lactobacillus and Bifidobacterium produce short-chain fatty acids that regulate immune responses, including those involved in psoriasis.',
+    shortDesc: 'A sachet drink designed to support constipation, gastritis, digestion, and gut balance while helping restore a healthier microbiome.',
+    whyItHelps: 'DND BioSerat combines probiotic and prebiotic support with antioxidant and anti-inflammatory benefits. It is positioned as an important daily gut-support product to help support digestion, ease constipation, and strengthen gut comfort, which matters because gut health and skin inflammation are closely linked.',
+    howItWorks: 'The formula supports the gut environment, helps maintain a healthier digestive barrier, and provides a prebiotic-style fiber drink that can be taken before meals. Taking it before eating may help prepare the digestive system and support more regular bowel habits.',
     keyIngredients: [
-      'Lactobacillus acidophilus',
-      'Bifidobacterium lactis',
-      'Lactobacillus plantarum',
-      'Saccharomyces boulardii',
+      '7 Important probiotic strain blend (LGG, LA5, LS-33, LPC-37, BB-02, BL-420, BB536)',
+      'Soluble fiber blend (corn fiber, psyllium husk, acacia gum)',
+      'Prebiotic FOS',
+      'Digestive support blend (aloe vera, oat fiber, apple fiber)',
+      'Biotin + vitamin B and C support',
     ],
-    dosage: '1 capsule daily (25 billion CFU)',
-    bestTime: 'On empty stomach, 30 min before breakfast',
-    safety: ['Start with lower CFU if new to probiotics', 'May cause temporary bloating/gas', 'Space 2 hours apart from antibiotics'],
-    suitableFor: ['Those with digestive issues alongside psoriasis', 'People after antibiotic use', 'Those wanting immune support'],
-    notSuitableFor: ['Immunocompromised without checking with doctor', 'Those with acute pancreatitis'],
-    evidenceLevel: 'Moderate',
-    evidenceNote: 'Multiple studies show altered gut microbiome in psoriasis patients. Probiotic supplementation improves inflammatory markers and some studies show modest improvement in psoriasis severity.',
-    affiliateUrl: '#',
-    isHero: false,
+    dosage: 'Take 1-2 sachets before meals daily',
+    bestTime: 'Before meals',
+    safety: ['Start with 1 sachet if you are new to it', 'Mix only with room-temperature water', 'May cause temporary bloating as your gut adjusts'],
+    suitableFor: ['Those with constipation or digestive discomfort', 'People wanting gut support before meals', 'Those looking for a digestive wellness routine'],
+    notSuitableFor: ['Those who need medical advice for severe digestive symptoms', 'Anyone with known sensitivity to the ingredients'],
+    evidenceLevel: 'Strong',
+    evidenceNote: 'Gut health is closely linked with inflammation and digestion. This product is positioned as an important daily gut-support product for constipation, gastritis comfort, and microbiome balance, with additional probiotic and antioxidant support.',
+    affiliateUrl: 'https://s.shopee.com.my/18DAgiByO',
+    isHero: true,
     rating: 4,
+    imageUrl: '/products/DND_BioSerat_Probiotic.JPG',
+    images: [
+      '/products/DND_BioSerat_Probiotic.JPG',
+      '/products/DND_BioSerat_Probiotic_supporting.JPG',
+    ],
   },
   {
     id: 'magnesium-glycinate',

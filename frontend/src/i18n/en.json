@@ -388,6 +388,9 @@
       "moderate": "Moderate",
       "emerging": "Emerging"
     },
+    "chooseFormat": "Choose your format",
+    "selected": "Selected",
+    "buyVersion": "Buy this version",
     "whyHelps": "Why this helps for psoriasis",
     "howWorks": "How it works",
     "dosage": "Dosage",
@@ -420,6 +423,8 @@
     "subtitle": "Education-first supplement suggestions for psoriasis support. Each product includes why it helps, how it works, dosage, and safety — so you decide with clarity.",
 
     "featured": "Featured product",
+    "primaryProduct": "1st product",
+    "secondaryProduct": "2nd product",
     "filterAll": "All",
     "empty": "No products in this category yet.",
     "whyForPsoriasis": "Why for psoriasis:",
@@ -437,6 +442,11 @@
       "avoidIf": "Avoid if",
       "safety": "Safety",
       "cta": "Check price on iHerb"
+    },
+    "bioSerat": {
+      "whyHelps": "Why this helps for psoriasis",
+      "howWorks": "How it works",
+      "cta": "Buy BioSerat"
     },
     "disclaimer": {
       "title": "Important",
