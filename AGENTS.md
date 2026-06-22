@@ -2,6 +2,11 @@
 
 Psoriasis ebook landing page + dual-product checkout (BM RM39 / EN $27 USD) with Stripe.
 
+## Branching
+
+- **Local dev / run requests**: first `git checkout fix/local-dev-cors` (has CORS fix for `127.0.0.1`).
+- **Committing code changes**: always push to `master` branch (not feature branches) — merge `fix/local-dev-cors` changes into `master` if needed.
+
 ## Java
 
 - Project requires **Java 17** (Spring Boot 3.2.0)
