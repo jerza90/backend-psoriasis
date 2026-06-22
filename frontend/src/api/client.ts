@@ -242,6 +242,30 @@ export async function getPublicAffiliateProfile(code: string): Promise<Affiliate
   return request<AffiliateProfile>(`/affiliate/public?code=${encodeURIComponent(code)}`);
 }
 
+export interface AffiliateConversion {
+  id: number;
+  orderAmount: string;
+  commissionAmount: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface AffiliateConversionsResponse {
+  count: number;
+  conversions: AffiliateConversion[];
+}
+
+export async function getAffiliateConversions(affiliateId: number): Promise<AffiliateConversionsResponse> {
+  return request<AffiliateConversionsResponse>(`/affiliate/${affiliateId}/conversions`);
+}
+
+export async function registerAffiliate(name: string, email: string): Promise<AffiliateProfile> {
+  return request<AffiliateProfile>('/affiliate/register', {
+    method: 'POST',
+    body: JSON.stringify({ name, email }),
+  });
+}
+
 export async function uploadImage(file: File): Promise<string> {
   const form = new FormData();
   form.append('file', file);
