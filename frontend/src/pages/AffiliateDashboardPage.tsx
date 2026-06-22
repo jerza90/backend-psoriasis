@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import type { ChangeEvent } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Copy, ExternalLink, LayoutDashboard, User, BookOpen, TrendingUp, Eye, Save, Plus, Trash2, Upload, Loader2, CheckCircle2, AlertCircle, DollarSign, Users, Share2, Camera, LogOut, Clock } from 'lucide-react';
+import { Copy, ExternalLink, LayoutDashboard, User, BookOpen, TrendingUp, Eye, Save, Plus, Trash2, Upload, Loader2, CheckCircle2, AlertCircle, DollarSign, Users, Share2, Camera, LogOut, Clock, Image, Package, CalendarDays, Edit3, X, Lightbulb } from 'lucide-react';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import { useAuth } from '../hooks/useAuth';
@@ -15,16 +15,39 @@ import {
   type AffiliateConversion,
 } from '../api/client';
 
-type Tab = 'overview' | 'profile' | 'story' | 'progress' | 'earnings' | 'preview';
+type Tab = 'overview' | 'profile' | 'identity' | 'progress' | 'earnings' | 'preview';
+
+const CONDITION_OPTIONS = [
+  'Psoriasis fighter',
+  'Mom with eczema child',
+  'Eczema child',
+  'Nail psoriasis',
+  'Guttate psoriasis',
+];
 
 const TABS: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'profile', label: 'Profile', icon: User },
-  { id: 'story', label: 'Story', icon: BookOpen },
+  { id: 'identity', label: 'Identity', icon: BookOpen },
   { id: 'progress', label: 'Progress', icon: TrendingUp },
   { id: 'earnings', label: 'Earnings', icon: DollarSign },
   { id: 'preview', label: 'Preview', icon: Eye },
 ];
+
+export interface ProgressUpdate {
+  startDate: string;
+  endDate: string;
+  description: string;
+  images: string[];
+  products: string[];
+  tips: string;
+}
+
+const MAX_IMAGES = 5;
+
+function defaultUpdate(): ProgressUpdate {
+  return { startDate: '', endDate: '', description: '', images: [], products: [], tips: '' };
+}
 
 export default function AffiliateDashboardPage() {
   const { user, logout } = useAuth();
@@ -36,7 +59,10 @@ export default function AffiliateDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('overview');
-  const [progressItems, setProgressItems] = useState<{ text: string; imageUrl: string }[]>([]);
+  const [progressPosts, setProgressPosts] = useState<ProgressUpdate[]>([]);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [composer, setComposer] = useState<ProgressUpdate>(defaultUpdate());
+  const [showComposer, setShowComposer] = useState(false);
   const [conversions, setConversions] = useState<AffiliateConversion[]>([]);
   const [conversionsLoading, setConversionsLoading] = useState(false);
 
@@ -53,12 +79,16 @@ export default function AffiliateDashboardPage() {
           name: data.name || '',
           avatarUrl: data.avatarUrl || '',
           bio: data.bio || '',
+          conditionLabel: data.conditionLabel || 'Psoriasis fighter',
           storyTitle: data.storyTitle || '',
           storyBody: data.storyBody || '',
         });
-        const lines = (data.progressText || '').split('\n').map(l => l.trim()).filter(Boolean);
-        const images: string[] = JSON.parse(data.progressImages || '[]');
-        setProgressItems(lines.map((text, i) => ({ text, imageUrl: images[i] || '' })));
+        try {
+          const parsed: ProgressUpdate[] = JSON.parse(data.progressText || '[]');
+          setProgressPosts(Array.isArray(parsed) ? parsed : []);
+        } catch {
+          setProgressPosts([]);
+        }
       })
       .catch(() => setProfile(null))
       .finally(() => setLoading(false));
@@ -89,12 +119,10 @@ export default function AffiliateDashboardPage() {
     setError(null);
     setMessage(null);
     try {
-      const textLines = progressItems.map(p => p.text);
-      const imageUrls = progressItems.map(p => p.imageUrl);
       const updated = await updateAffiliateProfile(user.email, {
         ...draft,
-        progressText: textLines.join('\n'),
-        progressImages: JSON.stringify(imageUrls),
+        progressText: JSON.stringify(progressPosts),
+        progressImages: '[]',
       });
       setProfile(updated);
       setMessage('Saved successfully.');
@@ -108,12 +136,49 @@ export default function AffiliateDashboardPage() {
 
   const handleImageUpload = async (file: File) => {
     try {
-      const url = await uploadImage(file);
-      return url;
+      return await uploadImage(file);
     } catch {
       setError('Upload failed.');
       return null;
     }
+  };
+
+  const openComposer = (idx: number | null) => {
+    if (idx !== null) {
+      setComposer({ ...progressPosts[idx] });
+      setEditingIndex(idx);
+    } else {
+      setComposer(defaultUpdate());
+      setEditingIndex(null);
+    }
+    setShowComposer(true);
+  };
+
+  const cancelComposer = () => {
+    setShowComposer(false);
+    setEditingIndex(null);
+    setComposer(defaultUpdate());
+  };
+
+  const saveComposer = () => {
+    if (!composer.startDate || !composer.description) {
+      setError('Start date and description are required.');
+      return;
+    }
+    setProgressPosts(prev => {
+      if (editingIndex !== null) {
+        const next = [...prev];
+        next[editingIndex] = { ...composer };
+        return next;
+      }
+      return [...prev, { ...composer }];
+    });
+    cancelComposer();
+  };
+
+  const deletePost = (idx: number) => {
+    setProgressPosts(prev => prev.filter((_, i) => i !== idx));
+    if (editingIndex === idx) cancelComposer();
   };
 
   if (loading) {
@@ -128,20 +193,44 @@ export default function AffiliateDashboardPage() {
     return (
       <div className="min-h-screen">
         <Topbar />
-        <div className="gradient-subtle min-h-[calc(100vh-4rem)] flex items-center justify-center">
-          <div className="container-main max-w-[520px] py-16">
-            <div className="glass-card rounded-3xl p-10 text-center space-y-8">
+        <div className="bg-gray-50/80 min-h-[calc(100vh-4rem)] flex items-center justify-center">
+          <div className="max-w-[520px] w-full px-6 py-16">
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 text-center space-y-8">
+              <div className="w-16 h-16 rounded-full bg-green/15 flex items-center justify-center mx-auto">
+                <Users size={32} className="text-green" />
+              </div>
+              <div className="space-y-2">
+                <h1 className="text-2xl font-bold text-ink">Affiliate profile not found</h1>
+                <p className="text-sm text-muted">This account does not have an affiliate profile yet. Please contact support or use the affiliate registration flow.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const isOnboarding = profile.status !== 'active';
+
+  if (isOnboarding) {
+    return (
+      <div className="min-h-screen">
+        <Topbar />
+        <div className="bg-gray-50/80 min-h-[calc(100vh-4rem)] flex items-center justify-center">
+          <div className="max-w-[520px] w-full px-6 py-16">
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 text-center space-y-8">
               <div className="w-16 h-16 rounded-full bg-green/15 flex items-center justify-center mx-auto">
                 <Users size={32} className="text-green" />
               </div>
               <div className="space-y-2">
                 <h1 className="text-2xl font-bold text-ink">Welcome to the affiliate program!</h1>
-                <p className="text-sm text-muted">Set up your public profile to start sharing your story and earning commissions.</p>
+                <p className="text-sm text-muted">Set up your public profile to start sharing your journey and earning commissions.</p>
               </div>
 
               {onboardingStep === 0 && (
                 <div className="space-y-4 text-left">
-                  <div className="flex items-start gap-4 rounded-xl bg-white/50 border border-white/10 p-4">
+                  <div className="flex items-start gap-4 rounded-xl bg-white border border-gray-100 shadow-sm p-4">
                     <div className="w-8 h-8 rounded-full bg-green/15 flex items-center justify-center shrink-0">
                       <User size={16} className="text-green" />
                     </div>
@@ -150,16 +239,16 @@ export default function AffiliateDashboardPage() {
                       <div className="text-xs text-muted">Add your name, bio, and photo so visitors know who you are.</div>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4 rounded-xl bg-white/50 border border-white/10 p-4">
+                  <div className="flex items-start gap-4 rounded-xl bg-white border border-gray-100 shadow-sm p-4">
                     <div className="w-8 h-8 rounded-full bg-green/15 flex items-center justify-center shrink-0">
                       <BookOpen size={16} className="text-green" />
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-ink">2. Share your story</div>
-                      <div className="text-xs text-muted">Tell your psoriasis journey — how the ebook helped you.</div>
+                      <div className="text-sm font-bold text-ink">2. Choose your label</div>
+                      <div className="text-xs text-muted">Pick the journey label that best fits your current situation.</div>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4 rounded-xl bg-white/50 border border-white/10 p-4">
+                  <div className="flex items-start gap-4 rounded-xl bg-white border border-gray-100 shadow-sm p-4">
                     <div className="w-8 h-8 rounded-full bg-green/15 flex items-center justify-center shrink-0">
                       <TrendingUp size={16} className="text-green" />
                     </div>
@@ -183,6 +272,12 @@ export default function AffiliateDashboardPage() {
                   </div>
                   <Field label="Display name" value={onboardingSetup.current.name || ''} onChange={(e) => { onboardingSetup.current.name = e.target.value; setOnboardingStep(1); }} placeholder="Your name" />
                   <TextArea label="Bio" value={onboardingSetup.current.bio || ''} onChange={(e) => { onboardingSetup.current.bio = e.target.value; setOnboardingStep(1); }} rows={3} placeholder="Short intro about you..." />
+                  <SelectField
+                    label="Journey label"
+                    value={onboardingSetup.current.conditionLabel || 'Psoriasis fighter'}
+                    onChange={(e) => { onboardingSetup.current.conditionLabel = e.target.value; setOnboardingStep(1); }}
+                    options={CONDITION_OPTIONS}
+                  />
                   <div className="flex gap-3 pt-2">
                     <button onClick={async () => {
                       if (!user.email) return;
@@ -191,9 +286,10 @@ export default function AffiliateDashboardPage() {
                         const updated = await updateAffiliateProfile(user.email, {
                           name: onboardingSetup.current.name || '',
                           bio: onboardingSetup.current.bio || '',
+                          conditionLabel: onboardingSetup.current.conditionLabel || 'Psoriasis fighter',
                         });
                         setProfile(updated);
-                        setDraft({ name: updated.name || '', bio: updated.bio || '' });
+                        setDraft({ name: updated.name || '', bio: updated.bio || '', conditionLabel: updated.conditionLabel || 'Psoriasis fighter' });
                       } catch (err) {
                         setError(err instanceof Error ? err.message : 'Failed to save.');
                       } finally {
@@ -217,10 +313,10 @@ export default function AffiliateDashboardPage() {
   return (
     <div className="min-h-screen">
       <Topbar />
-      <div className="gradient-subtle min-h-[calc(100vh-4rem)]">
-        <div className="container-main max-w-[1200px] py-8">
+      <div className="bg-gray-50/80 min-h-[calc(100vh-4rem)]">
+        <div className="max-w-[1200px] mx-auto px-6 py-8">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-full bg-green/15 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-green/10 flex items-center justify-center">
               <Users size={20} className="text-green" />
             </div>
             <div>
@@ -230,19 +326,25 @@ export default function AffiliateDashboardPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 items-start">
-            <aside className="glass-card rounded-2xl p-3 space-y-1 sticky top-24">
+            <aside className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 space-y-1 sticky top-24">
               {TABS.map(tab => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
-                const isComplete = tab.id === 'profile' ? !!profile?.name : tab.id === 'story' ? !!profile?.storyTitle : tab.id === 'progress' ? progressItems.length > 0 : true;
+                const isComplete = tab.id === 'profile'
+                  ? !!profile?.name
+                  : tab.id === 'identity'
+                    ? !!profile?.conditionLabel
+                    : tab.id === 'progress'
+                      ? progressPosts.length > 0
+                      : true;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-left ${
                       isActive
-                        ? 'bg-green text-white shadow-md'
-                        : 'text-muted hover:text-ink hover:bg-white/50'
+                        ? 'bg-green text-white shadow-sm'
+                        : 'text-muted hover:text-ink hover:bg-gray-100'
                     }`}
                   >
                     <Icon size={18} />
@@ -256,22 +358,22 @@ export default function AffiliateDashboardPage() {
               <hr className="border-white/10 my-2" />
               <button
                 onClick={logout}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-muted hover:text-red-500 hover:bg-white/50 transition-all text-left"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-muted hover:text-red-500 hover:bg-gray-100 transition-all text-left"
               >
                 <LogOut size={18} />
                 <span>Sign out</span>
               </button>
             </aside>
 
-            <main className="glass-card rounded-2xl p-8 min-h-[500px]">
+            <main className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 min-h-[500px]">
               {message && (
-                <div className="flex items-center gap-2 text-sm text-green font-medium bg-green/5 rounded-xl px-4 py-3 mb-6">
+                <div className="flex items-center gap-2 text-sm text-green font-medium bg-green-50 rounded-xl px-4 py-3 mb-6">
                   <CheckCircle2 size={16} />
                   {message}
                 </div>
               )}
               {error && (
-                <div className="flex items-center gap-2 text-sm text-red-500 font-medium bg-red-500/5 rounded-xl px-4 py-3 mb-6">
+                <div className="flex items-center gap-2 text-sm text-red-500 font-medium bg-red-50 rounded-xl px-4 py-3 mb-6">
                   <AlertCircle size={16} />
                   {error}
                 </div>
@@ -283,7 +385,7 @@ export default function AffiliateDashboardPage() {
                     <h2 className="text-lg font-bold text-ink mb-1">Your referral link</h2>
                     <p className="text-sm text-muted mb-4">Share this link with your audience to start earning.</p>
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <div className="flex-1 rounded-xl border border-white/10 bg-white/60 px-4 py-3 text-sm text-ink break-all">
+                      <div className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink break-all">
                         {getShareLink(profile?.referralCode)}
                       </div>
                       <button onClick={async () => {
@@ -300,7 +402,7 @@ export default function AffiliateDashboardPage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="rounded-xl bg-white/50 border border-white/10 p-5">
+                    <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-5">
                       <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted mb-2">
                         <DollarSign size={14} />
                         Earnings
@@ -309,7 +411,7 @@ export default function AffiliateDashboardPage() {
                         RM {profile?.totalEarned || '0.00'}
                       </div>
                     </div>
-                    <div className="rounded-xl bg-white/50 border border-white/10 p-5">
+                    <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-5">
                       <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted mb-2">
                         <Share2 size={14} />
                         Commission
@@ -318,7 +420,7 @@ export default function AffiliateDashboardPage() {
                         {profile?.commissionRate ? `${Number(profile.commissionRate) * 100}%` : '50%'}
                       </div>
                     </div>
-                    <div className="rounded-xl bg-white/50 border border-white/10 p-5">
+                    <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-5">
                       <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted mb-2">
                         <Users size={14} />
                         Referrals
@@ -378,54 +480,153 @@ export default function AffiliateDashboardPage() {
                 </div>
               )}
 
-              {activeTab === 'story' && (
+              {activeTab === 'identity' && (
                 <div className="space-y-6 max-w-[560px]">
                   <div>
-                    <h2 className="text-lg font-bold text-ink mb-1">Your story</h2>
-                    <p className="text-sm text-muted">Share your psoriasis journey — the turning point, what changed, and how the ebook helped.</p>
+                    <h2 className="text-lg font-bold text-ink mb-1">Your identity</h2>
+                    <p className="text-sm text-muted">Choose the label that best fits your journey and update it anytime.</p>
                   </div>
-                  <Field label="Story title" value={draft.storyTitle || ''} onChange={handleChange('storyTitle')} placeholder="e.g. My 6-month journey to clear skin" />
-                  <TextArea label="Story" value={draft.storyBody || ''} onChange={handleChange('storyBody')} rows={10} placeholder="Tell your story in detail..." />
+                  <SelectField
+                    label="Journey label"
+                    value={draft.conditionLabel || 'Psoriasis fighter'}
+                    onChange={(e) => setDraft((p) => ({ ...p, conditionLabel: e.target.value }))}
+                    options={CONDITION_OPTIONS}
+                  />
+                  <Field label="Journey headline" value={draft.storyTitle || ''} onChange={handleChange('storyTitle')} placeholder="e.g. My 6-month journey to clear skin" />
+                  <TextArea label="Journey story" value={draft.storyBody || ''} onChange={handleChange('storyBody')} rows={10} placeholder="Tell your journey in detail..." />
                   <div className="flex gap-3 pt-2">
                     <button onClick={handleSave} disabled={saving} className="button-base button-primary gap-2">
                       {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                      {saving ? 'Saving...' : 'Save story'}
+                      {saving ? 'Saving...' : 'Save identity'}
                     </button>
                   </div>
                 </div>
               )}
 
               {activeTab === 'progress' && (
-                <div className="space-y-6 max-w-[560px]">
-                  <div>
-                    <h2 className="text-lg font-bold text-ink mb-1">Progress updates</h2>
-                    <p className="text-sm text-muted">Show your audience the real results over time. Add photos to each update.</p>
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-lg font-bold text-ink mb-1">Progress updates</h2>
+                      <p className="text-sm text-muted">Share your journey — each post can have photos, products you use, and tips.</p>
+                    </div>
+                    {!showComposer && (
+                      <button onClick={() => openComposer(null)} className="button-base button-primary gap-2 shrink-0">
+                        <Plus size={16} />
+                        New update
+                      </button>
+                    )}
                   </div>
+
+                  {showComposer && (
+                    <div className="rounded-2xl bg-white border border-green-200 shadow-sm p-5 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-bold text-ink">
+                          {editingIndex !== null ? 'Edit update' : 'New update'}
+                        </h3>
+                        <button onClick={cancelComposer} className="p-1 text-muted hover:text-ink">
+                          <X size={18} />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <label className="grid gap-1.5">
+                          <span className="text-xs font-bold uppercase tracking-widest text-muted flex items-center gap-1">
+                            <CalendarDays size={12} /> Start
+                          </span>
+                          <input type="month" value={composer.startDate} onChange={(e) => setComposer(p => ({ ...p, startDate: e.target.value }))}
+                            className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300" />
+                        </label>
+                        <label className="grid gap-1.5">
+                          <span className="text-xs font-bold uppercase tracking-widest text-muted flex items-center gap-1">
+                            <CalendarDays size={12} /> End
+                          </span>
+                          <input type="month" value={composer.endDate} onChange={(e) => setComposer(p => ({ ...p, endDate: e.target.value }))}
+                            className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300" />
+                        </label>
+                        <label className="grid gap-1.5">
+                          <span className="text-xs font-bold uppercase tracking-widest text-muted flex items-center gap-1">
+                            <Package size={12} /> Products used
+                          </span>
+                          <input type="text" value={composer.products.join(', ')} placeholder="Ebook Psoriasis, Moisturizer..."
+                            onChange={(e) => setComposer(p => ({ ...p, products: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))}
+                            className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300" />
+                        </label>
+                      </div>
+
+                      <label className="grid gap-1.5">
+                        <span className="text-xs font-bold uppercase tracking-widest text-muted">Description</span>
+                        <textarea value={composer.description} onChange={(e) => setComposer(p => ({ ...p, description: e.target.value }))} rows={3} placeholder="What happened? How are you feeling?"
+                          className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300 resize-y" />
+                      </label>
+
+                      <label className="grid gap-1.5">
+                        <span className="text-xs font-bold uppercase tracking-widest text-muted flex items-center gap-1">
+                          <Lightbulb size={12} /> Tips & notes
+                        </span>
+                        <textarea value={composer.tips} onChange={(e) => setComposer(p => ({ ...p, tips: e.target.value }))} rows={2} placeholder="Any tips or observations..."
+                          className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300 resize-y" />
+                      </label>
+
+                      <div className="space-y-2">
+                        <span className="text-xs font-bold uppercase tracking-widest text-muted flex items-center gap-1">
+                          <Image size={12} /> Photos ({composer.images.length}/{MAX_IMAGES})
+                        </span>
+                        <div className="flex flex-wrap gap-2">
+                          {composer.images.map((url, i) => (
+                            <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-200">
+                              <img src={url} alt="" className="w-full h-full object-cover" />
+                              <button type="button" onClick={() => setComposer(p => ({ ...p, images: p.images.filter((_, j) => j !== i) }))}
+                                className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-black/50 flex items-center justify-center text-white">
+                                <X size={12} />
+                              </button>
+                            </div>
+                          ))}
+                          {composer.images.length < MAX_IMAGES && (
+                            <ImageUploadButton onUpload={async (file) => {
+                              const url = await handleImageUpload(file);
+                              if (url) setComposer(p => ({ ...p, images: [...p.images, url] }));
+                            }} />
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-3 pt-1">
+                        <button onClick={saveComposer} className="button-base button-primary gap-2">
+                          <CheckCircle2 size={16} />
+                          {editingIndex !== null ? 'Save changes' : 'Publish update'}
+                        </button>
+                        <button onClick={cancelComposer} className="button-base button-ghost">Cancel</button>
+                      </div>
+                    </div>
+                  )}
+
                   <Field label="Section title" value={draft.progressTitle || ''} onChange={handleChange('progressTitle')} placeholder="e.g. Perjalanan perkembangan" />
-                  <div className="space-y-3">
-                    {progressItems.map((item, idx) => (
-                      <ProgressItem
-                        key={idx}
-                        text={item.text}
-                        imageUrl={item.imageUrl}
-                        onTextChange={(val) => setProgressItems(p => p.map((pi, i) => i === idx ? { ...pi, text: val } : pi))}
-                        onImageUpload={async (file) => {
-                          const url = await handleImageUpload(file);
-                          if (url) setProgressItems(p => p.map((pi, i) => i === idx ? { ...pi, imageUrl: url } : pi));
-                        }}
-                        onRemove={() => setProgressItems(p => p.filter((_, i) => i !== idx))}
-                        onImageRemove={() => setProgressItems(p => p.map((pi, i) => i === idx ? { ...pi, imageUrl: '' } : pi))}
-                      />
-                    ))}
-                    <button onClick={() => setProgressItems(p => [...p, { text: '', imageUrl: '' }])} className="w-full rounded-xl border-2 border-dashed border-white/20 py-4 text-sm text-muted hover:text-green hover:border-green/40 transition-all flex items-center justify-center gap-2">
-                      <Plus size={16} />
-                      Add update
-                    </button>
+
+                  <div className="space-y-4 max-h-[600px] overflow-y-auto pr-1">
+                    {progressPosts.length === 0 && !showComposer && (
+                      <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-8 text-center">
+                        <TrendingUp size={32} className="text-muted mx-auto mb-3" />
+                        <p className="text-sm text-muted">No updates yet. Share your first progress post!</p>
+                      </div>
+                    )}
+                    {[...progressPosts].reverse().map((post, ri) => {
+                      const idx = progressPosts.length - 1 - ri;
+                      return (
+                        <ProgressPostCard
+                          key={idx}
+                          post={post}
+                          onEdit={() => openComposer(idx)}
+                          onDelete={() => deletePost(idx)}
+                        />
+                      );
+                    })}
                   </div>
+
                   <div className="flex gap-3 pt-2">
                     <button onClick={handleSave} disabled={saving} className="button-base button-primary gap-2">
                       {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                      {saving ? 'Saving...' : 'Save progress'}
+                      {saving ? 'Saving...' : 'Save all progress'}
                     </button>
                   </div>
                 </div>
@@ -438,15 +639,15 @@ export default function AffiliateDashboardPage() {
                     <p className="text-sm text-muted">Track your commissions from referred sales.</p>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="rounded-xl bg-white/50 border border-white/10 p-5">
+                    <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-5">
                       <div className="text-xs uppercase tracking-widest text-muted mb-1">Total earned</div>
                       <div className="text-2xl font-bold text-ink">RM {profile?.totalEarned || '0.00'}</div>
                     </div>
-                    <div className="rounded-xl bg-white/50 border border-white/10 p-5">
+                    <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-5">
                       <div className="text-xs uppercase tracking-widest text-muted mb-1">Conversions</div>
                       <div className="text-2xl font-bold text-ink">{conversions.length}</div>
                     </div>
-                    <div className="rounded-xl bg-white/50 border border-white/10 p-5">
+                    <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-5">
                       <div className="text-xs uppercase tracking-widest text-muted mb-1">Commission rate</div>
                       <div className="text-2xl font-bold text-ink">{profile?.commissionRate ? `${Number(profile.commissionRate) * 100}%` : '50%'}</div>
                     </div>
@@ -456,7 +657,7 @@ export default function AffiliateDashboardPage() {
                       <Loader2 size={24} className="animate-spin text-green" />
                     </div>
                   ) : conversions.length === 0 ? (
-                    <div className="rounded-xl bg-white/50 border border-white/10 p-8 text-center">
+                    <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-8 text-center">
                       <DollarSign size={32} className="text-muted mx-auto mb-3" />
                       <p className="text-sm text-muted">No conversions yet. Share your referral link and start earning!</p>
                     </div>
@@ -473,7 +674,7 @@ export default function AffiliateDashboardPage() {
                         </thead>
                         <tbody>
                           {conversions.map((c) => (
-                            <tr key={c.id} className="border-t border-white/10">
+                            <tr key={c.id} className="border-t border-gray-100">
                               <td className="py-3 pr-4 text-muted whitespace-nowrap">
                                 {new Date(c.createdAt).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' })}
                               </td>
@@ -486,10 +687,10 @@ export default function AffiliateDashboardPage() {
                               <td className="py-3">
                                 <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                                   c.status === 'paid'
-                                    ? 'bg-green/10 text-green'
+                                    ? 'bg-green-50 text-green'
                                     : c.status === 'pending'
-                                    ? 'bg-amber/10 text-amber'
-                                    : 'bg-white/10 text-muted'
+                                    ? 'bg-amber-50 text-amber'
+                                    : 'bg-gray-50 text-muted'
                                 }`}>
                                   {c.status === 'pending' && <Clock size={12} />}
                                   {c.status === 'paid' && <CheckCircle2 size={12} />}
@@ -511,7 +712,7 @@ export default function AffiliateDashboardPage() {
                     <h2 className="text-lg font-bold text-ink mb-1">Public page preview</h2>
                     <p className="text-sm text-muted">This is what your audience sees when they visit your page.</p>
                   </div>
-                  <div className="rounded-2xl bg-white/50 border border-white/10 p-8 space-y-6">
+                  <div className="rounded-2xl bg-white border border-gray-100 shadow-sm p-8 space-y-6">
                     <div className="flex flex-col items-center text-center gap-3">
                       <div className="w-20 h-20 rounded-full bg-green/10 flex items-center justify-center overflow-hidden">
                         {profile?.avatarUrl ? (
@@ -523,29 +724,23 @@ export default function AffiliateDashboardPage() {
                       <h3 className="text-xl font-bold text-ink">{profile?.name || 'Your name'}</h3>
                       <p className="text-sm text-muted max-w-[500px]">{profile?.bio || 'Your bio will appear here.'}</p>
                     </div>
-                    <hr className="border-white/10" />
+                    <hr className="border-gray-100" />
                     <div>
-                      <h4 className="text-xs uppercase tracking-widest text-muted font-bold mb-2">{profile?.storyTitle || 'Story'}</h4>
-                      <p className="text-sm text-muted whitespace-pre-line">{profile?.storyBody || 'Share your story to connect with your audience.'}</p>
+                      <h4 className="text-xs uppercase tracking-widest text-muted font-bold mb-2">{profile?.storyTitle || 'Journey'}</h4>
+                      <p className="text-sm text-muted whitespace-pre-line">{profile?.storyBody || 'Share your journey to connect with your audience.'}</p>
                     </div>
-                    <hr className="border-white/10" />
+                    <hr className="border-gray-100" />
                     <div>
-                      <h4 className="text-xs uppercase tracking-widest text-muted font-bold mb-2">{draft.progressTitle || 'Progress'}</h4>
-                      <div className="space-y-3">
-                        {progressItems.map((item, idx) => (
-                          <div key={idx} className="flex items-start gap-2 text-sm text-muted">
-                            <span className="w-5 h-5 rounded-full bg-green/15 flex items-center justify-center shrink-0 mt-0.5">
-                              <TrendingUp size={12} className="text-green" />
-                            </span>
-                            <div className="space-y-1">
-                              <span>{item.text}</span>
-                              {item.imageUrl && (
-                                <img src={item.imageUrl} alt="" className="rounded-xl border border-white/10 max-h-48 w-auto object-cover" loading="lazy" />
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                      <h4 className="text-xs uppercase tracking-widest text-muted font-bold mb-3">{draft.progressTitle || 'Progress'}</h4>
+                      {progressPosts.length === 0 ? (
+                        <p className="text-sm text-muted">No progress updates yet.</p>
+                      ) : (
+                        <div className="space-y-4">
+                          {progressPosts.map((post, idx) => (
+                            <PreviewPostCard key={idx} post={post} />
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                   {profile?.referralCode && (
@@ -575,7 +770,7 @@ function Field({ label, value, onChange, placeholder }: {
     <label className="grid gap-1.5">
       <span className="text-xs font-bold uppercase tracking-widest text-muted">{label}</span>
       <input value={value} onChange={onChange} placeholder={placeholder}
-        className="w-full rounded-xl border border-white/10 bg-white/60 px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40" />
+        className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300" />
     </label>
   );
 }
@@ -591,54 +786,179 @@ function TextArea({ label, value, onChange, rows, placeholder }: {
     <label className="grid gap-1.5">
       <span className="text-xs font-bold uppercase tracking-widest text-muted">{label}</span>
       <textarea value={value} onChange={onChange} rows={rows} placeholder={placeholder}
-        className="w-full rounded-xl border border-white/10 bg-white/60 px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 resize-y" />
+        className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300 resize-y" />
     </label>
   );
 }
 
-function ProgressItem({ text, imageUrl, onTextChange, onImageUpload, onImageRemove, onRemove }: {
-  text: string;
-  imageUrl: string;
-  onTextChange: (val: string) => void;
-  onImageUpload: (file: File) => Promise<void>;
-  onImageRemove: () => void;
-  onRemove: () => void;
+function SelectField({ label, value, onChange, options }: {
+  label: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  options: string[];
 }) {
+  return (
+    <label className="grid gap-1.5">
+      <span className="text-xs font-bold uppercase tracking-widest text-muted">{label}</span>
+      <select
+        value={value}
+        onChange={onChange}
+        className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300"
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>{option}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function ProgressPostCard({ post, onEdit, onDelete }: {
+  post: ProgressUpdate;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  const fmt = (d: string) => {
+    if (!d) return '';
+    if (d.length === 7) {
+      const [y, m] = d.split('-');
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${months[parseInt(m) - 1] || ''} ${y}`;
+    }
+    const [y, m, day] = d.split('-');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${day} ${months[parseInt(m) - 1] || ''} ${y}`;
+  };
+
+  const range = post.startDate
+    ? post.endDate
+      ? `${fmt(post.startDate)} → ${fmt(post.endDate)}`
+      : `${fmt(post.startDate)}`
+    : '';
+
+  return (
+    <div className="rounded-2xl bg-white border border-gray-100 shadow-sm p-5 space-y-3">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2 text-xs text-muted">
+          <CalendarDays size={14} className="shrink-0" />
+          <span className="font-semibold">{range}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <button onClick={onEdit} className="p-1.5 text-muted hover:text-green rounded-lg hover:bg-green-50 transition-colors">
+            <Edit3 size={14} />
+          </button>
+          <button onClick={onDelete} className="p-1.5 text-muted hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors">
+            <Trash2 size={14} />
+          </button>
+        </div>
+      </div>
+
+      <p className="text-sm text-ink leading-relaxed whitespace-pre-line">{post.description}</p>
+
+      {post.products.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {post.products.map((p, i) => (
+            <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-medium text-green">
+              <Package size={11} />
+              {p}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {post.images.length > 0 && (
+        <div className={`grid gap-2 ${post.images.length === 1 ? 'grid-cols-1' : post.images.length <= 3 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+          {post.images.map((url, i) => (
+            <img key={i} src={url} alt="" className="rounded-xl border border-gray-200 w-full h-40 object-cover" loading="lazy" />
+          ))}
+        </div>
+      )}
+
+      {post.tips && (
+        <div className="rounded-xl bg-amber-50 border border-amber-200 px-3.5 py-2.5 flex items-start gap-2">
+          <Lightbulb size={14} className="text-amber shrink-0 mt-0.5" />
+          <p className="text-xs text-muted leading-relaxed">{post.tips}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PreviewPostCard({ post }: { post: ProgressUpdate }) {
+  const fmt = (d: string) => {
+    if (!d) return '';
+    if (d.length === 7) {
+      const [y, m] = d.split('-');
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${months[parseInt(m) - 1] || ''} ${y}`;
+    }
+    const [y, m, day] = d.split('-');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${day} ${months[parseInt(m) - 1] || ''} ${y}`;
+  };
+
+  const range = post.startDate
+    ? post.endDate
+      ? `${fmt(post.startDate)} → ${fmt(post.endDate)}`
+      : `${fmt(post.startDate)}`
+    : '';
+
+  return (
+    <div className="rounded-2xl bg-white border border-gray-100 shadow-sm p-5 space-y-3">
+      {range && (
+        <div className="flex items-center gap-2 text-xs text-muted">
+          <CalendarDays size={14} className="shrink-0" />
+          <span className="font-semibold">{range}</span>
+        </div>
+      )}
+      <p className="text-sm text-muted leading-relaxed whitespace-pre-line">{post.description}</p>
+      {post.products.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {post.products.map((p, i) => (
+            <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-medium text-green">
+              <Package size={11} />
+              {p}
+            </span>
+          ))}
+        </div>
+      )}
+      {post.images.length > 0 && (
+        <div className={`grid gap-2 ${post.images.length === 1 ? 'grid-cols-1' : post.images.length <= 3 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+          {post.images.map((url, i) => (
+            <img key={i} src={url} alt="" className="rounded-xl border border-gray-200 w-full h-40 object-cover" loading="lazy" />
+          ))}
+        </div>
+      )}
+      {post.tips && (
+        <div className="rounded-xl bg-amber-50 border border-amber-200 px-3.5 py-2.5 flex items-start gap-2">
+          <Lightbulb size={14} className="text-amber shrink-0 mt-0.5" />
+          <p className="text-xs text-muted leading-relaxed">{post.tips}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ImageUploadButton({ onUpload }: { onUpload: (file: File) => Promise<void> }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
   return (
-    <div className="rounded-xl bg-white/50 border border-white/10 p-4 space-y-3">
-      <div className="flex items-start gap-2">
-        <input value={text} onChange={(e) => onTextChange(e.target.value)} placeholder="Describe your progress..."
-          className="flex-1 rounded-lg border border-white/10 bg-white/60 px-3 py-2 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40" />
-        <button type="button" onClick={onRemove} className="shrink-0 p-2 text-red-400 hover:text-red-600">
-          <Trash2 size={16} />
-        </button>
-      </div>
-      <div className="flex items-center gap-3">
-        <input ref={fileRef} type="file" accept="image/*" className="hidden"
-          onChange={async (e) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-            setUploading(true);
-            await onImageUpload(file);
-            setUploading(false);
-            if (fileRef.current) fileRef.current.value = '';
-          }} />
-        <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
-          className="text-xs flex items-center gap-1 text-green font-semibold hover:underline">
-          <Upload size={14} />
-          {uploading ? 'Uploading...' : imageUrl ? 'Change photo' : 'Add photo'}
-        </button>
-        {imageUrl && (
-          <>
-            <img src={imageUrl} alt="" className="w-14 h-14 rounded-lg object-cover border border-white/20" />
-            <button type="button" onClick={onImageRemove} className="text-xs text-red-400 hover:text-red-600">Remove</button>
-          </>
-        )}
-      </div>
-    </div>
+    <>
+      <input ref={fileRef} type="file" accept="image/*" className="hidden"
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          setUploading(true);
+          await onUpload(file);
+          setUploading(false);
+          if (fileRef.current) fileRef.current.value = '';
+        }} />
+      <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
+        className="w-20 h-20 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-muted hover:text-green hover:border-green-400 transition-all">
+        {uploading ? <Loader2 size={18} className="animate-spin" /> : <Upload size={18} />}
+      </button>
+    </>
   );
 }
 

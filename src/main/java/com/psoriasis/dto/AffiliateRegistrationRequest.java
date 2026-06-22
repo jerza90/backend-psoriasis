@@ -13,6 +13,7 @@ public class AffiliateRegistrationRequest {
     private String email;
 
     private String bio;
+    private String conditionLabel;
     private String socialLinks;
     private String paymentInfo;
 
@@ -22,6 +23,8 @@ public class AffiliateRegistrationRequest {
     public void setEmail(String email) { this.email = email; }
     public String getBio() { return bio; }
     public void setBio(String bio) { this.bio = bio; }
+    public String getConditionLabel() { return conditionLabel; }
+    public void setConditionLabel(String conditionLabel) { this.conditionLabel = conditionLabel; }
     public String getSocialLinks() { return socialLinks; }
     public void setSocialLinks(String socialLinks) { this.socialLinks = socialLinks; }
     public String getPaymentInfo() { return paymentInfo; }

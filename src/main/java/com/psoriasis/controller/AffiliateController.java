@@ -27,6 +27,7 @@ public class AffiliateController {
                 request.getName(),
                 request.getEmail(),
                 request.getBio(),
+                request.getConditionLabel(),
                 request.getSocialLinks(),
                 request.getPaymentInfo()
         );
