@@ -200,6 +200,30 @@ export default function AffiliateDashboardPage() {
                 <Users size={32} className="text-green" />
               </div>
               <div className="space-y-2">
+                <h1 className="text-2xl font-bold text-ink">Affiliate profile not found</h1>
+                <p className="text-sm text-muted">This account does not have an affiliate profile yet. Please contact support or use the affiliate registration flow.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const isOnboarding = profile.status !== 'active';
+
+  if (isOnboarding) {
+    return (
+      <div className="min-h-screen">
+        <Topbar />
+        <div className="bg-gray-50/80 min-h-[calc(100vh-4rem)] flex items-center justify-center">
+          <div className="max-w-[520px] w-full px-6 py-16">
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 text-center space-y-8">
+              <div className="w-16 h-16 rounded-full bg-green/15 flex items-center justify-center mx-auto">
+                <Users size={32} className="text-green" />
+              </div>
+              <div className="space-y-2">
                 <h1 className="text-2xl font-bold text-ink">Welcome to the affiliate program!</h1>
                 <p className="text-sm text-muted">Set up your public profile to start sharing your journey and earning commissions.</p>
               </div>

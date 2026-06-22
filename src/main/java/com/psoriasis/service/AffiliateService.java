@@ -60,7 +60,7 @@ public class AffiliateService {
         affiliate.setSocialLinks(socialLinks);
         affiliate.setPaymentInfo(paymentInfo);
         affiliate.setCommissionRate(new BigDecimal("0.5000"));
-        affiliate.setStatus("active");
+        affiliate.setStatus("pending");
         affiliate.setCreatedAt(LocalDateTime.now());
         affiliate.setUpdatedAt(LocalDateTime.now());
 
@@ -111,6 +111,7 @@ public class AffiliateService {
         if (request.getProgressTitle() != null) affiliate.setProgressTitle(request.getProgressTitle());
         if (request.getProgressText() != null) affiliate.setProgressText(request.getProgressText());
         if (request.getProgressImages() != null) affiliate.setProgressImages(request.getProgressImages());
+        affiliate.setStatus("active");
         affiliate.setUpdatedAt(LocalDateTime.now());
         Affiliate saved = affiliateRepository.save(affiliate);
         return affiliateMapper.toResponse(saved, buildReferralLink(saved.getReferralCode()));
