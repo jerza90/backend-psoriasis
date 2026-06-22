@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShoppingCart, Shield, AlertTriangle, Info, ExternalLink, Star, Search, X } from 'lucide-react';
 import Topbar from '../components/Topbar';
@@ -24,6 +24,16 @@ function EvidenceBadge({ level }: { level: Product['evidenceLevel'] }) {
 
 function ProductDetailModal({ product, onClose }: { product: Product; onClose: () => void }) {
   const { t } = useTranslation();
+  const [selectedOptionId, setSelectedOptionId] = useState(product.purchaseOptions?.[0]?.id ?? '');
+
+  useEffect(() => {
+    setSelectedOptionId(product.purchaseOptions?.[0]?.id ?? '');
+  }, [product.id, product.purchaseOptions]);
+
+  const selectedOption = product.purchaseOptions?.find((option) => option.id === selectedOptionId) ?? product.purchaseOptions?.[0];
+  const modalImage = selectedOption?.imageUrl ?? product.imageUrl;
+  const modalDosage = selectedOption?.dosage ?? product.dosage;
+  const modalAffiliateUrl = selectedOption?.affiliateUrl ?? product.affiliateUrl;
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12 md:pt-20 overflow-y-auto">
       <div className="fixed inset-0 bg-[rgba(10,20,30,0.6)] backdrop-blur-sm" onClick={onClose} />
@@ -36,6 +46,52 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
         </button>
 
         <div className="p-7 md:p-9">
+          {/* Image gallery */}
+          <div className="flex justify-center mb-5">
+            <ProductImage name={product.name} category={product.category} imageUrl={modalImage} size="xxl" />
+          </div>
+
+          {product.purchaseOptions && product.purchaseOptions.length > 0 && (
+            <div className="glass rounded-xl p-4 mb-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {product.purchaseOptions.map((option) => {
+                  const active = option.id === (selectedOption?.id ?? product.purchaseOptions?.[0]?.id);
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => setSelectedOptionId(option.id)}
+                      className={`text-left rounded-xl border px-4 py-3 transition-all ${
+                        active
+                          ? 'border-green bg-green/10 shadow-sm shadow-green/10'
+                          : 'border-white/20 bg-white/10 hover:bg-white/20'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="font-semibold text-sm text-ink">{option.label}</span>
+                        <div className="flex items-center gap-2">
+                          {option.supplyBadge && (
+                            <span className="rounded-full bg-green/15 text-green px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest">
+                              {option.supplyBadge}
+                            </span>
+                          )}
+                          {active && <span className="text-[11px] font-bold uppercase tracking-widest text-green">Selected</span>}
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted mt-1">{option.subtitle}</p>
+                      <p className="text-xs text-muted/80 mt-2">{option.packInfo}</p>
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedOption && (
+                <p className="text-xs text-muted/70 mt-3 leading-relaxed">
+                  {selectedOption.note}
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Image gallery */}
           {product.images && product.images.length > 0 && (
             <div className="flex gap-3 mb-5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-thin">
@@ -70,7 +126,6 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
           )}
 
           <div className="flex items-start gap-4 mb-4">
-            <ProductImage name={product.name} category={product.category} imageUrl={product.imageUrl} size="md" className="shrink-0" />
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <EvidenceBadge level={product.evidenceLevel} />
@@ -112,7 +167,7 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
             <div className="glass rounded-xl p-4">
               <span className="font-bold text-xs text-muted uppercase tracking-widest block mb-1">{t('products.modal.dosage')}</span>
-              <p className="text-sm text-muted">{product.dosage}</p>
+              <p className="text-sm text-muted">{modalDosage}</p>
             </div>
             <div className="glass rounded-xl p-4">
               <span className="font-bold text-xs text-muted uppercase tracking-widest block mb-1">{t('products.modal.bestTime')}</span>
@@ -178,7 +233,9 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
           </div>
 
           <a
-            href={product.affiliateUrl}
+            href={modalAffiliateUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="button-base button-primary gap-2 w-full justify-center shadow-lg shadow-green/20"
           >
             <ShoppingCart size={18} />
