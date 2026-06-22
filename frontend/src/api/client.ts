@@ -97,6 +97,7 @@ export interface AffiliateProfile {
   bio?: string | null;
   pageTitle?: string | null;
   pageIntro?: string | null;
+  conditionLabel?: string | null;
   storyTitle?: string | null;
   storySummary?: string | null;
   storyBody?: string | null;
@@ -128,6 +129,7 @@ export interface AffiliateProfileUpdateInput {
   bio?: string;
   pageTitle?: string;
   pageIntro?: string;
+  conditionLabel?: string;
   storyTitle?: string;
   storySummary?: string;
   storyBody?: string;
