@@ -28,7 +28,8 @@ public class SecurityConfig {
                     "/api/payment/**",
                     "/api/ebook/**",
                     "/api/download",
-                    "/api/download/**"
+                    "/api/download/**",
+                    "/api/upload/**"
                 )
             )
             .sessionManagement(session -> session
@@ -46,6 +47,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/download").permitAll()
                 .requestMatchers("/api/download/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/upload/**").permitAll()
+                .requestMatchers("/uploads/**").permitAll()
                 .anyRequest().authenticated()
             );
 
