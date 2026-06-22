@@ -7,6 +7,7 @@ This project now gives each affiliate:
 - Editable story details
 - Editable blog teaser/details
 - A public affiliate page with profile, tips, guide, and progress sections
+- Image upload for each progress update (via dashboard → progress section) — images displayed on public page
 
 ## Branch Note
 
