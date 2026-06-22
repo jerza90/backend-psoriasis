@@ -1,6 +1,10 @@
 -- Ensure the local affiliate login account also has a matching affiliate profile row.
 -- This keeps the dashboard lookup working for the documented test account.
 
+DELETE FROM affiliates
+WHERE referral_code = 'AISYAH01'
+  AND email <> 'aishaaffiliate@example.com';
+
 UPDATE affiliates
 SET
     name = 'Aisha Affiliate',
@@ -13,8 +17,7 @@ SET
     condition_label = 'Psoriasis fighter',
     status = 'active',
     updated_at = NOW()
-WHERE email = 'aishaaffiliate@example.com'
-   OR referral_code = 'AISYAH01';
+WHERE email = 'aishaaffiliate@example.com';
 
 INSERT INTO affiliates (
     name,
@@ -50,5 +53,4 @@ WHERE NOT EXISTS (
     SELECT 1
     FROM affiliates
     WHERE email = 'aishaaffiliate@example.com'
-       OR referral_code = 'AISYAH01'
 );
