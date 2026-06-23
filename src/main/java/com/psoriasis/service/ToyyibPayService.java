@@ -60,7 +60,7 @@ public class ToyyibPayService {
     public String createBill(String fullName, String email, String referralCode) throws Exception {
         String billRef = "BM-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String returnUrl = frontendUrl + "/thank-you?billcode={billcode}&status_id={status_id}";
-        String billAmount = "3900";
+        String billAmount = "500";
 
         String body = "userSecretKey=" + encode(userSecretKey)
                 + "&categoryCode=" + encode(categoryCode)
@@ -111,7 +111,7 @@ public class ToyyibPayService {
         order.setCustomerEmail(email);
         order.setCustomerPhone("0000000000");
         order.setProductName("Panduan Sokongan Psoriasis");
-        order.setAmount(new BigDecimal("39.00"));
+        order.setAmount(new BigDecimal("5.00"));
         order.setCurrency("RM");
         order.setPaymentStatus("Unpaid");
         order.setStatus("Active");

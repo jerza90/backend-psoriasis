@@ -10,7 +10,7 @@ import { clearCheckoutDraft, readCheckoutDraft, saveCheckoutDraft } from '../uti
 type ProductType = 'bm' | 'en';
 
 const PRODUCTS: Record<ProductType, { price: string; original: string | null; total: string; surcharge: string | null; currency: string }> = {
-  bm: { price: 'RM 39', original: 'RM 49', total: 'RM 39', surcharge: null, currency: 'RM' },
+  bm: { price: 'RM 5', original: null, total: 'RM 5', surcharge: null, currency: 'RM' },
   en: { price: '$27', original: '$67', total: '$28.50', surcharge: '$1.50', currency: '$' },
 };
 
@@ -115,8 +115,7 @@ export default function CheckoutPage() {
                   <span className="text-sm font-bold">{t('checkout.bmLabel')}</span>
                 </div>
                 <div className={`flex items-baseline gap-2 ${product !== 'bm' ? 'opacity-50' : ''}`}>
-                  <p className="text-lg font-black text-green">RM 39</p>
-                  <p className="text-sm text-muted/40 line-through">RM 49</p>
+                  <p className="text-lg font-black text-green">RM 5</p>
                 </div>
                 <p className={`text-[10px] text-muted/60 mt-0.5 ${product !== 'bm' ? 'opacity-50' : ''}`}>{t('checkout.bmDesc')} &middot; {t('checkout.bmSave')}</p>
                 <p className={`flex items-center gap-1 text-[10px] text-amber-600 mt-1 ${product !== 'bm' ? 'opacity-50' : ''}`}>
