@@ -71,7 +71,7 @@ export default function HeroProduct() {
 
         <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-8 items-start">
           {/* Main content */}
-          <div>
+          <div className="order-2 md:order-none">
             <div className="flex items-center gap-2 mb-1">
               <span className="px-3 py-1 rounded-full gradient-green text-xs font-bold text-white">
                 {t('heroProduct.editorsPick')}
@@ -218,7 +218,7 @@ export default function HeroProduct() {
           </div>
 
           {/* Right panel */}
-          <div className="space-y-3">
+          <div className="order-1 md:order-none space-y-3">
             <div className="flex justify-center">
               <ProductImage name={p.name} category={p.category} imageUrl={heroImage} size="xxl" />
             </div>
