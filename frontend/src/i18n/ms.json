@@ -60,7 +60,7 @@
       "items": [
         {
           "title": "🔥 Bermula",
-          "desc": "Bahagian yang tidak diberitahu oleh sesiapa. Apabila keadaan menjadi lebih teruk sebelum menjadi lebih baik. Kulit anda suar, badan anda melawan, dan kebanyakan orang menyerah kalah di sini. Saya akan membimbing anda melalui apa yang saya lalui dan bagaimana saya bertahan ketika ia terasa mustahil."
+          "desc": "Bahagian yang tidak diberitahu oleh sesiapa. Apabila keadaan menjadi lebih teruk sebelum menjadi lebih baik. Kulit anda mengalami keradangan, badan anda melawan, dan kebanyakan orang menyerah kalah di sini. Saya akan membimbing anda melalui apa yang saya lalui dan bagaimana saya bertahan ketika ia terasa mustahil."
         },
         {
           "title": "🌱 Maju",
@@ -112,7 +112,7 @@
     },
     "price": {
       "heading": "Bersedia untuk memulakan dengan panduan BM?",
-      "subtitle": "Dapatkan salinan anda dan mula memahami suar anda hari ini.",
+      "subtitle": "Dapatkan salinan anda dan mula memahami keradangan anda hari ini.",
       "amount": "RM XX",
       "cta": "Dapatkan Segera"
     },
@@ -138,7 +138,7 @@
     },
     "checklistCta": {
       "heading": "Belum bersedia untuk membeli?",
-      "desc": "Dapatkan Senarai Semak Sokongan Suar Psoriasis percuma — 7 bidang untuk dikaji sebelum memilih produk.",
+      "desc": "Dapatkan Senarai Semak Sokongan Keradangan Psoriasis percuma — 7 bidang untuk dikaji sebelum memilih produk.",
       "cta": "Muat Turun Senarai Semak Percuma"
     },
     "disclaimer": "Penafian: E-book ini adalah untuk pendidikan kesejahteraan sahaja dan bukan nasihat perubatan. Psoriasis mungkin memerlukan diagnosis dan rawatan profesional. Sentiasa berbincang dengan profesional penjagaan kesihatan yang bertauliah sebelum memulakan suplemen, menukar ubat, atau membuat keputusan kesihatan yang besar."
@@ -151,8 +151,8 @@
     "filterAll": "Semua",
     "posts": [
       {
-        "title": "Memahami Suar Psoriasis: Panduan Pemula",
-        "excerpt": "Psoriasis lebih daripada kulit kering. Ketahui apa yang berlaku dalam badan semasa suar dan cara mendekati sokongan dengan tenang.",
+        "title": "Memahami Keradangan Psoriasis: Panduan Pemula",
+        "excerpt": "Psoriasis lebih daripada kulit kering. Ketahui apa yang berlaku dalam badan semasa keradangan dan cara mendekati sokongan dengan tenang.",
         "category": "Asas Psoriasis",
         "date": "Mei 2026"
       },
@@ -163,7 +163,7 @@
         "date": "Mei 2026"
       },
       {
-        "title": "Peranan Tekanan dan Tidur dalam Suar Kulit",
+        "title": "Peranan Tekanan dan Tidur dalam Keradangan Kulit",
         "excerpt": "Tekanan menjejaskan tidur, tidur menjejaskan pemulihan, dan pemulihan rendah boleh membuat kulit berasa lebih teruk. Lihat secara praktikal pada kitaran ini.",
         "category": "Tekanan, Tidur & Pemulihan",
         "date": "April 2026"
@@ -193,18 +193,18 @@
     "notFound": "Catatan tidak ditemui",
     "cta": {
       "heading": "Mahukan panduan lengkap?",
-      "desc": "Dapatkan Senarai Semak Sokongan Suar Psoriasis percuma dengan 7 bidang tindakan.",
+      "desc": "Dapatkan Senarai Semak Sokongan Keradangan Psoriasis percuma dengan 7 bidang tindakan.",
       "button": "Muat Turun Senarai Semak Percuma"
     },
     "content": {
       "1": {
-        "title": "Memahami Suar Psoriasis: Panduan Pemula",
-        "body": "Psoriasis sering disalah anggap sebagai \"kulit kering semata-mata.\" Tetapi ia lebih kompleks daripada itu.\n\nPada intinya, psoriasis dikaitkan dengan proses imun dan keradangan dalam badan. Ini tidak bermakna ia perlu ditakuti — ia bermakna badan sedang bertindak balas terhadap sesuatu, dan kulit adalah salah satu tempat tindak balas itu muncul.\n\nSuar boleh dipengaruhi oleh pelbagai faktor:\n\n• Tahap tekanan\n• Kualiti tidur\n• Corak pemakanan\n• Penghadaman dan keselesaan usus\n• Produk dan rutin kulit\n• Cuaca, peluh, atau geseran\n• Penyakit atau jangkitan baru-baru ini\n• Perubahan ubat atau suplemen\n\nMatlamatnya bukan untuk mengawal setiap faktor dengan sempurna. Matlamatnya adalah untuk memahami yang mana paling penting untuk badan anda sendiri.\n\nLangkah pertama yang mudah ialah memerhati, bukan membetulkan semuanya sekaligus. Mulakan dengan satu bidang — tidur, atau penjagaan kulit, atau penjejakan makanan — dan lihat apa yang berubah apabila anda memberi lebih perhatian kepada bidang itu.\n\nPanduan ini membantu anda melakukan perkara itu, satu langkah pada satu masa."
+        "title": "Memahami Keradangan Psoriasis: Panduan Pemula",
+        "body": "Psoriasis sering disalah anggap sebagai \"kulit kering semata-mata.\" Tetapi ia lebih kompleks daripada itu.\n\nPada intinya, psoriasis dikaitkan dengan proses imun dan keradangan dalam badan. Ini tidak bermakna ia perlu ditakuti — ia bermakna badan sedang bertindak balas terhadap sesuatu, dan kulit adalah salah satu tempat tindak balas itu muncul.\n\nKeradangan boleh dipengaruhi oleh pelbagai faktor:\n\n• Tahap tekanan\n• Kualiti tidur\n• Corak pemakanan\n• Penghadaman dan keselesaan usus\n• Produk dan rutin kulit\n• Cuaca, peluh, atau geseran\n• Penyakit atau jangkitan baru-baru ini\n• Perubahan ubat atau suplemen\n\nMatlamatnya bukan untuk mengawal setiap faktor dengan sempurna. Matlamatnya adalah untuk memahami yang mana paling penting untuk badan anda sendiri.\n\nLangkah pertama yang mudah ialah memerhati, bukan membetulkan semuanya sekaligus. Mulakan dengan satu bidang — tidur, atau penjagaan kulit, atau penjejakan makanan — dan lihat apa yang berubah apabila anda memberi lebih perhatian kepada bidang itu.\n\nPanduan ini membantu anda melakukan perkara itu, satu langkah pada satu masa."
       }
     }
   },
   "checklist": {
-    "heading": "Senarai Semak Sokongan Suar Psoriasis",
+    "heading": "Senarai Semak Sokongan Keradangan Psoriasis",
     "subtitle": "Senarai semak 7 bidang percuma untuk membantu anda mengkaji rutin, mengenal pasti pencetus, dan membuat keputusan sokongan yang lebih tenang — sebelum membeli produk lain.",
     "areas": {
       "title": "7 bidang dilindungi",
@@ -388,6 +388,9 @@
       "moderate": "Sederhana",
       "emerging": "Baru"
     },
+    "chooseFormat": "Pilih format anda",
+    "selected": "Dipilih",
+    "buyVersion": "Beli versi ini",
     "whyHelps": "Mengapa ini membantu untuk psoriasis",
     "howWorks": "Cara ia berfungsi",
     "dosage": "Dos",
@@ -420,6 +423,8 @@
     "subtitle": "Cadangan suplemen yang mengutamakan pendidikan untuk sokongan psoriasis. Setiap produk termasuk mengapa ia membantu, cara ia berfungsi, dos, dan keselamatan — supaya anda membuat keputusan dengan jelas.",
 
     "featured": "Produk pilihan",
+    "primaryProduct": "Produk utama",
+    "secondaryProduct": "Produk kedua",
     "filterAll": "Semua",
     "empty": "Tiada produk dalam kategori ini lagi.",
     "whyForPsoriasis": "Mengapa untuk psoriasis:",
@@ -438,6 +443,11 @@
       "safety": "Keselamatan",
       "cta": "Semak harga di iHerb"
     },
+    "bioSerat": {
+      "whyHelps": "Mengapa ini membantu untuk psoriasis",
+      "howWorks": "Cara ia berfungsi",
+      "cta": "Beli BioSerat"
+    },
     "disclaimer": {
       "title": "Penting",
       "text1": "Panduan ini untuk tujuan pendidikan sahaja. Tiada produk yang disenaraikan di sini merawat atau menyembuhkan psoriasis. Sentiasa berbincang dengan profesional penjagaan kesihatan yang bertauliah sebelum memulakan sebarang suplemen — terutamanya jika anda mengambil ubat, hamil, menyusu, atau menguruskan keadaan kesihatan.",
@@ -446,9 +456,9 @@
   },
   "tips": {
     "badge": "E-book Pilihan",
-    "heading": "Dapatkan Panduan Sokongan Suar Psoriasis hari ini!",
+    "heading": "Dapatkan Panduan Sokongan Keradangan Psoriasis hari ini!",
     "story": {
-      "p1": "E-book ini dicipta daripada <strong>perjalanan 13 tahun</strong> sebenar hidup dengan psoriasis, bergelut melalui suar, kesakitan, kekecewaan, dan saat-saat hampir berputus asa.",
+      "p1": "E-book ini dicipta daripada <strong>perjalanan 13 tahun</strong> sebenar hidup dengan psoriasis, bergelut melalui keradangan, kesakitan, kekecewaan, dan saat-saat hampir berputus asa.",
       "p2": "Ia bukan sekadar panduan. Ia adalah <strong>peta jalan peribadi</strong> untuk mereka yang berasa letih, keliru, dan bersendirian dalam perjalanan kulit mereka."
     },
     "secretHacks": "Di dalamnya, anda akan mempelajari Rahsia & Rutin Harian saya untuk membalikkan keadaan saya.",
@@ -457,10 +467,10 @@
       "items": [
         "Apa yang saya harap saya faham lebih awal tentang psoriasis",
         "Bagaimana makanan, gula, tenusu, gluten, dan makanan diproses boleh menjejaskan keradangan",
-        "Mengapa kesihatan usus mungkin berkaitan dengan suar kulit",
+        "Mengapa kesihatan usus mungkin berkaitan dengan keradangan kulit",
         "Makanan apa yang mungkin perlu dielakkan semasa fasa penyembuhan",
         "Makanan apa yang lebih baik menyokong pemulihan usus",
-        "Cara menjejak pencetus anda sendiri dengan selamat",
+        "Cara mengenalpasti pencetus anda sendiri dengan selamat",
         "Cara mula menyokong badan anda satu langkah pada satu masa"
       ]
     },
@@ -506,7 +516,7 @@
           "title": "Makanan yang perlu diambil perhatian:",
           "items": [
             "• Tenusu — boleh meningkatkan keradangan pada individu sensitif",
-            "• Gluten — sesetengah orang melaporkan suar selepas pengambilan",
+            "• Gluten — sesetengah orang melaporkan keradangan selepas pengambilan",
             "• Gula — boleh meningkatkan insulin dan penanda keradangan",
             "• Makanan diproses — selalunya tinggi omega-6"
           ],
@@ -567,14 +577,14 @@
     "closing": "\"Dapatkan panduan sokongan penyembuhan anda hari ini.\"",
     "gallery": {
       "title": "Galeri E-book",
-      "subtitle": "Terokai semua gambar pratonton Panduan Sokongan Suar Psoriasis",
+      "subtitle": "Terokai semua gambar pratonton Panduan Sokongan Keradangan Psoriasis",
       "cta": "Dapatkan Segera",
       "backToTips": "Kembali ke Tip & Trik"
     },
     "moreResources": "Sumber percuma lain",
     "extraTips": [
       {
-        "title": "Senarai Semak Sokongan Suar Psoriasis",
+        "title": "Senarai Semak Sokongan Keradangan Psoriasis",
         "type": "Muat Turun Percuma",
         "desc": "Senarai semak 7 bidang percuma untuk mengkaji rutin anda dan mengenal pasti pencetus sebelum membeli produk lain.",
         "features": [
