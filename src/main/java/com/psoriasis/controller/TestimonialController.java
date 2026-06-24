@@ -18,19 +18,19 @@ public class TestimonialController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TestimonialResponse>> getAll(@RequestParam(required = false, defaultValue = "ms") String lang) {
+    public ResponseEntity<List<TestimonialResponse>> getAll(@RequestParam(name = "lang", required = false, defaultValue = "ms") String lang) {
         List<TestimonialResponse> list = testimonialService.getAll(lang);
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/featured")
-    public ResponseEntity<List<TestimonialResponse>> getFeatured(@RequestParam(required = false, defaultValue = "ms") String lang) {
+    public ResponseEntity<List<TestimonialResponse>> getFeatured(@RequestParam(name = "lang", required = false, defaultValue = "ms") String lang) {
         List<TestimonialResponse> list = testimonialService.getFeatured(lang);
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TestimonialResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<TestimonialResponse> getById(@PathVariable(name = "id") Long id) {
         return testimonialService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
