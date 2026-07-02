@@ -258,10 +258,10 @@
       ]
     },
     "price": {
-      "original": "RM 47",
-      "amount": "RM 27",
-      "discount": "Tawaran pelancaran terhad — potongan 40%",
-      "note": "Muat turun digital segera. Pembayaran selamat Payhip.",
+      "original": "RM 79",
+      "amount": "RM 39",
+      "discount": "Tawaran pelancaran terhad — potongan 51%",
+      "note": "Muat turun digital segera. Pembayaran selamat.",
       "cta": "Dapatkan Segera"
     },
     "faq": {
@@ -312,7 +312,7 @@
     "subtotal": "Subjumlah",
     "original": "Harga asal",
     "discount": "Anda jimat",
-    "surcharge": "Yuran pemprosesan",
+    "surcharge": "SST & Yuran pemprosesan",
     "total": "Jumlah",
     "digitalItem": "Item digital — tiada penghantaran",
     "secureBadge": "Checkout selamat — dikuasakan oleh Stripe",

@@ -9,8 +9,24 @@ import { clearCheckoutDraft, readCheckoutDraft, saveCheckoutDraft } from '../uti
 
 type ProductType = 'bm' | 'en';
 
+const SST_RATE = 0.08;
+const TRANSACTION_FEE = 1;
+
+function calcBmPrices() {
+  const base = 39;
+  const sst = base * SST_RATE;
+  const total = base + sst + TRANSACTION_FEE;
+  return {
+    price: `RM ${base}`,
+    original: 'RM 79',
+    total: `RM ${total.toFixed(2)}`,
+    surcharge: `SST 8% (RM ${sst.toFixed(2)}) + Fee (RM ${TRANSACTION_FEE}.00)`,
+    currency: 'RM',
+  };
+}
+
 const PRODUCTS: Record<ProductType, { price: string; original: string | null; total: string; surcharge: string | null; currency: string }> = {
-  bm: { price: 'RM 5', original: null, total: 'RM 5', surcharge: null, currency: 'RM' },
+  bm: calcBmPrices(),
   en: { price: '$27', original: '$67', total: '$28.50', surcharge: '$1.50', currency: '$' },
 };
 
@@ -264,7 +280,7 @@ export default function CheckoutPage() {
                 {selected.original && (
                   <div className="flex justify-between text-rose font-semibold text-xs">
                     <span>{t('checkout.discount')}</span>
-                    <span>{product === 'en' ? '-60%' : '-20%'}</span>
+                    <span>{product === 'en' ? '-60%' : '-51%'}</span>
                   </div>
                 )}
                 {selected.surcharge && (
