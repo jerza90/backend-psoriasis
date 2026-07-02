@@ -77,7 +77,7 @@ export default function EbookPage() {
                 className="relative w-full rounded-xl border border-white/10 shadow-[0_24px_64px_rgba(0,0,0,0.4)]"
               />
               <div className="absolute -top-3 -right-3 z-10 bg-rose text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                -40%
+                -51%
               </div>
             </div>
           </div>
