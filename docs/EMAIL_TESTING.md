@@ -47,7 +47,7 @@ curl -X POST 'https://psoriasis-backend.fly.dev/api/debug/email/test' \
     "subject": "Psoriasis test email",
     "message": "This is a test email from the Psoriasis backend.",
     "ctaLabel": "Open dashboard",
-    "ctaUrl": "https://frontend-eta-seven-55.vercel.app"
+    "ctaUrl": "https://freefrompsoriasis.com"
   }'
 ```
 

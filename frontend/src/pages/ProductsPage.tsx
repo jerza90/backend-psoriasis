@@ -56,31 +56,47 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {product.purchaseOptions.map((option) => {
                   const active = option.id === (selectedOption?.id ?? product.purchaseOptions?.[0]?.id);
+                  const optionLink = option.affiliateUrl ?? product.affiliateUrl;
                   return (
-                    <button
+                    <div
                       key={option.id}
-                      type="button"
-                      onClick={() => setSelectedOptionId(option.id)}
-                      className={`text-left rounded-xl border px-4 py-3 transition-all ${
+                      className={`text-left rounded-xl border px-4 py-3 transition-all h-full flex flex-col ${
                         active
                           ? 'border-green bg-green/10 shadow-sm shadow-green/10'
                           : 'border-white/20 bg-white/10 hover:bg-white/20'
                       }`}
                     >
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="font-semibold text-sm text-ink">{option.label}</span>
-                        <div className="flex items-center gap-2">
-                          {option.supplyBadge && (
-                            <span className="rounded-full bg-green/15 text-green px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest">
-                              {option.supplyBadge}
-                            </span>
-                          )}
-                          {active && <span className="text-[11px] font-bold uppercase tracking-widest text-green">Selected</span>}
+                      <button
+                        type="button"
+                        onClick={() => setSelectedOptionId(option.id)}
+                        className="w-full text-left flex-1"
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="font-semibold text-sm text-ink">{option.label}</span>
+                          <div className="flex items-center gap-2">
+                            {option.supplyBadge && (
+                              <span className="rounded-full bg-green/15 text-green px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest">
+                                {option.supplyBadge}
+                              </span>
+                            )}
+                            {active && <span className="text-[11px] font-bold uppercase tracking-widest text-green">Selected</span>}
+                          </div>
                         </div>
-                      </div>
-                      <p className="text-xs text-muted mt-1">{option.subtitle}</p>
-                      <p className="text-xs text-muted/80 mt-2">{option.packInfo}</p>
-                    </button>
+                        <p className="text-xs text-muted mt-1">{option.subtitle}</p>
+                        <p className="text-xs text-muted/80 mt-2">{option.packInfo}</p>
+                      </button>
+                      <a
+                        href={optionLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full gradient-green px-3 py-2 text-xs font-bold uppercase tracking-widest text-white shadow-lg shadow-green/20 hover:opacity-95 transition-opacity"
+                      >
+                        <ShoppingCart size={14} />
+                        Buy this version
+                        <ExternalLink size={12} />
+                      </a>
+                    </div>
                   );
                 })}
               </div>

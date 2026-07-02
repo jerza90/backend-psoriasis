@@ -13,7 +13,8 @@ spring.jpa.hibernate.ddl-auto=create-drop
 stripe.secret-key=sk_test_...
 stripe.webhook-secret=whsec_...
 
-app.base-url=http://localhost:5173
+frontend.url=https://freefrompsoriasis.com
+frontend.allowed-origins=https://freefrompsoriasis.com,https://www.freefrompsoriasis.com
 ```
 
 ## Database

@@ -65,6 +65,13 @@ Users land via content (TikTok, Instagram), opt into a free checklist, purchase 
 
 Base URL: `http://localhost:8080/api` (dev) / `https://psoriasis-backend.fly.dev/api` (prod)
 
+Production frontend:
+
+- `https://freefrompsoriasis.com`
+- `https://www.freefrompsoriasis.com`
+
+The backend uses `FRONTEND_URL` and `FRONTEND_ALLOWED_ORIGINS` to generate checkout return URLs and allow CORS for the live frontend domain.
+
 ### 4.1 Authentication (`/api/auth`)
 
 | Method | Path | Body | Response | Description |
@@ -331,8 +338,8 @@ cd frontend && npm run dev
 | `DATABASE_URL` | `jdbc:postgresql://localhost:5432/psoriasis_db` | JDBC connection string |
 | `DB_USERNAME` | `postgres` | DB user |
 | `DB_PASSWORD` | `password` | DB password |
-| `FRONTEND_URL` | `http://localhost:5173` | Frontend URL (for CORS + links) |
-| `FRONTEND_ALLOWED_ORIGINS` | defaults to FRONTEND_URL | Comma-separated CORS origins |
+| `FRONTEND_URL` | `http://localhost:5173` | Frontend URL (for CORS + links). Production should be `https://freefrompsoriasis.com` |
+| `FRONTEND_ALLOWED_ORIGINS` | defaults to FRONTEND_URL | Comma-separated CORS origins. Production should include `https://freefrompsoriasis.com,https://www.freefrompsoriasis.com` |
 | `STRIPE_SECRET_KEY` | `sk_test_...` | Stripe API key |
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` | Stripe webhook signing secret |
 | `STRIPE_PRICE_BM` | `price_...` | Stripe price ID for BM product |
@@ -356,6 +363,11 @@ cd frontend && npm run dev
 ```bash
 cd frontend && npm run build && vercel --prod
 ```
+
+Production domain:
+
+- `freefrompsoriasis.com`
+- `www.freefrompsoriasis.com`
 
 ### Backend (Fly.io)
 ```bash

@@ -84,7 +84,8 @@ docker-compose up --build
 | `DATABASE_PASSWORD` | DB password |
 | `STRIPE_SECRET_KEY` | Stripe secret key |
 | `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
-| `APP_BASE_URL` | Frontend URL (for redirects) |
+| `FRONTEND_URL` | Frontend URL for checkout redirects and CORS |
+| `FRONTEND_ALLOWED_ORIGINS` | Comma-separated allowed CORS origins |
 | `MAIL_HOST` | SMTP host |
 | `MAIL_PORT` | SMTP port |
 | `MAIL_USERNAME` | SMTP user |
