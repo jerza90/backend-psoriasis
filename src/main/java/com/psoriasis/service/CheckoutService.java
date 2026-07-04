@@ -174,7 +174,7 @@ public class CheckoutService {
         if (!"Paid".equals(order.getPaymentStatus())) {
             throw new RuntimeException("Payment not completed");
         }
-        if (order.getDownloadToken() == null) {
+        if (deliveryService.needsFreshDownloadToken(order)) {
             deliveryService.generateAndSend(order);
         }
         return downloadBaseUrl + "/" + order.getDownloadToken();

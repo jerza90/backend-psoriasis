@@ -58,7 +58,7 @@ public class PaymentController {
         if (!"Paid".equals(order.getPaymentStatus())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Payment not completed");
         }
-        if (order.getDownloadToken() == null) {
+        if (deliveryService.needsFreshDownloadToken(order)) {
             deliveryService.generateAndSend(order);
         }
         return new DownloadUrlResponseDTO(order.getDownloadToken());
