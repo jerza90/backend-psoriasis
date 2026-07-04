@@ -298,6 +298,8 @@
     "fullName": "Nama penuh",
     "namePlaceholder": "Nama anda",
     "email": "Alamat e-mel",
+    "phone": "Nombor telefon",
+    "phonePlaceholder": "012-345 6789",
     "digitalNotice": "Produk digital — penghantaran segera",
     "digitalDesc": "Tiada penghantaran fizikal. Anda akan terima PDF melalui e-mel selepas pembelian.",
     "deliveryInfo": "Maklumat penghantaran",
