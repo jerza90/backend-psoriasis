@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,6 +24,7 @@ import java.util.zip.ZipOutputStream;
 
 @Service
 public class EbookDeliveryService {
+    private static final Logger log = LoggerFactory.getLogger(EbookDeliveryService.class);
 
     private final PaymentOrderRepository orderRepository;
     private final EmailService emailService;
@@ -54,10 +57,22 @@ public class EbookDeliveryService {
         String downloadLink = downloadBaseUrl + "/" + token;
 
         try {
-            emailService.sendMockPurchaseBundle(order, downloadLink);
+            emailService.sendReceiptEmail(order.getCustomerEmail(), order.getProductName(), downloadLink);
         } catch (Exception e) {
-            System.err.println("Failed to send purchase emails for " + order.getCustomerEmail() + ": " + e.getMessage());
+            log.error("Failed to send customer purchase email for order {} to {}", order.getOrderRef(), order.getCustomerEmail(), e);
         }
+
+        try {
+            emailService.sendOrderNotificationEmail(order, downloadLink);
+        } catch (Exception e) {
+            log.error("Failed to send admin order notification for order {}", order.getOrderRef(), e);
+        }
+    }
+
+    public boolean needsFreshDownloadToken(PaymentOrder order) {
+        return order.getDownloadToken() == null
+                || order.getTokenExpiresAt() == null
+                || order.getTokenExpiresAt().isBefore(LocalDateTime.now());
     }
 
     public void streamPdf(String token, HttpServletResponse response) {
