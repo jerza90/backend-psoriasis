@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -23,6 +24,17 @@ import java.util.UUID;
 
 @Service
 public class ToyyibPayService {
+    private static final BigDecimal BM_BASE_PRICE = new BigDecimal("39.00");
+    private static final BigDecimal SST_RATE = new BigDecimal("0.08");
+    private static final BigDecimal PROCESSING_FEE = new BigDecimal("1.00");
+    private static final BigDecimal BM_TOTAL_AMOUNT = BM_BASE_PRICE
+            .add(BM_BASE_PRICE.multiply(SST_RATE))
+            .add(PROCESSING_FEE)
+            .setScale(2, RoundingMode.HALF_UP);
+    private static final String BM_BILL_AMOUNT_SEN = BM_TOTAL_AMOUNT
+            .movePointRight(2)
+            .setScale(0, RoundingMode.UNNECESSARY)
+            .toPlainString();
 
     @Value("${toyyipay.user-secret-key}")
     private String userSecretKey;
@@ -60,7 +72,7 @@ public class ToyyibPayService {
     public String createBill(String fullName, String email, String referralCode) throws Exception {
         String billRef = "BM-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String returnUrl = frontendUrl + "/thank-you?billcode={billcode}&status_id={status_id}";
-        String billAmount = "500";
+        String billAmount = BM_BILL_AMOUNT_SEN;
 
         String body = "userSecretKey=" + encode(userSecretKey)
                 + "&categoryCode=" + encode(categoryCode)
@@ -111,7 +123,7 @@ public class ToyyibPayService {
         order.setCustomerEmail(email);
         order.setCustomerPhone("0000000000");
         order.setProductName("Panduan Sokongan Psoriasis");
-        order.setAmount(new BigDecimal("5.00"));
+        order.setAmount(BM_TOTAL_AMOUNT);
         order.setCurrency("RM");
         order.setPaymentStatus("Unpaid");
         order.setStatus("Active");

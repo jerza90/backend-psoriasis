@@ -1,6 +1,6 @@
 ## Project
 
-Psoriasis ebook landing page + dual-product checkout (BM RM39 / EN $27 USD) with Stripe.
+Psoriasis ebook landing page + dual-product checkout (BM RM39 base / EN $27 USD) with Stripe.
 
 ## Branch Workflow
 
@@ -42,14 +42,14 @@ If a branch accidentally includes local-dev commits (CORS fix, AGENTS.md, etc.):
 
 ## ToyyibPay (BM local payments)
 
-- BM (RM 39) → ToyyibPay (FPX / online banking)
+- BM (RM 39 base + SST 8% + RM 1 processing fee = RM 43.12) → ToyyibPay (FPX / online banking)
 - EN ($27 USD) → Stripe (credit card)
 - Sandbox: `https://dev.toyyibpay.com` (set in `toyyipay.base-url`)
 - Production: `https://toyyibpay.com`
 - Update credentials in `application.properties`:
   - `toyyipay.user-secret-key`
   - `toyyipay.category-code`
-- BM bill amount is `3900` (RM 39.00 in sen) — no processing surcharge
+- BM bill amount is `4312` (RM 43.12 in sen): RM 39.00 base + SST 8% (RM 3.12) + RM 1.00 processing fee
 - Sandbox credentials for reference:
   - `toyyipay.user-secret-key=5954lso7-ocz1-tjgg-t99r-kelorq4k07kd`
   - `toyyipay.category-code=c8xg913m`

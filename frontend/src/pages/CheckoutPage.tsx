@@ -131,7 +131,8 @@ export default function CheckoutPage() {
                   <span className="text-sm font-bold">{t('checkout.bmLabel')}</span>
                 </div>
                 <div className={`flex items-baseline gap-2 ${product !== 'bm' ? 'opacity-50' : ''}`}>
-                  <p className="text-lg font-black text-green">RM 5</p>
+                  <p className="text-lg font-black text-green">{PRODUCTS.bm.price}</p>
+                  {PRODUCTS.bm.original && <p className="text-sm text-muted/40 line-through">{PRODUCTS.bm.original}</p>}
                 </div>
                 <p className={`text-[10px] text-muted/60 mt-0.5 ${product !== 'bm' ? 'opacity-50' : ''}`}>{t('checkout.bmDesc')} &middot; {t('checkout.bmSave')}</p>
                 <p className={`flex items-center gap-1 text-[10px] text-amber-600 mt-1 ${product !== 'bm' ? 'opacity-50' : ''}`}>
