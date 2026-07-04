@@ -298,6 +298,8 @@
     "fullName": "Full name",
     "namePlaceholder": "Your name",
     "email": "Email address",
+    "phone": "Phone number",
+    "phonePlaceholder": "012-345 6789",
     "digitalNotice": "Digital product — instant delivery",
     "digitalDesc": "No shipping needed. You'll get the PDF via email after purchase.",
     "deliveryInfo": "Delivery information",

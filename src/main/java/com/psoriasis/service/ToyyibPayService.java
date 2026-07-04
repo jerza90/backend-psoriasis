@@ -66,13 +66,18 @@ public class ToyyibPayService {
     }
 
     public String createBill(String fullName, String email) throws Exception {
-        return createBill(fullName, email, null);
+        return createBill(fullName, email, "0000000000", null);
     }
 
     public String createBill(String fullName, String email, String referralCode) throws Exception {
+        return createBill(fullName, email, "0000000000", referralCode);
+    }
+
+    public String createBill(String fullName, String email, String phone, String referralCode) throws Exception {
         String billRef = "BM-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String returnUrl = frontendUrl + "/thank-you?billcode={billcode}&status_id={status_id}";
         String billAmount = BM_BILL_AMOUNT_SEN;
+        String customerPhone = phone == null || phone.isBlank() ? "0000000000" : phone.trim();
 
         String body = "userSecretKey=" + encode(userSecretKey)
                 + "&categoryCode=" + encode(categoryCode)
@@ -85,7 +90,7 @@ public class ToyyibPayService {
                 + "&billExternalReferenceNo=" + encode(billRef)
                 + "&billTo=" + encode(fullName)
                 + "&billEmail=" + encode(email)
-                + "&billPhone=" + encode("0000000000")
+                + "&billPhone=" + encode(customerPhone)
                 + "&billPriceSetting=" + encode("1")
                 + "&billPaymentChannel=" + encode("0");
 
@@ -121,7 +126,7 @@ public class ToyyibPayService {
         order.setPaymentMethod("TOYYIBPAY");
         order.setCustomerName(fullName);
         order.setCustomerEmail(email);
-        order.setCustomerPhone("0000000000");
+        order.setCustomerPhone(customerPhone);
         order.setProductName("Panduan Sokongan Psoriasis");
         order.setAmount(BM_TOTAL_AMOUNT);
         order.setCurrency("RM");

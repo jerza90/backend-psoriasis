@@ -55,7 +55,7 @@ public class CheckoutService {
         Stripe.apiKey = stripeSecretKey;
     }
 
-    public String createCheckoutSession(String fullName, String email, String product, String referralCode) throws StripeException {
+    public String createCheckoutSession(String fullName, String email, String phone, String product, String referralCode) throws StripeException {
         String priceId = "bm".equals(product) ? priceBm : priceEn;
         String orderRef = "EN-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String successUrl = frontendUrl + "/thank-you?session_id={CHECKOUT_SESSION_ID}";
@@ -64,6 +64,7 @@ public class CheckoutService {
         Map<String, String> metadata = new java.util.HashMap<>(Map.of(
                 "fullName", fullName,
                 "email", email,
+                "phone", phone,
                 "product", product,
                 "orderRef", orderRef
         ));
@@ -92,6 +93,7 @@ public class CheckoutService {
         order.setPaymentMethod("STRIPE");
         order.setCustomerName(fullName);
         order.setCustomerEmail(email);
+        order.setCustomerPhone(phone);
         order.setProductName("en".equals(product) ? "English Guide" : "Panduan Sokongan Psoriasis");
         order.setAmount(new BigDecimal(session.getAmountTotal().doubleValue() / 100, java.math.MathContext.DECIMAL64));
         order.setCurrency("USD");

@@ -36,6 +36,7 @@ export default function CheckoutPage() {
   const draft = readCheckoutDraft();
   const [product, setProduct] = useState<ProductType>(draft?.product ?? 'bm');
   const [email, setEmail] = useState(draft?.email ?? '');
+  const [phone, setPhone] = useState(draft?.phone ?? '');
   const [name, setName] = useState(draft?.name ?? '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -44,18 +45,18 @@ export default function CheckoutPage() {
   const referralCode = searchParams.get('ref') || undefined;
 
   useEffect(() => {
-    if (!name.trim() && !email.trim() && !referralCode) {
+    if (!name.trim() && !email.trim() && !phone.trim() && !referralCode) {
       clearCheckoutDraft();
       return;
     }
-    saveCheckoutDraft({ name, email, product, referralCode });
-  }, [name, email, product, referralCode]);
+    saveCheckoutDraft({ name, email, phone, product, referralCode });
+  }, [name, email, phone, product, referralCode]);
 
   const selected = PRODUCTS[product];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim()) return;
+    if (!name.trim() || !email.trim() || !phone.trim()) return;
 
     setLoading(true);
     setError('');
@@ -64,7 +65,7 @@ export default function CheckoutPage() {
       const res = await fetch(`${getApiBaseUrl()}/api/checkout/create-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName: name, email, product, referralCode }),
+        body: JSON.stringify({ fullName: name, email, phone, product, referralCode }),
       });
 
       if (!res.ok) {
@@ -76,7 +77,7 @@ export default function CheckoutPage() {
       if (!data?.url) {
         throw new Error('Checkout link was not returned');
       }
-      saveCheckoutDraft({ name, email, product, referralCode });
+      saveCheckoutDraft({ name, email, phone, product, referralCode });
       window.location.href = data.url;
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
@@ -203,16 +204,31 @@ export default function CheckoutPage() {
                       className="w-full rounded-xl glass-input px-4 py-2.5 text-sm text-ink outline-none transition-all"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs text-muted font-semibold mb-1.5">{t('checkout.email')}</label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      required
-                      className="w-full rounded-xl glass-input px-4 py-2.5 text-sm text-ink outline-none transition-all"
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs text-muted font-semibold mb-1.5">{t('checkout.email')}</label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        required
+                        className="w-full rounded-xl glass-input px-4 py-2.5 text-sm text-ink outline-none transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-muted font-semibold mb-1.5">{t('checkout.phone')}</label>
+                      <input
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder={t('checkout.phonePlaceholder')}
+                        required
+                        className="w-full rounded-xl glass-input px-4 py-2.5 text-sm text-ink outline-none transition-all"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 mt-3 text-xs text-muted/50">
@@ -230,7 +246,7 @@ export default function CheckoutPage() {
 
               <button
                 type="submit"
-                disabled={loading || !name.trim() || !email.trim()}
+                disabled={loading || !name.trim() || !email.trim() || !phone.trim()}
                 className="button-base button-primary gap-2 w-full justify-center shadow-lg shadow-green/20 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {product === 'bm' ? <Banknote size={18} /> : <Lock size={18} />}

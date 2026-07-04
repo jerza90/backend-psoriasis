@@ -33,6 +33,7 @@ public class CheckoutController {
                 String url = toyyibPayService.createBill(
                         request.getFullName(),
                         request.getEmail(),
+                        request.getPhone(),
                         request.getReferralCode()
                 );
                 return new CheckoutUrlResponseDTO(url);
@@ -40,6 +41,7 @@ public class CheckoutController {
             String url = checkoutService.createCheckoutSession(
                     request.getFullName(),
                     request.getEmail(),
+                    request.getPhone(),
                     request.getProduct(),
                     request.getReferralCode()
             );

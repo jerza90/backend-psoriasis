@@ -13,6 +13,10 @@ public class CheckoutRequest {
     @Email(message = "Invalid email format")
     private String email;
 
+    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "^[0-9+()\\-\\s]{7,20}$", message = "Invalid phone number format")
+    private String phone;
+
     @NotBlank(message = "Product selection is required")
     @Pattern(regexp = "bm|en", message = "Product must be 'bm' or 'en'")
     private String product;
@@ -24,6 +28,9 @@ public class CheckoutRequest {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public String getProduct() { return product; }
     public void setProduct(String product) { this.product = product; }

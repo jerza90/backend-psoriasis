@@ -1,6 +1,7 @@
 export type CheckoutDraft = {
   name: string;
   email: string;
+  phone?: string;
   product: 'bm' | 'en';
   referralCode?: string;
 };
