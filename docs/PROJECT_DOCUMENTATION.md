@@ -267,7 +267,7 @@ Error codes: 410 (expired), 403 (limit reached), 404 (invalid token), 500 (error
 
 ### E-Book Checkout
 
-**BM (RM 39.00)** → ToyyibPay (FPX / online banking)
+**BM (RM 39.00 base + SST 8% RM 3.12 + RM 1.00 processing fee = RM 43.12 total)** → ToyyibPay (FPX / online banking)
 **EN ($27.00 USD)** → Stripe (credit card)
 
 ### ToyyibPay Flow
