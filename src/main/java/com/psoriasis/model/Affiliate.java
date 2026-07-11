@@ -75,6 +75,9 @@ public class Affiliate {
     @Column(name = "progress_images", columnDefinition = "TEXT")
     private String progressImages;
 
+    @Column(name = "affiliate_product_links", columnDefinition = "TEXT")
+    private String affiliateProductLinks;
+
     @Column(name = "avatar_url", length = 500)
     private String avatarUrl;
 
@@ -146,6 +149,8 @@ public class Affiliate {
     public void setProgressText(String progressText) { this.progressText = progressText; }
     public String getProgressImages() { return progressImages; }
     public void setProgressImages(String progressImages) { this.progressImages = progressImages; }
+    public String getAffiliateProductLinks() { return affiliateProductLinks; }
+    public void setAffiliateProductLinks(String affiliateProductLinks) { this.affiliateProductLinks = affiliateProductLinks; }
     public String getAvatarUrl() { return avatarUrl; }
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
     public String getSocialLinks() { return socialLinks; }

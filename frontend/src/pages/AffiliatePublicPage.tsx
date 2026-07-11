@@ -11,9 +11,21 @@ interface ProgressUpdate {
   endDate: string;
   description: string;
   images: string[];
-  products: string[];
+  products: ProductMention[];
   tips: string;
 }
+
+type ProductMention = string | {
+  id?: string;
+  name?: string;
+  url?: string;
+};
+
+type ProductLinkConfig = {
+  id: string;
+  name: string;
+  url: string;
+};
 
 export default function AffiliatePublicPage() {
   const { referralCode } = useParams();
@@ -52,10 +64,11 @@ export default function AffiliatePublicPage() {
 
   const tips = splitLines(profile.tipsText);
   const guide = splitLines(profile.guideText);
+  const productLinks = parseProductLinks(profile.affiliateProductLinks);
   let progressPosts: ProgressUpdate[] = [];
   try {
     const parsed = JSON.parse(profile.progressText || '[]');
-    progressPosts = Array.isArray(parsed) ? parsed : [];
+    progressPosts = Array.isArray(parsed) ? parsed.map(normalizeProgressUpdate) : [];
   } catch {
     progressPosts = [];
   }
@@ -119,7 +132,7 @@ export default function AffiliatePublicPage() {
             body={profile.tipsText || 'Add quick tips here for your audience.'}
             bullets={tips}
           />
-          <ProgressSection title={profile.progressTitle || 'Progress'} posts={progressPosts} />
+          <ProgressSection title={profile.progressTitle || 'Progress'} posts={progressPosts} productLinks={productLinks} />
           <SectionCard
             title={profile.blogTitle || 'Blog'}
             body={profile.blogExcerpt || 'Your blog teaser can live here and point to the full article or external page.'}
@@ -153,6 +166,66 @@ function splitLines(value?: string | null) {
     .split('\n')
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function normalizeProgressUpdate(post: ProgressUpdate): ProgressUpdate {
+  return {
+    ...post,
+    images: Array.isArray(post.images) ? post.images : [],
+    products: Array.isArray(post.products)
+      ? post.products
+          .map((product) => {
+            if (typeof product === 'string') return product;
+            return {
+              id: typeof product?.id === 'string' ? product.id : undefined,
+              name: typeof product?.name === 'string' ? product.name : undefined,
+              url: typeof product?.url === 'string' ? product.url : undefined,
+            };
+          })
+          .filter((product) => typeof product === 'string' || product.id || product.name)
+      : [],
+  };
+}
+
+function parseProductLinks(value?: string | null): ProductLinkConfig[] {
+  try {
+    const parsed = JSON.parse(value || '[]');
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((item) => ({
+        id: typeof item?.id === 'string' ? item.id : '',
+        name: typeof item?.name === 'string' ? item.name : '',
+        url: typeof item?.url === 'string' ? item.url : '',
+      }))
+      .filter((item) => item.id && item.name.trim());
+  } catch {
+    return [];
+  }
+}
+
+function normalizeProductMention(product: ProductMention, productLinks: ProductLinkConfig[] = []): { name: string; url?: string } {
+  if (typeof product === 'string') {
+    const linked = productLinks.find((item) => item.id === product);
+    return linked ? { name: linked.name, url: linked.url } : { name: product };
+  }
+  const linked = product.id ? productLinks.find((item) => item.id === product.id) : undefined;
+  if (linked) {
+    return { name: linked.name, url: linked.url };
+  }
+  return {
+    name: product.name || '',
+    url: product.url,
+  };
+}
+
+function productMentionLabel(product: ProductMention, productLinks: ProductLinkConfig[] = []) {
+  return normalizeProductMention(product, productLinks).name;
+}
+
+function productMentionUrl(product: ProductMention, productLinks: ProductLinkConfig[] = []) {
+  const url = normalizeProductMention(product, productLinks).url?.trim();
+  if (!url) return undefined;
+  return /^https?:\/\//i.test(url) ? url : undefined;
 }
 
 function SectionCard({
@@ -209,7 +282,7 @@ function SectionCard({
   );
 }
 
-function ProgressSection({ title, posts }: { title: string; posts: ProgressUpdate[] }) {
+function ProgressSection({ title, posts, productLinks }: { title: string; posts: ProgressUpdate[]; productLinks: ProductLinkConfig[] }) {
   const fmt = (d: string) => {
     if (!d) return '';
     if (d.length === 7) {
@@ -250,10 +323,7 @@ function ProgressSection({ title, posts }: { title: string; posts: ProgressUpdat
                 {post.products.length > 0 && (
                   <div className="flex flex-wrap gap-1.5">
                     {post.products.map((p, i) => (
-                      <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-medium text-green">
-                        <Package size={11} />
-                        {p}
-                      </span>
+                      <ProductTag key={i} product={p} productLinks={productLinks} />
                     ))}
                   </div>
                 )}
@@ -276,5 +346,30 @@ function ProgressSection({ title, posts }: { title: string; posts: ProgressUpdat
         </div>
       )}
     </div>
+  );
+}
+
+function ProductTag({ product, productLinks = [] }: { product: ProductMention; productLinks?: ProductLinkConfig[] }) {
+  const label = productMentionLabel(product, productLinks);
+  const url = productMentionUrl(product, productLinks);
+  const className = "inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-medium text-green";
+
+  if (!label) return null;
+
+  if (url) {
+    return (
+      <a href={url} target="_blank" rel="noreferrer" className={`${className} hover:bg-green-100 no-underline`}>
+        <Package size={11} />
+        {label}
+        <ExternalLink size={10} />
+      </a>
+    );
+  }
+
+  return (
+    <span className={className}>
+      <Package size={11} />
+      {label}
+    </span>
   );
 }

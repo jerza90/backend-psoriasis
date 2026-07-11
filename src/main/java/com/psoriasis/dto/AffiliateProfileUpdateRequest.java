@@ -23,6 +23,7 @@ public class AffiliateProfileUpdateRequest {
     private String progressTitle;
     private String progressText;
     private String progressImages;
+    private String affiliateProductLinks;
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -68,4 +69,6 @@ public class AffiliateProfileUpdateRequest {
     public void setProgressText(String progressText) { this.progressText = progressText; }
     public String getProgressImages() { return progressImages; }
     public void setProgressImages(String progressImages) { this.progressImages = progressImages; }
+    public String getAffiliateProductLinks() { return affiliateProductLinks; }
+    public void setAffiliateProductLinks(String affiliateProductLinks) { this.affiliateProductLinks = affiliateProductLinks; }
 }

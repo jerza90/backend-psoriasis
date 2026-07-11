@@ -37,6 +37,7 @@ public class AffiliateMapper {
         response.setProgressTitle(affiliate.getProgressTitle());
         response.setProgressText(affiliate.getProgressText());
         response.setProgressImages(affiliate.getProgressImages());
+        response.setAffiliateProductLinks(affiliate.getAffiliateProductLinks());
         response.setAvatarUrl(affiliate.getAvatarUrl());
         response.setSocialLinks(affiliate.getSocialLinks());
         response.setPaymentInfo(affiliate.getPaymentInfo());
@@ -71,6 +72,7 @@ public class AffiliateMapper {
         response.setProgressTitle(affiliate.getProgressTitle());
         response.setProgressText(affiliate.getProgressText());
         response.setProgressImages(affiliate.getProgressImages());
+        response.setAffiliateProductLinks(affiliate.getAffiliateProductLinks());
         response.setAvatarUrl(affiliate.getAvatarUrl());
         response.setSocialLinks(affiliate.getSocialLinks());
         response.setReferralCode(affiliate.getReferralCode());

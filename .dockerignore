@@ -6,3 +6,5 @@ target
 .DS_Store
 frontend
 docker-compose.yml
+tmp
+src/main/resources/db/migration/test.sql

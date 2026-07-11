@@ -1,21 +1,21 @@
 import { useEffect, useState, useRef } from 'react';
 import type { ChangeEvent } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Copy, ExternalLink, LayoutDashboard, User, BookOpen, TrendingUp, Eye, Save, Plus, Trash2, Upload, Loader2, CheckCircle2, AlertCircle, DollarSign, Users, Share2, Camera, LogOut, Clock, Image, Package, CalendarDays, Edit3, X, Lightbulb } from 'lucide-react';
+import { Copy, ExternalLink, LayoutDashboard, User, BookOpen, TrendingUp, Eye, Save, Plus, Trash2, Upload, Loader2, CheckCircle2, AlertCircle, DollarSign, Users, Share2, Camera, LogOut, Clock, Image, Package, CalendarDays, Edit3, X, Lightbulb, Settings } from 'lucide-react';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
 import { useAuth } from '../hooks/useAuth';
 import {
   getAffiliateProfile,
   updateAffiliateProfile,
-  uploadImage,
+  uploadImages,
   getAffiliateConversions,
   type AffiliateProfile,
   type AffiliateProfileUpdateInput,
   type AffiliateConversion,
 } from '../api/client';
 
-type Tab = 'overview' | 'profile' | 'identity' | 'progress' | 'earnings' | 'preview';
+type Tab = 'overview' | 'profile' | 'identity' | 'progress' | 'settings' | 'earnings' | 'preview';
 
 const CONDITION_OPTIONS = [
   'Psoriasis fighter',
@@ -30,6 +30,7 @@ const TABS: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'profile', label: 'Profile', icon: User },
   { id: 'identity', label: 'Identity', icon: BookOpen },
   { id: 'progress', label: 'Progress', icon: TrendingUp },
+  { id: 'settings', label: 'Settings', icon: Settings },
   { id: 'earnings', label: 'Earnings', icon: DollarSign },
   { id: 'preview', label: 'Preview', icon: Eye },
 ];
@@ -39,14 +40,132 @@ export interface ProgressUpdate {
   endDate: string;
   description: string;
   images: string[];
-  products: string[];
+  products: ProductMention[];
   tips: string;
 }
 
+type ProductLinkConfig = {
+  id: string;
+  name: string;
+  url: string;
+};
+
+type ProductMention = string | {
+  id?: string;
+  name?: string;
+  url?: string;
+};
+
 const MAX_IMAGES = 5;
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
 
 function defaultUpdate(): ProgressUpdate {
   return { startDate: '', endDate: '', description: '', images: [], products: [], tips: '' };
+}
+
+function createProductId() {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+  return `product-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function normalizeProductMention(product: ProductMention, productLinks: ProductLinkConfig[] = []): { name: string; url?: string } {
+  if (typeof product === 'string') {
+    const linked = productLinks.find((item) => item.id === product);
+    return linked ? { name: linked.name, url: linked.url } : { name: product };
+  }
+  const linked = product.id ? productLinks.find((item) => item.id === product.id) : undefined;
+  if (linked) {
+    return { name: linked.name, url: linked.url };
+  }
+  return {
+    name: product.name || '',
+    url: product.url,
+  };
+}
+
+function productMentionLabel(product: ProductMention, productLinks: ProductLinkConfig[] = []) {
+  return normalizeProductMention(product, productLinks).name;
+}
+
+function productMentionUrl(product: ProductMention, productLinks: ProductLinkConfig[] = []) {
+  const url = normalizeProductMention(product, productLinks).url?.trim();
+  if (!url) return undefined;
+  return /^https?:\/\//i.test(url) ? url : undefined;
+}
+
+function parseProductLinks(value?: string | null): ProductLinkConfig[] {
+  try {
+    const parsed = JSON.parse(value || '[]');
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((item) => ({
+        id: typeof item?.id === 'string' && item.id.trim() ? item.id : createProductId(),
+        name: typeof item?.name === 'string' ? item.name : '',
+        url: typeof item?.url === 'string' ? item.url : '',
+      }))
+      .filter((item) => item.name.trim());
+  } catch {
+    return [];
+  }
+}
+
+function serializeProductLinks(products: ProductLinkConfig[]) {
+  return JSON.stringify(
+    products
+      .map((item) => ({
+        id: item.id,
+        name: item.name.trim(),
+        url: item.url.trim(),
+      }))
+      .filter((item) => item.name)
+  );
+}
+
+function hasProductMention(products: ProductMention[], productId: string) {
+  return products.some((product) => typeof product !== 'string' && product.id === productId);
+}
+
+function toggleProductMention(products: ProductMention[], product: ProductLinkConfig) {
+  if (hasProductMention(products, product.id)) {
+    return products.filter((item) => !(typeof item !== 'string' && item.id === product.id));
+  }
+  return [...products, { id: product.id }];
+}
+
+function normalizeProgressUpdate(post: ProgressUpdate): ProgressUpdate {
+  return {
+    ...post,
+    images: Array.isArray(post.images) ? post.images : [],
+    products: Array.isArray(post.products)
+      ? post.products
+          .map((product) => {
+            if (typeof product === 'string') return product;
+            return {
+              id: typeof product?.id === 'string' ? product.id : undefined,
+              name: typeof product?.name === 'string' ? product.name : undefined,
+              url: typeof product?.url === 'string' ? product.url : undefined,
+            };
+          })
+          .filter((product) => typeof product === 'string' || product.id || product.name)
+      : [],
+  };
+}
+
+function cleanProductLinks(products: ProductLinkConfig[]) {
+  return products
+    .map((item) => ({
+      id: item.id || createProductId(),
+      name: item.name.trim(),
+      url: item.url.trim(),
+    }))
+    .filter((item) => item.name);
+}
+
+function hasInvalidProductLink(products: ProductLinkConfig[]) {
+  return products.some((item) => item.url.trim() && !/^https?:\/\//i.test(item.url.trim()));
 }
 
 export default function AffiliateDashboardPage() {
@@ -60,6 +179,7 @@ export default function AffiliateDashboardPage() {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [progressPosts, setProgressPosts] = useState<ProgressUpdate[]>([]);
+  const [productLinks, setProductLinks] = useState<ProductLinkConfig[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [composer, setComposer] = useState<ProgressUpdate>(defaultUpdate());
   const [showComposer, setShowComposer] = useState(false);
@@ -85,10 +205,11 @@ export default function AffiliateDashboardPage() {
         });
         try {
           const parsed: ProgressUpdate[] = JSON.parse(data.progressText || '[]');
-          setProgressPosts(Array.isArray(parsed) ? parsed : []);
+          setProgressPosts(Array.isArray(parsed) ? parsed.map(normalizeProgressUpdate) : []);
         } catch {
           setProgressPosts([]);
         }
+        setProductLinks(parseProductLinks(data.affiliateProductLinks));
       })
       .catch(() => setProfile(null))
       .finally(() => setLoading(false));
@@ -115,6 +236,11 @@ export default function AffiliateDashboardPage() {
 
   const handleSave = async () => {
     if (!user.email) return;
+    const cleanedProductLinks = cleanProductLinks(productLinks);
+    if (hasInvalidProductLink(cleanedProductLinks)) {
+      setError('Product links must start with http:// or https://.');
+      return;
+    }
     setSaving(true);
     setError(null);
     setMessage(null);
@@ -123,8 +249,10 @@ export default function AffiliateDashboardPage() {
         ...draft,
         progressText: JSON.stringify(progressPosts),
         progressImages: '[]',
+        affiliateProductLinks: serializeProductLinks(cleanedProductLinks),
       });
       setProfile(updated);
+      setProductLinks(cleanedProductLinks);
       setMessage('Saved successfully.');
       setTimeout(() => setMessage(null), 2500);
     } catch (err) {
@@ -134,12 +262,31 @@ export default function AffiliateDashboardPage() {
     }
   };
 
-  const handleImageUpload = async (file: File) => {
+  const handleImageUpload = async (files: File[], remainingSlots: number) => {
+    if (files.length === 0) return [];
+    if (files.length > remainingSlots) {
+      setError(`You can add ${remainingSlots} more photo${remainingSlots === 1 ? '' : 's'}.`);
+      return [];
+    }
+
+    const invalidType = files.find((file) => !ALLOWED_IMAGE_TYPES.includes(file.type));
+    if (invalidType) {
+      setError('Only JPEG and PNG photos are allowed.');
+      return [];
+    }
+
+    const oversized = files.find((file) => file.size > MAX_IMAGE_BYTES);
+    if (oversized) {
+      setError('Each photo must be 10MB or smaller.');
+      return [];
+    }
+
     try {
-      return await uploadImage(file);
-    } catch {
-      setError('Upload failed.');
-      return null;
+      setError(null);
+      return await uploadImages(files);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Upload failed.');
+      return [];
     }
   };
 
@@ -336,6 +483,8 @@ export default function AffiliateDashboardPage() {
                     ? !!profile?.conditionLabel
                     : tab.id === 'progress'
                       ? progressPosts.length > 0
+                      : tab.id === 'settings'
+                        ? productLinks.length > 0
                       : true;
                 return (
                   <button
@@ -544,14 +693,46 @@ export default function AffiliateDashboardPage() {
                           <input type="month" value={composer.endDate} onChange={(e) => setComposer(p => ({ ...p, endDate: e.target.value }))}
                             className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300" />
                         </label>
-                        <label className="grid gap-1.5">
-                          <span className="text-xs font-bold uppercase tracking-widest text-muted flex items-center gap-1">
-                            <Package size={12} /> Products used
-                          </span>
-                          <input type="text" value={composer.products.join(', ')} placeholder="Ebook Psoriasis, Moisturizer..."
-                            onChange={(e) => setComposer(p => ({ ...p, products: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))}
-                            className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-ink outline-none focus:ring-2 focus:ring-green/40 focus:border-green-300" />
-                        </label>
+                      </div>
+
+                      <div className="grid gap-2">
+                        <span className="text-xs font-bold uppercase tracking-widest text-muted flex items-center gap-1">
+                          <Package size={12} /> Product tags
+                        </span>
+                        {productLinks.length > 0 ? (
+                          <div className="flex flex-wrap gap-2">
+                            {productLinks.map((product) => {
+                              const selected = hasProductMention(composer.products, product.id);
+                              return (
+                                <button
+                                  key={product.id}
+                                  type="button"
+                                  onClick={() => setComposer(p => ({ ...p, products: toggleProductMention(p.products, product) }))}
+                                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                                    selected
+                                      ? 'bg-green text-white border-green'
+                                      : 'bg-green-50 text-green border-green-200 hover:bg-green-100'
+                                  }`}
+                                >
+                                  <Package size={12} />
+                                  {product.name}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-3 text-sm text-muted">
+                            Add product links in Settings first, then tag them in your updates.
+                          </div>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('settings')}
+                          className="inline-flex w-fit items-center gap-1.5 text-xs font-semibold text-green hover:underline"
+                        >
+                          <Settings size={12} />
+                          Manage product links
+                        </button>
                       </div>
 
                       <label className="grid gap-1.5">
@@ -583,9 +764,9 @@ export default function AffiliateDashboardPage() {
                             </div>
                           ))}
                           {composer.images.length < MAX_IMAGES && (
-                            <ImageUploadButton onUpload={async (file) => {
-                              const url = await handleImageUpload(file);
-                              if (url) setComposer(p => ({ ...p, images: [...p.images, url] }));
+                            <ImageUploadButton remainingSlots={MAX_IMAGES - composer.images.length} onUpload={async (files) => {
+                              const urls = await handleImageUpload(files, MAX_IMAGES - composer.images.length);
+                              if (urls.length > 0) setComposer(p => ({ ...p, images: [...p.images, ...urls].slice(0, MAX_IMAGES) }));
                             }} />
                           )}
                         </div>
@@ -616,6 +797,7 @@ export default function AffiliateDashboardPage() {
                         <ProgressPostCard
                           key={idx}
                           post={post}
+                          productLinks={productLinks}
                           onEdit={() => openComposer(idx)}
                           onDelete={() => deletePost(idx)}
                         />
@@ -627,6 +809,64 @@ export default function AffiliateDashboardPage() {
                     <button onClick={handleSave} disabled={saving} className="button-base button-primary gap-2">
                       {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                       {saving ? 'Saving...' : 'Save all progress'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'settings' && (
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-lg font-bold text-ink mb-1">Affiliate link settings</h2>
+                    <p className="text-sm text-muted">Save the Shopee or product links you often promote, then tag them in progress posts.</p>
+                  </div>
+
+                  <div className="space-y-3">
+                    {productLinks.length === 0 ? (
+                      <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-8 text-center">
+                        <Package size={32} className="text-muted mx-auto mb-3" />
+                        <p className="text-sm text-muted">No product links yet. Add your first product below.</p>
+                      </div>
+                    ) : (
+                      productLinks.map((product, index) => (
+                        <div key={product.id} className="grid grid-cols-1 md:grid-cols-[minmax(160px,0.8fr)_minmax(220px,1.2fr)_auto] gap-3 items-end rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+                          <Field
+                            label="Product tag"
+                            value={product.name}
+                            onChange={(e) => setProductLinks((prev) => prev.map((item, i) => i === index ? { ...item, name: e.target.value } : item))}
+                            placeholder="DND BioSerat"
+                          />
+                          <Field
+                            label="Shopee/product link"
+                            value={product.url}
+                            onChange={(e) => setProductLinks((prev) => prev.map((item, i) => i === index ? { ...item, url: e.target.value } : item))}
+                            placeholder="https://shopee.com.my/..."
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setProductLinks((prev) => prev.filter((_, i) => i !== index))}
+                            className="h-[46px] inline-flex items-center justify-center gap-2 rounded-xl border border-red-100 px-4 text-sm font-semibold text-red-500 hover:bg-red-50"
+                          >
+                            <Trash2 size={16} />
+                            Remove
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setProductLinks((prev) => [...prev, { id: createProductId(), name: '', url: '' }])}
+                      className="button-base button-secondary gap-2"
+                    >
+                      <Plus size={16} />
+                      Add product link
+                    </button>
+                    <button onClick={handleSave} disabled={saving} className="button-base button-primary gap-2">
+                      {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                      {saving ? 'Saving...' : 'Save settings'}
                     </button>
                   </div>
                 </div>
@@ -737,7 +977,7 @@ export default function AffiliateDashboardPage() {
                       ) : (
                         <div className="space-y-4">
                           {progressPosts.map((post, idx) => (
-                            <PreviewPostCard key={idx} post={post} />
+                            <PreviewPostCard key={idx} post={post} productLinks={productLinks} />
                           ))}
                         </div>
                       )}
@@ -813,8 +1053,9 @@ function SelectField({ label, value, onChange, options }: {
   );
 }
 
-function ProgressPostCard({ post, onEdit, onDelete }: {
+function ProgressPostCard({ post, productLinks, onEdit, onDelete }: {
   post: ProgressUpdate;
+  productLinks: ProductLinkConfig[];
   onEdit: () => void;
   onDelete: () => void;
 }) {
@@ -858,10 +1099,7 @@ function ProgressPostCard({ post, onEdit, onDelete }: {
       {post.products.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {post.products.map((p, i) => (
-            <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-medium text-green">
-              <Package size={11} />
-              {p}
-            </span>
+            <ProductTag key={i} product={p} productLinks={productLinks} />
           ))}
         </div>
       )}
@@ -884,7 +1122,7 @@ function ProgressPostCard({ post, onEdit, onDelete }: {
   );
 }
 
-function PreviewPostCard({ post }: { post: ProgressUpdate }) {
+function PreviewPostCard({ post, productLinks }: { post: ProgressUpdate; productLinks: ProductLinkConfig[] }) {
   const fmt = (d: string) => {
     if (!d) return '';
     if (d.length === 7) {
@@ -915,10 +1153,7 @@ function PreviewPostCard({ post }: { post: ProgressUpdate }) {
       {post.products.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {post.products.map((p, i) => (
-            <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-medium text-green">
-              <Package size={11} />
-              {p}
-            </span>
+            <ProductTag key={i} product={p} productLinks={productLinks} />
           ))}
         </div>
       )}
@@ -939,22 +1174,49 @@ function PreviewPostCard({ post }: { post: ProgressUpdate }) {
   );
 }
 
-function ImageUploadButton({ onUpload }: { onUpload: (file: File) => Promise<void> }) {
+function ProductTag({ product, productLinks = [] }: { product: ProductMention; productLinks?: ProductLinkConfig[] }) {
+  const label = productMentionLabel(product, productLinks);
+  const url = productMentionUrl(product, productLinks);
+  const className = "inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-medium text-green";
+
+  if (!label) return null;
+
+  if (url) {
+    return (
+      <a href={url} target="_blank" rel="noreferrer" className={`${className} hover:bg-green-100 no-underline`}>
+        <Package size={11} />
+        {label}
+        <ExternalLink size={10} />
+      </a>
+    );
+  }
+
+  return (
+    <span className={className}>
+      <Package size={11} />
+      {label}
+    </span>
+  );
+}
+
+function ImageUploadButton({ remainingSlots, onUpload }: { remainingSlots: number; onUpload: (files: File[]) => Promise<void> }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
   return (
     <>
-      <input ref={fileRef} type="file" accept="image/*" className="hidden"
+      <input ref={fileRef} type="file" accept="image/jpeg,image/png" multiple className="hidden"
         onChange={async (e) => {
-          const file = e.target.files?.[0];
-          if (!file) return;
+          const files = Array.from(e.target.files ?? []);
+          if (files.length === 0) return;
           setUploading(true);
-          await onUpload(file);
+          await onUpload(files);
           setUploading(false);
           if (fileRef.current) fileRef.current.value = '';
         }} />
       <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
+        title={`Upload up to ${remainingSlots} photo${remainingSlots === 1 ? '' : 's'}`}
+        aria-label={`Upload up to ${remainingSlots} photo${remainingSlots === 1 ? '' : 's'}`}
         className="w-20 h-20 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-muted hover:text-green hover:border-green-400 transition-all">
         {uploading ? <Loader2 size={18} className="animate-spin" /> : <Upload size={18} />}
       </button>
