@@ -12,6 +12,7 @@ export interface User {
   fullName: string | null;
   role: string;
   enabled: boolean;
+  avatarUrl?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -22,6 +23,7 @@ export interface AuthUser {
   fullName: string;
   username: string;
   role: string;
+  avatarUrl?: string | null;
 }
 
 export interface ChecklistFormData {

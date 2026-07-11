@@ -657,6 +657,20 @@
     "forgotPassword": "Forgot password?",
     "rememberPassword": "Remember your password?"
   },
+  "profile": {
+    "title": "Profile",
+    "avatar": "Profile picture",
+    "upload": "Upload photo",
+    "uploading": "Uploading...",
+    "remove": "Remove photo",
+    "hint": "JPEG or PNG, max 10MB. Your photo will be resized and compressed automatically.",
+    "saved": "Profile picture updated.",
+    "removed": "Profile picture removed.",
+    "name": "Name",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role"
+  },
   "aisha": {
     "back": "Back to home",
     "badge": "Real story",

@@ -76,8 +76,12 @@ export default function Topbar() {
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/50 transition-all"
               >
-                <div className="w-7 h-7 rounded-full gradient-green flex items-center justify-center">
-                  <User size={14} className="text-white" />
+                <div className="w-7 h-7 rounded-full gradient-green flex items-center justify-center overflow-hidden">
+                  {user.avatarUrl ? (
+                    <img src={user.avatarUrl} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <User size={14} className="text-white" />
+                  )}
                 </div>
                 <span className="text-sm font-semibold text-ink max-w-[100px] truncate">
                   {user.fullName || user.email}
@@ -93,6 +97,14 @@ export default function Topbar() {
                     <div className="px-3 py-2 text-sm text-muted border-b border-line mb-1">
                       {user.email}
                     </div>
+                    <Link
+                      to="/profile"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg hover:bg-white/50 transition-all mb-1 no-underline"
+                    >
+                      <User size={16} />
+                      Profile
+                    </Link>
                     {dashboardHref && (
                       <Link
                         to={dashboardHref}
@@ -147,8 +159,12 @@ export default function Topbar() {
 
         <div className="md:hidden flex items-center gap-2 z-10">
           {user ? (
-            <div className="w-7 h-7 rounded-full gradient-green flex items-center justify-center">
-              <User size={14} className="text-white" />
+            <div className="w-7 h-7 rounded-full gradient-green flex items-center justify-center overflow-hidden">
+              {user.avatarUrl ? (
+                <img src={user.avatarUrl} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <User size={14} className="text-white" />
+              )}
             </div>
           ) : (
             <Link to="/login" className="no-underline">
@@ -198,13 +214,23 @@ export default function Topbar() {
                 )
               )}
               {user && (
-                <button
-                  onClick={() => { logout(); setOpen(false); }}
-                  className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-rose/5 text-rose transition-colors"
-                >
-                  <LogOut size={16} />
-                  {t('auth.logout')}
-                </button>
+                <>
+                  <Link
+                    to="/profile"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-white/50 transition-colors no-underline"
+                  >
+                    <User size={16} />
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => { logout(); setOpen(false); }}
+                    className="flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-rose/5 text-rose transition-colors"
+                  >
+                    <LogOut size={16} />
+                    {t('auth.logout')}
+                  </button>
+                </>
               )}
               {dashboardHref && (
                 <Link

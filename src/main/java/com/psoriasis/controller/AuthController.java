@@ -30,7 +30,8 @@ public class AuthController {
                 user.getEmail(),
                 user.getFullName() != null ? user.getFullName() : "",
                 user.getUsername(),
-                user.getRole()
+                user.getRole(),
+                user.getAvatarUrl()
         );
     }
 
