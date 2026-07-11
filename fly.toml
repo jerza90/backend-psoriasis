@@ -1,6 +1,9 @@
 app = "psoriasis-backend"
 primary_region = "sin"
 
+[env]
+  APP_UPLOAD_DIR = "/data/affiliate-uploads"
+
 [build]
 
 [http_service]
@@ -14,3 +17,7 @@ primary_region = "sin"
   cpu_kind = "shared"
   cpus = 1
   memory_mb = 512
+
+[[mounts]]
+  source = "affiliate_uploads"
+  destination = "/data"

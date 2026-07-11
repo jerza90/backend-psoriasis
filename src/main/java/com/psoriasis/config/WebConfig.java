@@ -17,6 +17,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${frontend.allowed-origins:${frontend.url}}")
     private String allowedOrigins;
 
+    @Value("${app.upload.dir:local-ebooks/affiliate-uploads}")
+    private String uploadDir;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
@@ -32,6 +35,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
-            .addResourceLocations("file:local-ebooks/affiliate-uploads/");
+            .addResourceLocations("file:" + uploadDir + "/");
     }
 }

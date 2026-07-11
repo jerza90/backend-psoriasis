@@ -4,6 +4,13 @@ import { getApiBaseUrl } from '../config/apiBase';
 const API_BASE = getApiBaseUrl();
 const BASE_URL = API_BASE + '/api';
 
+function toAbsoluteUploadUrl(url: string): string {
+  if (!url.startsWith('/uploads/')) {
+    return url;
+  }
+  return `${API_BASE}${url}`;
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: {
@@ -112,6 +119,7 @@ export interface AffiliateProfile {
   progressTitle?: string | null;
   progressText?: string | null;
   progressImages?: string | null;
+  affiliateProductLinks?: string | null;
   avatarUrl?: string | null;
   socialLinks?: string | null;
   paymentInfo?: string | null;
@@ -146,6 +154,7 @@ export interface AffiliateProfileUpdateInput {
   progressTitle?: string;
   progressText?: string;
   progressImages?: string;
+  affiliateProductLinks?: string;
 }
 
 export interface AdminTestimonialProgressInput {
@@ -268,16 +277,23 @@ export async function registerAffiliate(name: string, email: string): Promise<Af
   });
 }
 
-export async function uploadImage(file: File): Promise<string> {
+export async function uploadImages(files: File[]): Promise<string[]> {
   const form = new FormData();
-  form.append('file', file);
+  files.forEach((file) => form.append('files', file));
   const res = await fetch(`${API_BASE}/api/upload`, {
     method: 'POST',
     body: form,
   });
   if (!res.ok) {
-    throw new Error('Upload failed');
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error || 'Upload failed');
   }
   const data = await res.json();
-  return data.url;
+  const urls = Array.isArray(data.urls) ? data.urls : [data.url].filter(Boolean);
+  return urls.map(toAbsoluteUploadUrl);
+}
+
+export async function uploadImage(file: File): Promise<string> {
+  const urls = await uploadImages([file]);
+  return urls[0];
 }

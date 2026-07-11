@@ -50,10 +50,11 @@ check_checkout() {
   local product="$1"
   local full_name="${CHECKOUT_NAME:-Smoke Test User}"
   local email="${CHECKOUT_EMAIL:-smoke@example.com}"
+  local phone="${CHECKOUT_PHONE:-0123456789}"
 
   echo "Checking checkout session ($product)"
   local body response url
-  body="$(printf '{"fullName":"%s","email":"%s","product":"%s"}' "$full_name" "$email" "$product")"
+  body="$(printf '{"fullName":"%s","email":"%s","phone":"%s","product":"%s"}' "$full_name" "$email" "$phone" "$product")"
   response="$(curl -fsS -X POST "$BACKEND_URL/api/checkout/create-session" \
     -H 'Content-Type: application/json' \
     -d "$body")"

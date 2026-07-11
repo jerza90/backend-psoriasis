@@ -111,6 +111,7 @@ public class AffiliateService {
         if (request.getProgressTitle() != null) affiliate.setProgressTitle(request.getProgressTitle());
         if (request.getProgressText() != null) affiliate.setProgressText(request.getProgressText());
         if (request.getProgressImages() != null) affiliate.setProgressImages(request.getProgressImages());
+        if (request.getAffiliateProductLinks() != null) affiliate.setAffiliateProductLinks(request.getAffiliateProductLinks());
         affiliate.setStatus("active");
         affiliate.setUpdatedAt(LocalDateTime.now());
         Affiliate saved = affiliateRepository.save(affiliate);
