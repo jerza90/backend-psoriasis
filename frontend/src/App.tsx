@@ -17,6 +17,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ProfilePage from './pages/ProfilePage';
 import AdminTestimonialsPage from './pages/AdminTestimonialsPage';
 import AffiliateDashboardPage from './pages/AffiliateDashboardPage';
 import AffiliatePublicPage from './pages/AffiliatePublicPage';
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:id" element={<BlogPostPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/thank-you" element={<ThankYouPage />} />
           <Route path="/payment-failed" element={<PaymentFailedPage />} />

@@ -17,6 +17,7 @@ public class UserMapper {
         response.setFullName(user.getFullName());
         response.setRole(user.getRole());
         response.setEnabled(user.isEnabled());
+        response.setAvatarUrl(user.getAvatarUrl());
         response.setCreatedAt(user.getCreatedAt());
         response.setUpdatedAt(user.getUpdatedAt());
         return response;

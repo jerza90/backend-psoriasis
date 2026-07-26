@@ -6,15 +6,17 @@ public class AuthResponseDTO {
     private String fullName;
     private String username;
     private String role;
+    private String avatarUrl;
 
     public AuthResponseDTO() {}
 
-    public AuthResponseDTO(Long id, String email, String fullName, String username, String role) {
+    public AuthResponseDTO(Long id, String email, String fullName, String username, String role, String avatarUrl) {
         this.id = id;
         this.email = email;
         this.fullName = fullName;
         this.username = username;
         this.role = role;
+        this.avatarUrl = avatarUrl;
     }
 
     public Long getId() {
@@ -55,5 +57,13 @@ public class AuthResponseDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }

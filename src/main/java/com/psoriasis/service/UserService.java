@@ -124,6 +124,17 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public UserResponseDTO findById(Long id) {
+        return userMapper.toResponse(userRepository.findById(id).orElse(null));
+    }
+
+    public UserResponseDTO updateAvatar(Long userId, String avatarUrl) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setAvatarUrl(avatarUrl);
+        return userMapper.toResponse(userRepository.save(user));
+    }
+
     public UserResponseDTO findByUsername(String username) {
         return userMapper.toResponse(userRepository.findByUsername(username));
     }

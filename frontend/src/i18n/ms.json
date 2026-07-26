@@ -657,6 +657,20 @@
     "forgotPassword": "Lupa kata laluan?",
     "rememberPassword": "Ingat kata laluan anda?"
   },
+  "profile": {
+    "title": "Profil",
+    "avatar": "Gambar profil",
+    "upload": "Muat naik",
+    "uploading": "Sedang muat naik...",
+    "remove": "Buang gambar",
+    "hint": "JPEG atau PNG, maks 10MB. Gambar akan dikecilkan dan dimampatkan secara automatik.",
+    "saved": "Gambar profil dikemas kini.",
+    "removed": "Gambar profil dibuang.",
+    "name": "Nama",
+    "username": "Nama pengguna",
+    "email": "E-mel",
+    "role": "Peranan"
+  },
   "aisha": {
     "back": "Kembali ke laman utama",
     "badge": "Pengalaman sebenar",

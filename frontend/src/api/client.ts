@@ -96,6 +96,17 @@ export async function getUserByUsername(username: string): Promise<User> {
   return request<User>(`/users/username/${encodeURIComponent(username)}`);
 }
 
+export async function getUserById(id: number): Promise<User> {
+  return request<User>(`/users/${id}`);
+}
+
+export async function updateUserAvatar(id: number, avatarUrl: string): Promise<User> {
+  return request<User>(`/users/${id}/avatar`, {
+    method: 'PUT',
+    body: JSON.stringify({ avatarUrl }),
+  });
+}
+
 export interface AffiliateProfile {
   id: number;
   name: string;
