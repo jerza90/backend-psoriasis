@@ -141,7 +141,7 @@ public class EmailService {
 
                         <div style="background: #f9f9f9; border-radius: 12px; padding: 18px; margin: 20px 0;">
                             <h3 style="margin: 0 0 12px; color: #2d6a4f; font-size: 16px;">Butiran Pelanggan</h3>
-                            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                            <table style="width: 100%%; border-collapse: collapse; font-size: 14px;">
                                 <tr><td style="padding: 6px 0; width: 160px; color: #6b7280;">Nama</td><td style="padding: 6px 0;">%s</td></tr>
                                 <tr><td style="padding: 6px 0; color: #6b7280;">Emel</td><td style="padding: 6px 0;">%s</td></tr>
                                 <tr><td style="padding: 6px 0; color: #6b7280;">No. Telefon</td><td style="padding: 6px 0;">%s</td></tr>
@@ -151,7 +151,7 @@ public class EmailService {
 
                         <div style="background: #f9f9f9; border-radius: 12px; padding: 18px; margin: 20px 0;">
                             <h3 style="margin: 0 0 12px; color: #2d6a4f; font-size: 16px;">Butiran Pembelian</h3>
-                            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                            <table style="width: 100%%; border-collapse: collapse; font-size: 14px;">
                                 <tr>
                                     <th align="left" style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">Produk</th>
                                     <th align="right" style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">Harga (%s)</th>
@@ -165,7 +165,7 @@ public class EmailService {
                                     <td align="right" style="padding: 10px 0;">%s</td>
                                 </tr>
                             </table>
-                            <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px;">
+                            <table style="width: 100%%; border-collapse: collapse; font-size: 14px; margin-top: 8px;">
                                 <tr>
                                     <td style="padding: 6px 0; color: #6b7280;">Jumlah</td>
                                     <td align="right" style="padding: 6px 0;">1</td>
@@ -183,7 +183,7 @@ public class EmailService {
 
                         <div style="background: #f9f9f9; border-radius: 12px; padding: 18px; margin: 20px 0;">
                             <h3 style="margin: 0 0 12px; color: #2d6a4f; font-size: 16px;">Butiran Pembayaran</h3>
-                            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                            <table style="width: 100%%; border-collapse: collapse; font-size: 14px;">
                                 <tr><td style="padding: 6px 0; width: 160px; color: #6b7280;">Jumlah</td><td style="padding: 6px 0;">%s</td></tr>
                                 <tr><td style="padding: 6px 0; color: #6b7280;">Kaedah</td><td style="padding: 6px 0;">%s</td></tr>
                                 <tr><td style="padding: 6px 0; color: #6b7280;">Affiliate</td><td style="padding: 6px 0;">%s</td></tr>
