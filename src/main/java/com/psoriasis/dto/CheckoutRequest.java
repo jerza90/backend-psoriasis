@@ -22,6 +22,7 @@ public class CheckoutRequest {
     private String product;
 
     private String referralCode;
+    private String discountCode;
 
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
@@ -37,4 +38,7 @@ public class CheckoutRequest {
 
     public String getReferralCode() { return referralCode; }
     public void setReferralCode(String referralCode) { this.referralCode = referralCode; }
+
+    public String getDiscountCode() { return discountCode; }
+    public void setDiscountCode(String discountCode) { this.discountCode = discountCode; }
 }

@@ -48,6 +48,12 @@ public class ToyyibPayService {
     @Value("${toyyipay.callback-url}")
     private String callbackUrl;
 
+    @Value("${toyyipay.test-discount-code:}")
+    private String testDiscountCode;
+
+    @Value("${toyyipay.test-total-amount:5.00}")
+    private BigDecimal testTotalAmount;
+
     @Value("${frontend.url}")
     private String frontendUrl;
 
@@ -74,9 +80,14 @@ public class ToyyibPayService {
     }
 
     public String createBill(String fullName, String email, String phone, String referralCode) throws Exception {
+        return createBill(fullName, email, phone, referralCode, null);
+    }
+
+    public String createBill(String fullName, String email, String phone, String referralCode, String discountCode) throws Exception {
         String billRef = "BM-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String returnUrl = frontendUrl + "/thank-you?billcode={billcode}&status_id={status_id}";
-        String billAmount = BM_BILL_AMOUNT_SEN;
+        BigDecimal orderAmount = resolveOrderAmount(discountCode);
+        String billAmount = toSen(orderAmount);
         String customerPhone = phone == null || phone.isBlank() ? "0000000000" : phone.trim();
 
         String body = "userSecretKey=" + encode(userSecretKey)
@@ -127,8 +138,8 @@ public class ToyyibPayService {
         order.setCustomerName(fullName);
         order.setCustomerEmail(email);
         order.setCustomerPhone(customerPhone);
-        order.setProductName("Panduan Sokongan Psoriasis");
-        order.setAmount(BM_TOTAL_AMOUNT);
+        order.setProductName(isDiscountCodeApplied(discountCode) ? "Panduan Sokongan Psoriasis (Test Discount)" : "Panduan Sokongan Psoriasis");
+        order.setAmount(orderAmount);
         order.setCurrency("RM");
         order.setPaymentStatus("Unpaid");
         order.setStatus("Active");
@@ -141,6 +152,29 @@ public class ToyyibPayService {
         orderRepository.save(order);
 
         return baseUrl + "/" + billCode;
+    }
+
+    private BigDecimal resolveOrderAmount(String discountCode) {
+        if (discountCode == null || discountCode.isBlank()) {
+            return BM_TOTAL_AMOUNT;
+        }
+        if (!isDiscountCodeApplied(discountCode)) {
+            throw new IllegalArgumentException("Invalid discount code");
+        }
+        return testTotalAmount.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private boolean isDiscountCodeApplied(String discountCode) {
+        return testDiscountCode != null
+                && !testDiscountCode.isBlank()
+                && discountCode != null
+                && testDiscountCode.trim().equalsIgnoreCase(discountCode.trim());
+    }
+
+    private String toSen(BigDecimal amount) {
+        return amount.movePointRight(2)
+                .setScale(0, RoundingMode.UNNECESSARY)
+                .toPlainString();
     }
 
     public PaymentOrder checkPaymentStatus(String billCode) throws Exception {

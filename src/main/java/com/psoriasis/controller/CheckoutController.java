@@ -34,7 +34,8 @@ public class CheckoutController {
                         request.getFullName(),
                         request.getEmail(),
                         request.getPhone(),
-                        request.getReferralCode()
+                        request.getReferralCode(),
+                        request.getDiscountCode()
                 );
                 return new CheckoutUrlResponseDTO(url);
             }
