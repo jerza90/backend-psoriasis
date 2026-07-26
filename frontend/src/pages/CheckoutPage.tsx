@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Lock, ArrowLeft, Mail, Download, AlertTriangle, Globe, MapPin, Banknote } from 'lucide-react';
+import { Lock, ArrowLeft, Mail, Download, AlertTriangle, Globe, MapPin, Banknote, Tag } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
@@ -38,6 +38,7 @@ export default function CheckoutPage() {
   const [email, setEmail] = useState(draft?.email ?? '');
   const [phone, setPhone] = useState(draft?.phone ?? '');
   const [name, setName] = useState(draft?.name ?? '');
+  const [discountCode, setDiscountCode] = useState(searchParams.get('discount') ?? draft?.discountCode ?? '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const resumeNotice = Boolean(searchParams.get('resume')) || Boolean(draft);
@@ -45,12 +46,12 @@ export default function CheckoutPage() {
   const referralCode = searchParams.get('ref') || undefined;
 
   useEffect(() => {
-    if (!name.trim() && !email.trim() && !phone.trim() && !referralCode) {
+    if (!name.trim() && !email.trim() && !phone.trim() && !referralCode && !discountCode.trim()) {
       clearCheckoutDraft();
       return;
     }
-    saveCheckoutDraft({ name, email, phone, product, referralCode });
-  }, [name, email, phone, product, referralCode]);
+    saveCheckoutDraft({ name, email, phone, product, referralCode, discountCode: discountCode.trim() || undefined });
+  }, [name, email, phone, product, referralCode, discountCode]);
 
   const selected = PRODUCTS[product];
 
@@ -65,7 +66,14 @@ export default function CheckoutPage() {
       const res = await fetch(`${getApiBaseUrl()}/api/checkout/create-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName: name, email, phone, product, referralCode }),
+        body: JSON.stringify({
+          fullName: name,
+          email,
+          phone,
+          product,
+          referralCode,
+          discountCode: discountCode.trim() || undefined,
+        }),
       });
 
       if (!res.ok) {
@@ -77,7 +85,7 @@ export default function CheckoutPage() {
       if (!data?.url) {
         throw new Error('Checkout link was not returned');
       }
-      saveCheckoutDraft({ name, email, phone, product, referralCode });
+      saveCheckoutDraft({ name, email, phone, product, referralCode, discountCode: discountCode.trim() || undefined });
       window.location.href = data.url;
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
@@ -236,6 +244,23 @@ export default function CheckoutPage() {
                   {t('checkout.emailDelivery')}
                 </div>
               </div>
+
+              {product === 'bm' && (
+                <div className="glass-card rounded-xl p-4 mb-4">
+                  <label className="block text-xs text-muted font-semibold mb-1.5">Discount code</label>
+                  <div className="relative">
+                    <Tag size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted/60" />
+                    <input
+                      type="text"
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value)}
+                      placeholder="Optional"
+                      className="w-full rounded-xl glass-input pl-9 pr-4 py-2.5 text-sm text-ink outline-none transition-all uppercase"
+                    />
+                  </div>
+                  <p className="text-xs text-muted/50 mt-2">Leave blank for normal checkout.</p>
+                </div>
+              )}
 
               {error && (
                 <div className="glass rounded-xl p-4 mb-4 flex items-start gap-2 border border-rose/30">

@@ -4,6 +4,7 @@ export type CheckoutDraft = {
   phone?: string;
   product: 'bm' | 'en';
   referralCode?: string;
+  discountCode?: string;
 };
 
 const KEY = 'psoriasis_checkout_draft';
