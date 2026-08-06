@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Lock, ArrowLeft, Mail, Download, AlertTriangle, Globe, MapPin, Banknote, Tag } from 'lucide-react';
+import { Lock, ArrowLeft, Mail, Download, AlertTriangle, Globe, MapPin, Banknote, Tag, Loader, CheckCircle2, XCircle } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 import Footer from '../components/Footer';
@@ -41,6 +41,8 @@ export default function CheckoutPage() {
   const [discountCode, setDiscountCode] = useState(searchParams.get('discount') ?? draft?.discountCode ?? '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [discountStatus, setDiscountStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
+  const [appliedDiscount, setAppliedDiscount] = useState<{ amount: number; original: number } | null>(null);
   const resumeNotice = Boolean(searchParams.get('resume')) || Boolean(draft);
 
   const referralCode = searchParams.get('ref') || undefined;
@@ -54,6 +56,38 @@ export default function CheckoutPage() {
   }, [name, email, phone, product, referralCode, discountCode]);
 
   const selected = PRODUCTS[product];
+
+  const validateDiscount = async (code: string) => {
+    const trimmed = code.trim();
+    if (!trimmed) {
+      setDiscountStatus('idle');
+      setAppliedDiscount(null);
+      return;
+    }
+    setDiscountStatus('checking');
+    try {
+      const res = await fetch(`${getApiBaseUrl()}/api/checkout/discount?code=${encodeURIComponent(trimmed)}`);
+      const data = await parseJsonSafe(res);
+      if (data?.valid) {
+        setAppliedDiscount({ amount: Number(data.discountedAmount), original: Number(data.originalAmount) });
+        setDiscountStatus('valid');
+      } else {
+        setAppliedDiscount(null);
+        setDiscountStatus('invalid');
+      }
+    } catch {
+      setAppliedDiscount(null);
+      setDiscountStatus('invalid');
+    }
+  };
+
+  const applied = appliedDiscount && product === 'bm' ? appliedDiscount : null;
+  const displayPrice = applied ? `RM ${applied.amount.toFixed(2)}` : selected.price;
+  const displayOriginal = applied ? `RM ${applied.original.toFixed(2)}` : selected.original;
+  const displayTotal = applied ? `RM ${applied.amount.toFixed(2)}` : selected.total;
+  const displaySave = applied
+    ? `RM ${(applied.original - applied.amount).toFixed(2)}`
+    : product === 'en' ? '-60%' : '-51%';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -247,18 +281,52 @@ export default function CheckoutPage() {
 
               {product === 'bm' && (
                 <div className="glass-card rounded-xl p-4 mb-4">
-                  <label className="block text-xs text-muted font-semibold mb-1.5">Discount code</label>
+                  <label className="block text-xs text-muted font-semibold mb-1.5">{t('checkout.discountCode')}</label>
                   <div className="relative">
                     <Tag size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted/60" />
                     <input
                       type="text"
                       value={discountCode}
-                      onChange={(e) => setDiscountCode(e.target.value)}
-                      placeholder="Optional"
-                      className="w-full rounded-xl glass-input pl-9 pr-4 py-2.5 text-sm text-ink outline-none transition-all uppercase"
+                      onChange={(e) => {
+                        setDiscountCode(e.target.value);
+                        setDiscountStatus('idle');
+                        setAppliedDiscount(null);
+                      }}
+                      onBlur={() => validateDiscount(discountCode)}
+                      placeholder={t('checkout.discountPlaceholder')}
+                      className={`w-full rounded-xl glass-input pl-9 pr-4 py-2.5 text-sm text-ink outline-none transition-all uppercase ${
+                        discountStatus === 'invalid'
+                          ? 'border-rose/70 animate-discount-shake'
+                          : discountStatus === 'valid'
+                          ? 'border-green/70 animate-discount-pop'
+                          : ''
+                      }`}
                     />
                   </div>
-                  <p className="text-xs text-muted/50 mt-2">Leave blank for normal checkout.</p>
+                  {discountStatus === 'checking' && (
+                    <p className="flex items-center gap-1.5 mt-2 text-xs text-muted">
+                      <Loader size={13} className="animate-spin" />
+                      {t('checkout.discountChecking')}
+                    </p>
+                  )}
+                  {discountStatus === 'valid' && appliedDiscount && (
+                    <p className="flex items-center gap-1.5 mt-2 text-xs text-green animate-fade-in">
+                      <CheckCircle2 size={14} className="shrink-0" />
+                      {t('checkout.discountValid', {
+                        amount: `RM ${appliedDiscount.amount.toFixed(2)}`,
+                        original: `RM ${appliedDiscount.original.toFixed(2)}`,
+                      })}
+                    </p>
+                  )}
+                  {discountStatus === 'invalid' && (
+                    <p className="flex items-center gap-1.5 mt-2 text-xs text-rose animate-fade-in">
+                      <XCircle size={14} className="shrink-0" />
+                      {t('checkout.discountInvalid')}
+                    </p>
+                  )}
+                  {discountStatus === 'idle' && (
+                    <p className="text-xs text-muted/50 mt-2">{t('checkout.discountHint')}</p>
+                  )}
                 </div>
               )}
 
@@ -300,7 +368,7 @@ export default function CheckoutPage() {
                   <p className="text-sm font-semibold truncate">{productLabel}</p>
                   <p className="text-xs text-muted/60">{t('ebook.details.pages')}</p>
                 </div>
-                <p className="text-sm font-bold">{selected.price}</p>
+                <p className="text-sm font-bold">{displayPrice}</p>
               </div>
 
               <div className="flex items-center gap-1.5 text-xs text-muted/50 mb-4">
@@ -309,23 +377,23 @@ export default function CheckoutPage() {
               </div>
 
               <div className="space-y-2 text-sm mb-4">
-                {selected.original && (
+                {displayOriginal && (
                   <div className="flex justify-between text-muted line-through">
                     <span>{t('checkout.original')}</span>
-                    <span>{selected.original}</span>
+                    <span>{displayOriginal}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-muted">
                   <span>{productLabel}</span>
-                  <span>{selected.price}</span>
+                  <span>{displayPrice}</span>
                 </div>
-                {selected.original && (
+                {displayOriginal && (
                   <div className="flex justify-between text-rose font-semibold text-xs">
                     <span>{t('checkout.discount')}</span>
-                    <span>{product === 'en' ? '-60%' : '-51%'}</span>
+                    <span>{displaySave}</span>
                   </div>
                 )}
-                {selected.surcharge && (
+                {selected.surcharge && !applied && (
                   <div className="flex justify-between text-muted text-xs pt-2 border-t border-white/10">
                     <span>{t('checkout.surcharge')}</span>
                     <span>{selected.surcharge}</span>
@@ -335,7 +403,7 @@ export default function CheckoutPage() {
 
               <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <span className="font-bold text-sm">{t('checkout.total')}</span>
-                <span className="text-xl font-black text-green">{selected.total}</span>
+                <span className="text-xl font-black text-green">{displayTotal}</span>
               </div>
 
               <div className="flex items-center gap-1.5 mt-4 text-xs text-muted/50 justify-center">

@@ -154,6 +154,26 @@ public class ToyyibPayService {
         return baseUrl + "/" + billCode;
     }
 
+    public com.psoriasis.dto.response.DiscountValidationResponseDTO validateDiscountCode(String discountCode) {
+        boolean valid = isDiscountCodeApplied(discountCode);
+        if (valid) {
+            return new com.psoriasis.dto.response.DiscountValidationResponseDTO(
+                    true,
+                    discountCode,
+                    testTotalAmount.setScale(2, RoundingMode.HALF_UP),
+                    BM_TOTAL_AMOUNT,
+                    "RM"
+            );
+        }
+        return new com.psoriasis.dto.response.DiscountValidationResponseDTO(
+                false,
+                discountCode,
+                null,
+                BM_TOTAL_AMOUNT,
+                "RM"
+        );
+    }
+
     private BigDecimal resolveOrderAmount(String discountCode) {
         if (discountCode == null || discountCode.isBlank()) {
             return BM_TOTAL_AMOUNT;

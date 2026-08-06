@@ -76,6 +76,29 @@
   50% { transform: translate(0, -22px) scale(1.04); }
 }
 
+/* Discount code feedback: shake for invalid (danger), gentle pulse for valid */
+@keyframes discount-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+@keyframes discount-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+  100% { transform: scale(1); }
+}
+
+@utility animate-discount-shake {
+  animation: discount-shake 0.4s ease-in-out;
+}
+
+@utility animate-discount-pop {
+  animation: discount-pop 0.35s ease-out;
+}
+
 @utility animate-drop-in {
   animation: drop-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }

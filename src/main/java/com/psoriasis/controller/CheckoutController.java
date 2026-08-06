@@ -52,6 +52,11 @@ public class CheckoutController {
         }
     }
 
+    @GetMapping("/discount")
+    public com.psoriasis.dto.response.DiscountValidationResponseDTO validateDiscount(@RequestParam String code) {
+        return toyyibPayService.validateDiscountCode(code);
+    }
+
     @GetMapping("/session/{sessionId}")
     public PaymentStatusResponseDTO getSession(@PathVariable String sessionId) {
         return checkoutService.getSessionStatus(sessionId);
