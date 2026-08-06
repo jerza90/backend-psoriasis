@@ -326,7 +326,13 @@
     "enSave": "Save 60%",
     "fpxPayment": "FPX / Bank Transfer",
     "creditCard": "Credit Card",
-    "payViaFpx": "Pay via FPX / online banking"
+    "payViaFpx": "Pay via FPX / online banking",
+    "discountCode": "Discount code",
+    "discountPlaceholder": "Enter code",
+    "discountHint": "Leave blank for normal checkout.",
+    "discountChecking": "Checking code...",
+    "discountValid": "Code applied — you pay {{amount}} instead of {{original}}.",
+    "discountInvalid": "Invalid discount code. Please check and try again."
   },
   "faq": {
     "badge": "Got questions?",

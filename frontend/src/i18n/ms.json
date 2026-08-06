@@ -326,7 +326,13 @@
     "enSave": "Jimat 60%",
     "fpxPayment": "FPX / Pindahan Bank",
     "creditCard": "Kad Kredit",
-    "payViaFpx": "Bayar melalui FPX / online banking"
+    "payViaFpx": "Bayar melalui FPX / online banking",
+    "discountCode": "Kod diskaun",
+    "discountPlaceholder": "Masukkan kod",
+    "discountHint": "Biarkan kosong untuk checkout biasa.",
+    "discountChecking": "Menyemak kod...",
+    "discountValid": "Kod berjaya — anda bayar {{amount}} dan bukannya {{original}}.",
+    "discountInvalid": "Kod diskaun tidak sah. Sila semak dan cuba lagi."
   },
   "faq": {
     "badge": "Ada soalan?",
