@@ -3,6 +3,7 @@ package com.psoriasis.repository;
 import com.psoriasis.model.PaymentOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PaymentOrderRepository extends JpaRepository<PaymentOrder, Long> {
@@ -11,4 +12,5 @@ public interface PaymentOrderRepository extends JpaRepository<PaymentOrder, Long
     Optional<PaymentOrder> findByOrderRef(String orderRef);
     Optional<PaymentOrder> findByStripePaymentIntentId(String stripePaymentIntentId);
     Optional<PaymentOrder> findByDownloadToken(String downloadToken);
+    List<PaymentOrder> findByPaymentMethodAndPaymentStatusAndBillCodeIsNotNull(String paymentMethod, String paymentStatus);
 }

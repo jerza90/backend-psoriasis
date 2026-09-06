@@ -11,6 +11,8 @@ import jakarta.mail.internet.MimeMessage;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -68,12 +70,7 @@ public class EmailService {
                     <h2 style="margin: 0 0 16px; color: #173326; font-size: 26px; line-height: 1.2;">Terima kasih</h2>
                     <p style="margin: 0 0 16px; line-height: 1.7;">😃 Ini adalah E-Book Bebas Psoriasis yang ditulis Kak Achaa - seorang pejuang psoriasis yang berkongsi pengalaman pemulihan.</p>
                     <p style="margin: 0 0 16px; line-height: 1.7;">📌 <strong>%s</strong></p>
-                    <p style="margin: 0 0 16px; line-height: 1.7;">📌 Dengan membeli E-Book ini, resipi pantang psoriasis & eczema disediakan (sila rujuk selepas muat turun).</p>
-                    <p style="margin: 0 0 20px; line-height: 1.7;">Jangan lupa join Telegram group & komuniti bebas psoriasis:</p>
-                    <p style="margin: 0 0 8px; line-height: 1.7;">Invitation link Telegram Suport Group:</p>
-                    <p style="margin: 0 0 20px; word-break: break-word;"><a href="%s" style="color: #2d6a4f; font-weight: bold;">%s</a></p>
-                    <p style="margin: 0 0 16px; line-height: 1.7;">Ada ramai kawan-kawan pengidap psoriasis dan ekzema. Di dalam Telegram group ini, kami berkongsi info, tips, pengalaman dan soal jawab yang membantu pengidap psoriasis & eczema.</p>
-                    <p style="margin: 0 0 20px; line-height: 1.7;">"Psoriasis bukan penyakit kulit"</p>
+                    <p style="margin: 0 0 20px; line-height: 1.7;">📌 Dengan membeli E-Book ini, resipi pantang psoriasis & eczema disediakan (sila rujuk selepas muat turun).</p>
                     <p style="margin: 24px 0;">
                         <a href="%s"
                            style="display:inline-block;background: #2d6a4f; color: white; padding: 12px 28px;
@@ -97,10 +94,11 @@ public class EmailService {
                             <li><strong>Di telefon:</strong> Buka folder <strong>Downloads</strong> atau <strong>Files</strong>, kemudian buka fail yang dimuat turun.</li>
                             <li><strong>Di komputer:</strong> Cari fail dalam <strong>Downloads</strong>, kemudian buka atau ekstrak jika perlu.</li>
                         </ul>
-                        <p style="color: #555; font-size: 13px; margin: 8px 0 0; line-height: 1.6;">
-                            💡 Jika perlukan bantuan, anda boleh hubungi Telegram support group di atas.
-                        </p>
                     </div>
+
+                    <p style="color: #999; font-size: 12px; line-height: 1.6;">
+                        Perlu bantuan? Sertai komuniti sokongan kami di Telegram: <a href="%s" style="color:#2d6a4f;">%s</a>
+                    </p>
 
                     <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;">
                     <p style="color: #999; font-size: 12px;">
@@ -112,12 +110,15 @@ public class EmailService {
                 """.formatted(
                 escapeHtml(fromName),
                 escapeHtml(productName),
+                escapeAttribute(downloadLink),
                 escapeAttribute(telegramSupportUrl),
-                escapeHtml(telegramSupportUrl),
-                escapeAttribute(downloadLink)
+                escapeHtml(telegramSupportUrl)
         );
 
-        sendHtmlEmail(to, subject, plainText, html);
+        String unsubscribe = (adminEmail == null || adminEmail.isBlank()) ? fromEmail : adminEmail;
+        List<String[]> headers = new ArrayList<>();
+        headers.add(new String[]{"List-Unsubscribe", "<mailto:" + unsubscribe + ">"});
+        sendHtmlEmail(to, subject, plainText, html, headers);
     }
 
     public void sendOrderNotificationEmail(PaymentOrder order, String downloadLink) {
@@ -270,6 +271,10 @@ public class EmailService {
     }
 
     private void sendHtmlEmail(String to, String subject, String plainText, String html) {
+        sendHtmlEmail(to, subject, plainText, html, List.of());
+    }
+
+    private void sendHtmlEmail(String to, String subject, String plainText, String html, List<String[]> headers) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -278,6 +283,11 @@ public class EmailService {
             helper.setSubject(subject);
             helper.setText(plainText, html);
             helper.setReplyTo(fromEmail);
+            for (String[] header : headers) {
+                if (header != null && header.length == 2) {
+                    helper.getMimeMessage().setHeader(header[0], header[1]);
+                }
+            }
             mailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send email", e);

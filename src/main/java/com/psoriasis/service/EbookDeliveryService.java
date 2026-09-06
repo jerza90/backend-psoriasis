@@ -47,14 +47,9 @@ public class EbookDeliveryService {
     }
 
     public void generateAndSend(PaymentOrder order) {
-        String token = UUID.randomUUID().toString();
-        order.setDownloadToken(token);
-        order.setDownloadCount(0);
-        order.setMaxDownloads(3);
-        order.setTokenExpiresAt(LocalDateTime.now().plusHours(tokenExpireHours));
-        orderRepository.save(order);
+        generateDownloadToken(order);
 
-        String downloadLink = downloadBaseUrl + "/" + token;
+        String downloadLink = downloadBaseUrl + "/" + order.getDownloadToken();
 
         try {
             emailService.sendReceiptEmail(order.getCustomerEmail(), order.getProductName(), downloadLink);
@@ -67,6 +62,15 @@ public class EbookDeliveryService {
         } catch (Exception e) {
             log.error("Failed to send admin order notification for order {}", order.getOrderRef(), e);
         }
+    }
+
+    public void generateDownloadToken(PaymentOrder order) {
+        String token = UUID.randomUUID().toString();
+        order.setDownloadToken(token);
+        order.setDownloadCount(0);
+        order.setMaxDownloads(3);
+        order.setTokenExpiresAt(LocalDateTime.now().plusHours(tokenExpireHours));
+        orderRepository.save(order);
     }
 
     public boolean needsFreshDownloadToken(PaymentOrder order) {
