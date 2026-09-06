@@ -2,8 +2,11 @@ package com.psoriasis.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.psoriasis.dto.response.PaymentReconcileResponseDTO;
 import com.psoriasis.model.PaymentOrder;
 import com.psoriasis.repository.PaymentOrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +21,14 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class ToyyibPayService {
+    private static final Logger log = LoggerFactory.getLogger(ToyyibPayService.class);
     private static final BigDecimal BM_BASE_PRICE = new BigDecimal("39.00");
     private static final BigDecimal SST_RATE = new BigDecimal("0.08");
     private static final BigDecimal PROCESSING_FEE = new BigDecimal("1.00");
@@ -56,6 +61,9 @@ public class ToyyibPayService {
 
     @Value("${frontend.url}")
     private String frontendUrl;
+
+    @Value("${app.test-emails:}")
+    private String testEmails;
 
     private final PaymentOrderRepository orderRepository;
     private final EbookDeliveryService deliveryService;
@@ -198,6 +206,10 @@ public class ToyyibPayService {
     }
 
     public PaymentOrder checkPaymentStatus(String billCode) throws Exception {
+        return checkPaymentStatus(billCode, true);
+    }
+
+    public PaymentOrder checkPaymentStatus(String billCode, boolean deliverEmail) throws Exception {
         String body = "userSecretKey=" + encode(userSecretKey)
                 + "&billCode=" + encode(billCode);
 
@@ -219,6 +231,7 @@ public class ToyyibPayService {
                 .orElseThrow(() -> new RuntimeException("Order not found: " + billCode));
 
         if (raw.startsWith("No") || raw.startsWith("{")) {
+            log.warn("ToyyibPay getBillTransactions returned no transaction for bill {}: {}", billCode, raw);
             return order;
         }
 
@@ -268,12 +281,73 @@ public class ToyyibPayService {
             if (order.getReferralCode() != null && order.getAffiliateId() == null) {
                 affiliateService.trackConversion(order.getReferralCode(), order);
             }
-            deliveryService.generateAndSend(order);
+            if (deliverEmail) {
+                deliveryService.generateAndSend(order);
+            } else {
+                deliveryService.generateDownloadToken(order);
+            }
             return order;
         }
 
         orderRepository.save(order);
         return order;
+    }
+
+    public PaymentReconcileResponseDTO reconcilePendingOrders() {
+        List<PaymentOrder> pending = orderRepository
+                .findByPaymentMethodAndPaymentStatusAndBillCodeIsNotNull("TOYYIBPAY", "Unpaid");
+
+        List<PaymentReconcileResponseDTO.Item> items = new ArrayList<>();
+        int paid = 0;
+        int skippedTests = 0;
+        int errors = 0;
+
+        for (PaymentOrder order : pending) {
+            String billCode = order.getBillCode();
+            boolean testOrder = isTestOrder(order);
+            try {
+                checkPaymentStatus(billCode, !testOrder);
+                PaymentOrder updated = orderRepository.findByBillCode(billCode).orElse(order);
+                if ("Paid".equals(updated.getPaymentStatus())) {
+                    if (testOrder) {
+                        skippedTests++;
+                        items.add(new PaymentReconcileResponseDTO.Item(
+                                order.getOrderRef(), billCode, order.getCustomerEmail(),
+                                "PAID", "Test order marked paid; email skipped"));
+                    } else {
+                        paid++;
+                        items.add(new PaymentReconcileResponseDTO.Item(
+                                order.getOrderRef(), billCode, order.getCustomerEmail(),
+                                "PAID", "Paid and delivered"));
+                    }
+                } else {
+                    items.add(new PaymentReconcileResponseDTO.Item(
+                            order.getOrderRef(), billCode, order.getCustomerEmail(),
+                            "UNPAID", "Still unpaid on ToyyibPay"));
+                }
+            } catch (Exception e) {
+                errors++;
+                log.error("ToyyibPay reconcile failed for order {} (bill {}): {}", order.getOrderRef(), billCode, e.getMessage());
+                items.add(new PaymentReconcileResponseDTO.Item(
+                        order.getOrderRef(), billCode, order.getCustomerEmail(),
+                        "ERROR", e.getMessage()));
+            }
+        }
+
+        return new PaymentReconcileResponseDTO(items.size(), paid, errors, skippedTests, items);
+    }
+
+    private boolean isTestOrder(PaymentOrder order) {
+        if (order == null) return false;
+        if (order.getOrderRef() != null && order.getOrderRef().startsWith("MOCK")) return true;
+        if (order.getProductName() != null && order.getProductName().contains("Test Discount")) return true;
+        String email = order.getCustomerEmail();
+        if (email == null || email.isBlank()) return false;
+        String normalized = email.trim();
+        for (String t : testEmails.split(",")) {
+            if (!t.isBlank() && t.trim().equalsIgnoreCase(normalized)) return true;
+        }
+        return false;
     }
 
     private String encode(String value) {
