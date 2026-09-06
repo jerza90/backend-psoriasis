@@ -11,6 +11,7 @@ import jakarta.mail.internet.MimeMessage;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -115,8 +116,9 @@ public class EmailService {
         );
 
         String unsubscribe = (adminEmail == null || adminEmail.isBlank()) ? fromEmail : adminEmail;
-        sendHtmlEmail(to, subject, plainText, html,
-                List.of(new String[]{"List-Unsubscribe", "<mailto:" + unsubscribe + ">"}));
+        List<String[]> headers = new ArrayList<>();
+        headers.add(new String[]{"List-Unsubscribe", "<mailto:" + unsubscribe + ">"});
+        sendHtmlEmail(to, subject, plainText, html, headers);
     }
 
     public void sendOrderNotificationEmail(PaymentOrder order, String downloadLink) {
@@ -283,7 +285,7 @@ public class EmailService {
             helper.setReplyTo(fromEmail);
             for (String[] header : headers) {
                 if (header != null && header.length == 2) {
-                    helper.setHeader(header[0], header[1]);
+                    helper.getMimeMessage().setHeader(header[0], header[1]);
                 }
             }
             mailSender.send(message);
