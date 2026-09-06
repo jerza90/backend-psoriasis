@@ -59,6 +59,12 @@ public class ToyyibPayService {
     @Value("${toyyipay.test-total-amount:5.00}")
     private BigDecimal testTotalAmount;
 
+    @Value("${toyyipay.owner-discount-code:}")
+    private String ownerDiscountCode;
+
+    @Value("${toyyipay.owner-total-amount:5.00}")
+    private BigDecimal ownerTotalAmount;
+
     @Value("${frontend.url}")
     private String frontendUrl;
 
@@ -146,7 +152,7 @@ public class ToyyibPayService {
         order.setCustomerName(fullName);
         order.setCustomerEmail(email);
         order.setCustomerPhone(customerPhone);
-        order.setProductName(isDiscountCodeApplied(discountCode) ? "Panduan Sokongan Psoriasis (Test Discount)" : "Panduan Sokongan Psoriasis");
+        order.setProductName(matchingDiscountCode(discountCode) != null ? "Panduan Sokongan Psoriasis (Test Discount)" : "Panduan Sokongan Psoriasis");
         order.setAmount(orderAmount);
         order.setCurrency("RM");
         order.setPaymentStatus("Unpaid");
@@ -163,12 +169,12 @@ public class ToyyibPayService {
     }
 
     public com.psoriasis.dto.response.DiscountValidationResponseDTO validateDiscountCode(String discountCode) {
-        boolean valid = isDiscountCodeApplied(discountCode);
-        if (valid) {
+        String matched = matchingDiscountCode(discountCode);
+        if (matched != null) {
             return new com.psoriasis.dto.response.DiscountValidationResponseDTO(
                     true,
                     discountCode,
-                    testTotalAmount.setScale(2, RoundingMode.HALF_UP),
+                    discountTotalAmount(matched),
                     BM_TOTAL_AMOUNT,
                     "RM"
             );
@@ -186,17 +192,35 @@ public class ToyyibPayService {
         if (discountCode == null || discountCode.isBlank()) {
             return BM_TOTAL_AMOUNT;
         }
-        if (!isDiscountCodeApplied(discountCode)) {
+        String matched = matchingDiscountCode(discountCode);
+        if (matched == null) {
             throw new IllegalArgumentException("Invalid discount code");
         }
-        return testTotalAmount.setScale(2, RoundingMode.HALF_UP);
+        return discountTotalAmount(matched);
     }
 
-    private boolean isDiscountCodeApplied(String discountCode) {
-        return testDiscountCode != null
-                && !testDiscountCode.isBlank()
-                && discountCode != null
-                && testDiscountCode.trim().equalsIgnoreCase(discountCode.trim());
+    private String matchingDiscountCode(String discountCode) {
+        if (discountCode == null || discountCode.isBlank()) {
+            return null;
+        }
+        String trimmed = discountCode.trim();
+        if (ownerDiscountCode != null && !ownerDiscountCode.isBlank()
+                && ownerDiscountCode.trim().equalsIgnoreCase(trimmed)) {
+            return ownerDiscountCode;
+        }
+        if (testDiscountCode != null && !testDiscountCode.isBlank()
+                && testDiscountCode.trim().equalsIgnoreCase(trimmed)) {
+            return testDiscountCode;
+        }
+        return null;
+    }
+
+    private BigDecimal discountTotalAmount(String matchedCode) {
+        if (ownerDiscountCode != null && !ownerDiscountCode.isBlank()
+                && ownerDiscountCode.trim().equalsIgnoreCase(matchedCode.trim())) {
+            return ownerTotalAmount.setScale(2, RoundingMode.HALF_UP);
+        }
+        return testTotalAmount.setScale(2, RoundingMode.HALF_UP);
     }
 
     private String toSen(BigDecimal amount) {
